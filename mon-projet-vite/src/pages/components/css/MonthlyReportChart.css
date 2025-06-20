@@ -1,0 +1,8 @@
+.monthly-report {
+    margin-top: 40px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    height: 500px;
+}
