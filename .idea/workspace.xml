@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="init">
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/budget_vite_js.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/eslint.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/public/vite.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/App.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/Revenues.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/TasksNotion.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/assets/pigs/pig_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/main.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Agenda.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpend.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpendFilters.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/BaniereLetchi.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/BarGraph.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/BilanFinancier.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/CalendarView.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Categorie.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashAllSpend.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashAllSpendFilters.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardAgenda.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardBudget.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardCategorie.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardHello.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardTache.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashEnveloppe.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashInscription.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashLogin.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashPrediction.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Depenses.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Document.pdf.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Enveloppe.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/EnveloppeChallenge.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/EnveloppeManager.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/EventForm.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/FondEcran.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Form.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Graph.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphParDate.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/HelloBis.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Helloword.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ImportTicket.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Inscription.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Item.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ItemCategorie.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/LineChart.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MenuComponent.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ModalCategorie.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MonthlyBudgetInfo.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MonthlyExpensesByCategoryIntegration.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MonthlyReportChart.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Navigation.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/NotFound.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Notification.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Prediction.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/RevenuManager.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/SelectCategorie.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Sidebar.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/TicketList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ajoutBudget.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/connection.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/cookie_bandeau.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/MonthlyReportChart.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/accueil.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/agenda.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/bilanFniancier.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/budget_style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/categorie.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/connexion.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/dash.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/dashboard.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/enveloppe.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/enveloppe_manager.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/form.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/revenue.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/toast.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/fondTodo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/lien.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/pdfit/output.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/pdfit/templatePdf.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/transitionComponent.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/reportWebVitals.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/setupTests.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/store.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/useBudgetStore.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/useEnvelopeStore.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/useTicketStore.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/vite.config.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2ynBB1wPYJJfhuEvy7gA8HjoXyb" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/kriss/IdeaProjects/budget_vite_js/mon-projet-vite/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\kriss\\IdeaProjects\\budget_vite_js\\mon-projet-vite\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\kriss\IdeaProjects\budget_vite_js\mon-projet-vite\src" />
+      <recent name="C:\Users\kriss\IdeaProjects\budget_vite_js\mon-projet-vite\src\assets\pigs" />
+      <recent name="C:\Users\kriss\IdeaProjects\budget_vite_js\mon-projet-vite\src\pages" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="" />
+      <created>1750460319118</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750460319118</updated>
+      <workItem from="1750460320347" duration="3373000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init" />
+    <option name="LAST_COMMIT_MESSAGE" value="init" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardHello.jsx</url>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

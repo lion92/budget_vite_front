@@ -1,0 +1,90 @@
+{
+  "name": "mon-projet-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "homepage": "https://gestiontaches.krissclotilde.com",
+  "dependencies": {
+    "@capacitor/android": "^7.3.0",
+    "@capacitor/cli": "^7.3.0",
+    "@capacitor/core": "^7.3.0",
+    "@ramonak/react-progress-bar": "^5.0.3",
+    "@tensorflow/tfjs": "^4.22.0",
+    "axios": "^0.23.0",
+    "chart.js": "^2.9.4",
+    "chartjs-plugin-datalabels": "^1.0.0",
+    "fetch": "^1.1.0",
+    "framer-motion": "4.1.17",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
+    "lucide-react": "^0.511.0",
+    "node-excel-export": "^1.4.4",
+    "node-xlsx": "^0.23.0",
+    "react": "^18.3.1",
+    "react-calendar": "^4.6.0",
+    "react-chartjs-2": "^2.11.2",
+    "react-color": "^2.19.3",
+    "react-datepicker": "^8.3.0",
+    "react-dom": "^18.3.1",
+    "react-icons": "^4.11.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.30.0",
+    "react-scripts": "^5.0.1",
+    "react-table": "^7.8.0",
+    "react-toastify": "^11.0.5",
+    "recharts": "^2.15.1",
+    "reducers": "^3.0.0-alpha",
+    "redux": "^4.2.1",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.4.2",
+    "sass": "^1.68.0",
+    "typescript": "^3.2.1",
+    "web-vitals": "^1.0.1",
+    "xlsx": "^0.18.5",
+    "zustand": "^4.5.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/chart.js": "^4.0.1",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.5.2",
+    "case-sensitive-paths-webpack-plugin": "^2.4.0",
+    "jest": "^27.5.1",
+    "jest-environment-jsdom": "^29.7.0",
+    "react-refresh": "^0.14.2",
+    "vite": "^6.3.5"
+  },
+  "resolutions": {
+    "framer-motion": "4.1.17"
+  }
+}

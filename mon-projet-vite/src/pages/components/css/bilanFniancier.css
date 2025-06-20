@@ -1,0 +1,74 @@
+:root {
+    --text: #333333;
+}
+.bilan-financier {
+    background-color: var(--background);
+    color: var(--text);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 700px;
+    margin: 2rem auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background 0.3s, color 0.3s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.bilan-financier h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary, #4a90e2);
+}
+
+.periode-select {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.periode-select label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.periode-select .react-datepicker-wrapper {
+    width: 100%;
+    margin-top: 0.3rem;
+
+}
+
+.bilan-financier p {
+    font-size: 1.1rem;
+    margin: 0.6rem 0;
+    text-align: center;
+}
+
+.bilan-financier strong {
+    color: var(--primary, #4a90e2);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .periode-select {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bilan-financier {
+        padding: 1.5rem;
+    }
+
+    .bilan-financier h2 {
+        font-size: 1.5rem;
+    }
+}
