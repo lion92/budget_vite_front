@@ -11,6 +11,7 @@ import Notifications from "./Notification";
 import {Depenses} from "./Depenses.jsx";
 import {Revenues} from "../../Revenues.jsx";
 import BaniereLetchi from "./BaniereLetchi.jsx";
+import ChatBotDepense from "./ChatBotDepense.jsx";
 
 export default function MenuComponent(props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -160,14 +161,14 @@ export default function MenuComponent(props) {
                 </div>
                 {isAuthenticated &&
                     (
-                        <div className="container" style={{backgroundColor: "lightcoral"}}>
+                        <div className="container">
                             <BaniereLetchi></BaniereLetchi>
                             <Depenses></Depenses>
                             <Revenues></Revenues>
                         </div>
                     )
                 }
-
+                <ChatBotDepense></ChatBotDepense>
                 {props.contenue}
             </section>
         </div>

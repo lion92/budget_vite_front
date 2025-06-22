@@ -1,0 +1,47 @@
+.chatbot-container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-bubble {
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 80%;
+}
+
+.chat-bubble.bot {
+    background: #e0e0e0;
+    align-self: flex-start;
+}
+
+.chat-bubble.user {
+    background: #007bff;
+    color: white;
+    align-self: flex-end;
+}
+
+.chat-input input {
+    width: 100%;
+    padding: 6px;
+}
+
+.chat-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.chat-form input, .chat-form select, .chat-form button {
+    padding: 6px;
+}

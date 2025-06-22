@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import lien from "./components/lien";
+import lien from "./pages/components/lien";
 
 export const useAppStore = create(async (set) => {
 
