@@ -1,22 +1,23 @@
-import { NavLink } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { SiWelcometothejungle } from "react-icons/si";
-import { TbLogin2 } from "react-icons/tb";
-import { MdOutlineAppRegistration } from "react-icons/md";
-import { BiSolidCategory } from "react-icons/bi";
-import { GoTasklist } from "react-icons/go";
-import { CiMenuBurger, CiMoneyBill } from "react-icons/ci";
+import {NavLink} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {SiWelcometothejungle} from "react-icons/si";
+import {TbLogin2} from "react-icons/tb";
+import {MdOutlineAppRegistration} from "react-icons/md";
+import {BiSolidCategory} from "react-icons/bi";
+import {GoTasklist} from "react-icons/go";
+import {CiMenuBurger, CiMoneyBill, CiChat1} from "react-icons/ci"; // Ajout icône chat
 import CookieConsent from "./cookie_bandeau.jsx";
 import Notifications from "./Notification";
 import {Depenses} from "./Depenses.jsx";
 import {Revenues} from "../../Revenues.jsx";
 import BaniereLetchi from "./BaniereLetchi.jsx";
-import ChatBotDepense from "./ChatBotDepense.jsx";
+import ChatBotAction from "./ChatBotAction.jsx";
 
 export default function MenuComponent(props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [afficher, setAfficher] = useState(window.innerWidth >= 768);
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("jwt"));
+    const [showChatBot, setShowChatBot] = useState(false); // 👉 état pour ouvrir/fermer la bulle chat
 
     useEffect(() => {
         const handleResize = () => {
@@ -25,7 +26,6 @@ export default function MenuComponent(props) {
             setAfficher(!mobile);
         };
 
-        // Réécoute en cas de login/logout dans d'autres onglets
         const handleStorageChange = () => {
             setIsAuthenticated(!!localStorage.getItem("token"));
         };
@@ -40,7 +40,6 @@ export default function MenuComponent(props) {
     }, []);
 
     const handlemenu = () => setAfficher(!afficher);
-
     const handleLinkClick = () => {
         if (isMobile) setAfficher(false);
     };
@@ -109,6 +108,34 @@ export default function MenuComponent(props) {
             fontWeight: "bold",
             color: "#5D3A9B",
         },
+        chatBubbleBtn: {
+            position: "fixed",
+            bottom: 20,
+            right: 20,
+            width: 60,
+            height: 60,
+            borderRadius: "50%",
+            backgroundColor: "#5D3A9B",
+            color: "white",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: 30,
+            cursor: "pointer",
+            zIndex: 1000
+        },
+        chatContainer: {
+            position: "fixed",
+            bottom: 90,
+            right: 20,
+            width: "300px",
+            maxHeight: "500px",
+            backgroundColor: "white",
+            border: "1px solid #ccc",
+            borderRadius: "10px",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+            zIndex: 999
+        }
     };
 
     const publicLinks = [
@@ -159,18 +186,26 @@ export default function MenuComponent(props) {
                         </button>
                     )}
                 </div>
-                {isAuthenticated &&
-                    (
-                        <div className="container">
-                            <BaniereLetchi></BaniereLetchi>
-                            <Depenses></Depenses>
-                            <Revenues></Revenues>
-                        </div>
-                    )
-                }
-                <ChatBotDepense></ChatBotDepense>
+                {isAuthenticated && (
+                    <div className="container">
+                        <BaniereLetchi/>
+                        <Depenses/>
+                        <Revenues/>
+                    </div>
+                )}
                 {props.contenue}
             </section>
+
+            {/* Bulle flottante pour ouvrir le chat */}
+            <div style={styles.chatBubbleBtn} onClick={() => setShowChatBot(!showChatBot)}>
+                <CiChat1/>
+            </div>
+
+            {showChatBot && (
+                <div style={styles.chatContainer}>
+                    <ChatBotAction/>
+                </div>
+            )}
         </div>
     );
 }
