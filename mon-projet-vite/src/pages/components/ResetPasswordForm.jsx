@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import lien from "../components/lien.js";
-import "./css/connexion.css"; // Tu peux réutiliser ton style existant
+import "./css/connexion.css";
 
 const ResetPasswordForm = () => {
     const [newPassword, setNewPassword] = useState("");
@@ -8,11 +8,13 @@ const ResetPasswordForm = () => {
     const [message, setMessage] = useState("");
     const [success, setSuccess] = useState(false);
 
-    // Récupération du token dans l'URL
     const token = new URLSearchParams(window.location.search).get("token");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setMessage("");
+        setSuccess(false);
 
         if (newPassword.length < 3) {
             setMessage("Le mot de passe doit contenir au moins 3 caractères");
@@ -31,17 +33,18 @@ const ResetPasswordForm = () => {
                 body: JSON.stringify({ token, newPassword }),
             });
 
+            const data = await response.json().catch(() => ({})); // pour éviter erreur si pas un JSON
+
             if (!response.ok) {
-                const errorData = await response.json();
-                setMessage(errorData.message || "Erreur serveur");
+                setMessage(data.message || `Erreur serveur: ${response.status}`);
                 return;
             }
 
-            const data = await response.json();
-            setMessage(data.message);
+            setMessage(data.message || "Mot de passe réinitialisé");
             if (data.success) {
                 setSuccess(true);
             }
+
         } catch {
             setMessage("Erreur lors de la réinitialisation");
         }
@@ -67,7 +70,9 @@ const ResetPasswordForm = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <button type="submit">Réinitialiser</button>
-                    {message && <p className={success ? "success" : "error"}>{message}</p>}
+                    {message && (
+                        <p className={success ? "success" : "error"}>{message}</p>
+                    )}
                 </form>
             )}
         </div>

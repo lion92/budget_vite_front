@@ -287,20 +287,7 @@ export default function Form(props) {
     return (
         <div className="form-container">
             <div className="form-wrapper">
-                {localStorage.getItem("jwt") ?
-                    <div className="logout-section">
-                        <Link
-                            className="logout-link"
-                            onClick={() => {
-                                localStorage.removeItem('jwt');
-                                localStorage.removeItem("utilisateur");
-                            }}
-                            to="/"
-                        >
-                            <button className="logout-btn">Déconnexion</button>
-                        </Link>
-                    </div>
-                    : ""}
+
 
                 <div className="form-content">
                     <div className="id-display">
