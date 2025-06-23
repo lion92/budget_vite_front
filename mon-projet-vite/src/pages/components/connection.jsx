@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import lien from '../components/lien.js';
 import './css/dash.scss';
 import Budget from "./Budget.jsx";
@@ -16,6 +16,10 @@ const Connection = () => {
         type: "error",
         message: "",
     });
+
+    const [showForgotForm, setShowForgotForm] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState("");
+    const [forgotMessage, setForgotMessage] = useState("");
 
     const isEmailValid = email.length > 0 && mailError === "";
     const isPasswordValid = password.length >= 3 && passwordError === "";
@@ -35,9 +39,9 @@ const Connection = () => {
     }, [mailError, passwordError]);
 
     const showNotification = (type, message) => {
-        setNotification({show: true, type, message});
+        setNotification({ show: true, type, message });
         setTimeout(() => {
-            setNotification(prev => ({...prev, show: false}));
+            setNotification(prev => ({ ...prev, show: false }));
         }, 5000);
     };
 
@@ -60,10 +64,10 @@ const Connection = () => {
         }
 
         try {
-            const response = await fetch(`${lien.url}connection/user`, {
+            const response = await fetch(lien.url+"connection/user", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({jwt})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ jwt })
             });
 
             if (!response.ok) {
@@ -73,12 +77,6 @@ const Connection = () => {
             }
 
             const text = await response.text();
-            if (!text) {
-                setMessageLog("Réponse vide du serveur");
-                showNotification("error", "Réponse vide du serveur");
-                return;
-            }
-
             let data;
             try {
                 data = JSON.parse(text);
@@ -97,7 +95,7 @@ const Connection = () => {
                 setMessageLog("Déconnecté - Token invalide");
                 showNotification("warning", "Session expirée - Veuillez vous reconnecter");
             }
-        } catch (err) {
+        } catch {
             setMessageLog("Erreur de connexion au serveur");
             showNotification("error", "Erreur de connexion au serveur");
         }
@@ -115,10 +113,10 @@ const Connection = () => {
         }
 
         try {
-            const response = await fetch(`${lien.url}connection/login`, {
+            const response = await fetch(lien.url+'connection/login', {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({email, password})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
             });
 
             if (!response.ok) {
@@ -128,12 +126,6 @@ const Connection = () => {
             }
 
             const text = await response.text();
-            if (!text) {
-                setMessageLog("Réponse vide du serveur");
-                showNotification("error", "Réponse vide du serveur");
-                return;
-            }
-
             let data;
             try {
                 data = JSON.parse(text);
@@ -166,11 +158,52 @@ const Connection = () => {
                 setMessageLog("Identifiants incorrects");
                 showNotification("error", "Identifiants incorrects");
             }
-        } catch (err) {
+        } catch {
             setMessageLog("Erreur de connexion");
             showNotification("error", "Erreur de connexion au serveur");
         }
     }, [email, password]);
+
+    const fetchForgotPassword = async (e) => {
+        e.preventDefault();
+
+        if (!ValidateEmail(forgotEmail)) return;
+
+        try {
+            const response = await fetch(lien.url+'connection/forgot-password', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: forgotEmail })
+            });
+
+            if (!response.ok) {
+                setForgotMessage(`Erreur serveur: ${response.status}`);
+                showNotification("error", `Erreur serveur: ${response.status}`);
+                return;
+            }
+
+            const text = await response.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                setForgotMessage("Réponse invalide du serveur");
+                showNotification("error", "Réponse invalide du serveur");
+                return;
+            }
+
+            if (data.message) {
+                setForgotMessage(data.message);
+                showNotification(data.success ? "success" : "info", data.message);
+            } else {
+                setForgotMessage("Si cet email existe, un lien de réinitialisation a été envoyé.");
+                showNotification("info", "Si cet email existe, un lien de réinitialisation a été envoyé.");
+            }
+        } catch {
+            setForgotMessage("Erreur lors de l'envoi de la demande");
+            showNotification("error", "Erreur lors de l'envoi de la demande");
+        }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem("jwt");
@@ -187,7 +220,7 @@ const Connection = () => {
                 <div className={`notification ${notification.type}`}>
                     <div className="notification-content">
                         <span>{notification.message}</span>
-                        <button onClick={() => setNotification(prev => ({...prev, show: false}))}>&times;</button>
+                        <button onClick={() => setNotification(prev => ({ ...prev, show: false }))}>&times;</button>
                     </div>
                 </div>
             )}
@@ -195,7 +228,7 @@ const Connection = () => {
             {probleme === "connecte" ? (
                 <div>
                     <button onClick={handleLogout} className="logout-button">Déconnexion</button>
-                    <Budget/>
+                    <Budget />
                 </div>
             ) : (
                 <div className="container2">
@@ -222,6 +255,24 @@ const Connection = () => {
                     <p className="error">{passwordError}</p>
 
                     <button onClick={fetchConnection} id="btnLogin">LOGIN</button>
+
+                    <button onClick={() => setShowForgotForm(!showForgotForm)} className="forgot-button">
+                        {showForgotForm ? "Annuler" : "Mot de passe oublié ?"}
+                    </button>
+
+                    {showForgotForm && (
+                        <div className="forgot-container">
+                            <input
+                                type="email"
+                                placeholder="Votre email"
+                                value={forgotEmail}
+                                onChange={e => setForgotEmail(e.target.value)}
+                                className={mailError ? "input-error" : ""}
+                            />
+                            <button onClick={fetchForgotPassword}>Envoyer</button>
+                            {forgotMessage && <p className="info">{forgotMessage}</p>}
+                        </div>
+                    )}
                 </div>
             )}
         </div>
