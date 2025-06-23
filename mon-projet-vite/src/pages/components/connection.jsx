@@ -170,7 +170,7 @@ const Connection = () => {
         if (!ValidateEmail(forgotEmail)) return;
 
         try {
-            const response = await fetch(lien.url+'connection/forgot-password', {
+            const response = await fetch(lien.url + 'connection/forgot-password', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: forgotEmail })
@@ -182,23 +182,10 @@ const Connection = () => {
                 return;
             }
 
-            const text = await response.text();
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch {
-                setForgotMessage("Réponse invalide du serveur");
-                showNotification("error", "Réponse invalide du serveur");
-                return;
-            }
+            // On ne dépend plus de data.message
+            setForgotMessage("Vérifie tes mails");
+            showNotification("info", "Vérifie tes mails");
 
-            if (data.message) {
-                setForgotMessage(data.message);
-                showNotification(data.success ? "success" : "info", data.message);
-            } else {
-                setForgotMessage("Si cet email existe, un lien de réinitialisation a été envoyé.");
-                showNotification("info", "Si cet email existe, un lien de réinitialisation a été envoyé.");
-            }
         } catch {
             setForgotMessage("Erreur lors de l'envoi de la demande");
             showNotification("error", "Erreur lors de l'envoi de la demande");

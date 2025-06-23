@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ResetPasswordForm.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Form.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Form.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MenuComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MenuComponent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ResetPasswordForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ResetPasswordForm.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/connection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/connection.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/lien.js" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/lien.js" afterDir="false" />
     </list>
@@ -72,7 +73,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1750460319118</updated>
-      <workItem from="1750460320347" duration="19387000" />
+      <workItem from="1750460320347" duration="21133000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -114,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750681058049</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="mot de passe oublié">
+      <option name="closed" value="true" />
+      <created>1750704645960</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750704645960</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -135,7 +144,8 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <MESSAGE value="ajout du chat pour les depenses" />
     <MESSAGE value="ajout du chat pour les depenses revenus et categorie" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajout du chat pour les depenses revenus et categorie" />
+    <MESSAGE value="mot de passe oublié" />
+    <option name="LAST_COMMIT_MESSAGE" value="mot de passe oublié" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

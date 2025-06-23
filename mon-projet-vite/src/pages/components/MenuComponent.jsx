@@ -1,4 +1,4 @@
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {SiWelcometothejungle} from "react-icons/si";
 import {TbLogin2} from "react-icons/tb";
@@ -188,6 +188,21 @@ export default function MenuComponent(props) {
                 </div>
                 {isAuthenticated && (
                     <div className="container">
+                        {localStorage.getItem("jwt") ?
+                            <div style={{textAlign:'center'}} className="logout-section">
+                                <button
+                                    className="logout-btn"
+                                    onClick={() => {
+                                        localStorage.removeItem("jwt");
+                                        localStorage.removeItem("utilisateur");
+                                        window.location.reload();
+                                    }}
+                                >
+                                    Déconnexion
+                                </button>
+
+                            </div>
+                            : ""}
                         <BaniereLetchi/>
                         <Depenses/>
                         <Revenues/>
