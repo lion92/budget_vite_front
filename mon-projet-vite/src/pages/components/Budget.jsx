@@ -224,7 +224,7 @@ export default function Budget() {
                     }}
                 >
                     <img
-                        src="/assets/pigs/pig_1.png"
+                        src="/../public/assets/pigs/pig_1.png"
                         alt="Cochon épargne"
                         className="piggy-image"
                     />
