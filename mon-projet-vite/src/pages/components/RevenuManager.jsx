@@ -7,6 +7,8 @@ import { useNotify } from "./Notification";
 
 const RevenueManager = ({ onClose }) => {
     const [revenusForm, setRevenusForm] = useState([{ description: "", amount: 0, date: new Date() }]);
+    const [isRecurrent, setIsRecurrent] = useState(false);
+    const [recurrenceMonths, setRecurrenceMonths] = useState(1);
     const notify = useNotify();
 
     const {
@@ -27,24 +29,42 @@ const RevenueManager = ({ onClose }) => {
     };
 
     const addLigneRevenu = () => {
-        setRevenusForm([...revenusForm, { description: "", amount: 0, date: new Date() }]);
+        setRevenusForm(prev => [...prev, { description: "", amount: 0, date: new Date() }]);
     };
 
     const removeLigneRevenu = (index) => {
-        const updated = revenusForm.filter((_, i) => i !== index);
-        setRevenusForm(updated);
+        setRevenusForm(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const safeRecurrence = parseInt(recurrenceMonths, 10);
+        const months = (!isNaN(safeRecurrence) && safeRecurrence > 0) ? safeRecurrence : 1;
+
         for (const rev of revenusForm) {
-            await addRevenu({
-                name: rev.description,
-                amount: parseFloat(rev.amount),
-                date: rev.date
-            }, notify);
+            if (isRecurrent) {
+                for (let i = 0; i < months; i++) {
+                    const date = new Date(rev.date);
+                    date.setMonth(date.getMonth() + i);
+                    await addRevenu({
+                        name: rev.description,
+                        amount: parseFloat(rev.amount),
+                        date
+                    }, notify);
+                }
+            } else {
+                await addRevenu({
+                    name: rev.description,
+                    amount: parseFloat(rev.amount),
+                    date: rev.date
+                }, notify);
+            }
         }
+
         setRevenusForm([{ description: "", amount: 0, date: new Date() }]);
+        setIsRecurrent(false);
+        setRecurrenceMonths(1);
         fetchRevenus();
         if (onClose) onClose();
     };
@@ -86,6 +106,38 @@ const RevenueManager = ({ onClose }) => {
                         )}
                     </div>
                 ))}
+
+                <div className="recurrente-options">
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={isRecurrent}
+                            onChange={e => setIsRecurrent(e.target.checked)}
+                        />
+                        Revenu récurrent
+                    </label>
+                    {isRecurrent && (
+                        <input
+                            type="number"
+                            min="1"
+                            max="24"
+                            value={recurrenceMonths}
+                            onChange={e => {
+                                const val = e.target.value;
+                                if (val === "") {
+                                    setRecurrenceMonths("");
+                                } else {
+                                    const num = parseInt(val, 10);
+                                    if (!isNaN(num) && num > 0) {
+                                        setRecurrenceMonths(num);
+                                    }
+                                }
+                            }}
+                            placeholder="Nombre de mois"
+                        />
+                    )}
+                </div>
+
                 <div className="button-row">
                     <button type="button" onClick={addLigneRevenu}>+ Ajouter une ligne</button>
                     <button type="submit">Enregistrer les revenus</button>
