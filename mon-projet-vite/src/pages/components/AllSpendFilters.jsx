@@ -42,10 +42,10 @@ const AllSpendFilters = () => {
             let filtered = listDesDepense;
 
             if (minMontant !== '') {
-                filtered = filtered.filter(expense => expense.montant >= parseFloat(minMontant));
+                filtered = filtered.filter(expense => Number(expense.montant) >= parseFloat(minMontant));
             }
             if (maxMontant !== '') {
-                filtered = filtered.filter(expense => expense.montant <= parseFloat(maxMontant));
+                filtered = filtered.filter(expense => Number(expense.montant) <= parseFloat(maxMontant));
             }
             if (startDate !== '') {
                 filtered = filtered.filter(expense => new Date(expense.dateTransaction) >= new Date(startDate));
@@ -65,7 +65,7 @@ const AllSpendFilters = () => {
             }
 
             setFilteredDepense(filtered);
-            const total = filtered.reduce((acc, expense) => acc + expense.montant, 0);
+            const total = filtered.reduce((acc, expense) => acc + Number(expense.montant), 0);
             setTotalFilteredMontant(total);
         };
 
@@ -80,7 +80,7 @@ const AllSpendFilters = () => {
         setDescriptionSearch('');
         setCategorieSearch('');
         setFilteredDepense(listDesDepense);
-        setTotalFilteredMontant(listDesDepense.reduce((acc, expense) => acc + expense.montant, 0));
+        setTotalFilteredMontant(listDesDepense.reduce((acc, expense) => acc + Number(expense.montant), 0));
     };
 
     return (
@@ -125,7 +125,7 @@ const AllSpendFilters = () => {
                     {filteredDepense.map((item) => (
                         <tr key={item.id} style={{ borderBottom: "1px solid #ddd" }}>
                             <td style={tdStyle}>{item.id}</td>
-                            <td style={{ ...tdStyle, color: "red" }}>{item.montant.toFixed(2)} €</td>
+                            <td style={{ ...tdStyle, color: "red" }}>{Number(item.montant).toFixed(2)} €</td>
                             <td style={tdStyle}>{item.description}</td>
                             <td style={tdStyle}>{item.categorie}</td>
                             <td style={tdStyle}>{new Date(item.dateTransaction).toLocaleDateString("fr-FR")}</td>

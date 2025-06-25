@@ -59,11 +59,13 @@ export default function ChatBotDepense({ addDepense = null, notify = () => {} })
                 break;
 
             case "montant":
-                if (!/^\d+(\.\d{1,2})?$/.test(input)) {
-                    sendBotMessage("Veuillez entrer un montant valide (ex : 12.50).");
+                if (!/^\d+(\.\d{0,2})?$/.test(input)) {
+                    sendBotMessage("Veuillez entrer un montant valide (ex : 12.50). Maximum 2 chiffres après la virgule.");
                     return;
                 }
-                setFormData(prev => ({ ...prev, montant: input }));
+                // Stocke proprement à 2 décimales
+                const montantFormate = parseFloat(input).toFixed(2);
+                setFormData(prev => ({ ...prev, montant: montantFormate }));
                 if (categories.length > 0) {
                     sendBotMessage("Choisissez une catégorie en cliquant sur un des boutons ci-dessous :");
                     setStep("categorie");

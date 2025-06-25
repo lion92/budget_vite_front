@@ -93,21 +93,22 @@ export function Depenses() {
                             {depensesForm.map((dep, index) => (
                                 <div key={index} className="depense-row">
                                     <input placeholder="Description" value={dep.description}
-                                           onChange={(e) => updateDepenseField(index, "description", e.target.value)} />
+                                           onChange={(e) => updateDepenseField(index, "description", e.target.value)}/>
                                     <input
                                         type="text"
-                                        inputMode="numeric"
-                                        placeholder="Montant (entier)"
+                                        inputMode="decimal"
+                                        placeholder="Montant (ex: 12.34)"
                                         value={dep.montant}
                                         onChange={(e) => {
                                             const val = e.target.value;
-                                            if (/^-?\d*$/.test(val)) {
+                                            // Autorise nombre avec max 2 décimales
+                                            if (/^\d*(\.\d{0,2})?$/.test(val)) {
                                                 updateDepenseField(index, "montant", val);
                                             }
                                         }}
                                         onBlur={(e) => {
-                                            const val = parseInt(e.target.value, 10);
-                                            updateDepenseField(index, "montant", isNaN(val) ? 0 : val);
+                                            const val = parseFloat(e.target.value);
+                                            updateDepenseField(index, "montant", isNaN(val) ? "0.00" : val.toFixed(2));
                                         }}
                                     />
                                     <select value={dep.categorie}
@@ -117,7 +118,7 @@ export function Depenses() {
                                     </select>
                                     <DatePicker selected={dep.date}
                                                 onChange={(date) => updateDepenseField(index, "date", date)}
-                                                dateFormat="dd/MM/yyyy" />
+                                                dateFormat="dd/MM/yyyy"/>
                                     {depensesForm.length > 1 &&
                                         <button type="button" onClick={() => removeLigneDepense(index)}>❌</button>}
                                 </div>

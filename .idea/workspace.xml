@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="image pig ok">
+    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Depenses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Depenses.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/RevenuManager.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/RevenuManager.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpend.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpend.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +74,7 @@
       <updated>1750460319118</updated>
       <workItem from="1750460320347" duration="21133000" />
       <workItem from="1750740047501" duration="2060000" />
-      <workItem from="1750872781242" duration="672000" />
+      <workItem from="1750872781242" duration="5002000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -141,7 +140,31 @@
       <option name="project" value="LOCAL" />
       <updated>1750741528839</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="depenses recurentes">
+      <option name="closed" value="true" />
+      <created>1750873530139</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1750873530139</updated>
+    </task>
+    <task id="LOCAL-00010" summary="montant décimale pour les dépenses">
+      <option name="closed" value="true" />
+      <created>1750882495832</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1750882495832</updated>
+    </task>
+    <task id="LOCAL-00011" summary="montant décimale pour les dépenses">
+      <option name="closed" value="true" />
+      <created>1750882820901</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1750882820901</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,7 +188,9 @@
     <MESSAGE value="mot de passe oublié" />
     <MESSAGE value="icone ok" />
     <MESSAGE value="image pig ok" />
-    <option name="LAST_COMMIT_MESSAGE" value="image pig ok" />
+    <MESSAGE value="depenses recurentes" />
+    <MESSAGE value="montant décimale pour les dépenses" />
+    <option name="LAST_COMMIT_MESSAGE" value="montant décimale pour les dépenses" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,8 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Bar} from "react-chartjs-2";
-import "jspdf-autotable";
+import React, { useEffect, useRef, useState } from "react";
+import { Bar } from "react-chartjs-2";
 import lien from "./lien";
-import AjoutBudget from "./ajoutBudget.jsx";
+import "jspdf-autotable";
 
 const Prediction = () => {
     const [listDesDepense, setListDesDepense] = useState([]);
@@ -66,20 +65,20 @@ const Prediction = () => {
             if (!summary[month]) {
                 summary[month] = { total: 0, categories: {} };
             }
-            summary[month].total += montant;
-            summary[month].categories[categorie] = (summary[month].categories[categorie] || 0) + montant;
+            summary[month].total += Number(montant);
+            summary[month].categories[categorie] = (summary[month].categories[categorie] || 0) + Number(montant);
         });
         setMonthlySummary(summary);
     };
 
     const calculateBudgetAnalysis = (expenses) => {
-        const totalExpenses = expenses.reduce((acc, { montant }) => acc + montant, 0);
+        const totalExpenses = expenses.reduce((acc, { montant }) => acc + Number(montant), 0);
         setBudgetUsed(totalExpenses);
         setBudgetRemaining(budget - totalExpenses);
     };
 
     const predictNextMonthExpense = () => {
-        const totals = Object.values(monthlySummary).map(m => m.total);
+        const totals = Object.values(monthlySummary).map(m => Number(m.total));
         if (totals.length === 0) return;
 
         const averageExpense = totals.reduce((acc, val) => acc + val, 0) / totals.length;
@@ -90,7 +89,10 @@ const Prediction = () => {
         <>
             <h1 style={{ fontSize: 20, color: "blueviolet", textAlign: "center" }}>Toutes vos dépenses</h1>
 
-            <h3 style={{ color: "red", textAlign: "center" }}>Prévision des dépenses pour le mois suivant: {predictedExpense?.toFixed(2)} €</h3>
+            <h3 style={{ color: "red", textAlign: "center" }}>
+                Prévision des dépenses pour le mois suivant: {predictedExpense !== null ? Number(predictedExpense).toFixed(2) : "-"} €
+            </h3>
+
             <div style={{ width: "80%", margin: "auto" }}>
                 <h2>Graphique des Dépenses</h2>
                 <Bar data={{
@@ -98,7 +100,7 @@ const Prediction = () => {
                     datasets: [
                         {
                             label: "Dépenses par Mois",
-                            data: [...Object.values(monthlySummary).map((m) => m.total), predictedExpense || 0],
+                            data: [...Object.values(monthlySummary).map((m) => Number(m.total)), predictedExpense || 0],
                             backgroundColor: "blue",
                             borderWidth: 1,
                         },
