@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/assets/pigs/pig_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/public/assets/pigs/pig_1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx" afterDir="false" />
+    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="image pig ok">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Depenses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Depenses.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/RevenuManager.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/RevenuManager.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +74,8 @@
       <option name="presentableId" value="Default" />
       <updated>1750460319118</updated>
       <workItem from="1750460320347" duration="21133000" />
-      <workItem from="1750740047501" duration="1439000" />
+      <workItem from="1750740047501" duration="2060000" />
+      <workItem from="1750872781242" duration="672000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -131,7 +133,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750740873858</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="image pig ok">
+      <option name="closed" value="true" />
+      <created>1750741528839</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1750741528839</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,7 +164,8 @@
     <MESSAGE value="ajout du chat pour les depenses revenus et categorie" />
     <MESSAGE value="mot de passe oublié" />
     <MESSAGE value="icone ok" />
-    <option name="LAST_COMMIT_MESSAGE" value="icone ok" />
+    <MESSAGE value="image pig ok" />
+    <option name="LAST_COMMIT_MESSAGE" value="image pig ok" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

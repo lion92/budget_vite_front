@@ -1,23 +1,15 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import useBudgetStore from "../../useBudgetStore";
 import DatePicker from "react-datepicker";
 import { FilePlus } from "lucide-react";
 import "./css/budget_style.css";
 import { useNotify } from "./Notification";
+
 export function Depenses() {
     const [depensesForm, setDepensesForm] = useState([{ description: "", montant: 0, categorie: "", date: new Date() }]);
-    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-    const [showModal, setShowModal] = useState(false);
+    const [isRecurrent, setIsRecurrent] = useState(false);
+    const [recurrenceMonths, setRecurrenceMonths] = useState(1);
     const [showDepenseForm, setShowDepenseForm] = useState(false);
-    const [showRevenuForm, setShowRevenuForm] = useState(false);
-    const [showDepenseTable, setShowDepenseTable] = useState(true);
-    const [showGraph, setShowGraph] = useState(true);
-    const [filterId, setFilterId] = useState('');
-    const [filterMontant, setFilterMontant] = useState('');
-    const [filterDescription, setFilterDescription] = useState('');
-    const [filterCategorie, setFilterCategorie] = useState('');
-    const [filterDate, setFilterDate] = useState('');
     const notify = useNotify();
     const bilanRef = useRef();
 
@@ -33,31 +25,51 @@ export function Depenses() {
     } = useBudgetStore();
 
     useEffect(() => {
-        fetchDepenses();
-        fetchCategories();
-        fetchRevenus();
+        const fetchAllData = async () => {
+            await fetchDepenses();
+            await fetchCategories();
+            await fetchRevenus();
+        };
+        fetchAllData();
     }, []);
-    const updateDepenseField = (index, field, value) => {
-        const updated = [...depensesForm];
-        updated[index][field] = value;
-        setDepensesForm(updated);
-    };
 
-    const addLigneDepense = () => {
-        setDepensesForm([...depensesForm, {description: "", montant: 0, categorie: "", date: new Date()}]);
-    };
+    const updateDepenseField = useCallback((index, field, value) => {
+        setDepensesForm(prev => {
+            const updated = [...prev];
+            updated[index][field] = value;
+            return updated;
+        });
+    }, []);
 
-    const removeLigneDepense = (index) => {
-        const updated = depensesForm.filter((_, i) => i !== index);
-        setDepensesForm(updated);
-    };
+    const addLigneDepense = useCallback(() => {
+        setDepensesForm(prev => [...prev, { description: "", montant: 0, categorie: "", date: new Date() }]);
+    }, []);
+
+    const removeLigneDepense = useCallback((index) => {
+        setDepensesForm(prev => prev.filter((_, i) => i !== index));
+    }, []);
 
     const handleCreate = async (e) => {
         e.preventDefault();
+
         for (const dep of depensesForm) {
-            await addDepense(dep, notify);
+            if (isRecurrent) {
+                for (let i = 0; i < recurrenceMonths; i++) {
+                    const date = new Date(dep.date);
+                    date.setMonth(date.getMonth() + i);
+                    await addDepense({
+                        ...dep,
+                        date
+                    }, notify);
+                }
+            } else {
+                await addDepense(dep, notify);
+            }
         }
-        setDepensesForm([{description: "", montant: 0, categorie: "", date: new Date()}]);
+
+        setDepensesForm([{ description: "", montant: 0, categorie: "", date: new Date() }]);
+        setIsRecurrent(false);
+        setRecurrenceMonths(1);
         setShowDepenseForm(false);
     };
 
@@ -66,12 +78,14 @@ export function Depenses() {
         await deleteDepense(id, notify);
     };
 
-
     return (
         <>
             <div className="toolbar">
-                <button onClick={() => setShowDepenseForm(true)}><FilePlus/> Ajouter des dépenses</button>
+                <button onClick={() => setShowDepenseForm(true)}>
+                    <FilePlus /> Ajouter des dépenses
+                </button>
             </div>
+
             {showDepenseForm && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -79,7 +93,7 @@ export function Depenses() {
                             {depensesForm.map((dep, index) => (
                                 <div key={index} className="depense-row">
                                     <input placeholder="Description" value={dep.description}
-                                           onChange={(e) => updateDepenseField(index, "description", e.target.value)}/>
+                                           onChange={(e) => updateDepenseField(index, "description", e.target.value)} />
                                     <input
                                         type="text"
                                         inputMode="numeric"
@@ -96,7 +110,6 @@ export function Depenses() {
                                             updateDepenseField(index, "montant", isNaN(val) ? 0 : val);
                                         }}
                                     />
-
                                     <select value={dep.categorie}
                                             onChange={(e) => updateDepenseField(index, "categorie", e.target.value)}>
                                         <option value="">-- Choisir catégorie --</option>
@@ -104,11 +117,37 @@ export function Depenses() {
                                     </select>
                                     <DatePicker selected={dep.date}
                                                 onChange={(date) => updateDepenseField(index, "date", date)}
-                                                dateFormat="dd/MM/yyyy"/>
+                                                dateFormat="dd/MM/yyyy" />
                                     {depensesForm.length > 1 &&
                                         <button type="button" onClick={() => removeLigneDepense(index)}>❌</button>}
                                 </div>
                             ))}
+
+                            <div className="recurrente-options">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={isRecurrent}
+                                        onChange={(e) => setIsRecurrent(e.target.checked)}
+                                    />
+                                    Dépense récurrente
+                                </label>
+                                {isRecurrent && (
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="24"
+                                        value={recurrenceMonths}
+                                        onChange={(e) => {
+                                            const val = parseInt(e.target.value, 10);
+                                            setRecurrenceMonths((!isNaN(val) && val > 0) ? val : 1);
+                                        }}
+                                        placeholder="Nombre de mois"
+                                    />
+                                )}
+
+                            </div>
+
                             <button type="button" onClick={addLigneDepense}>+ Ajouter une ligne</button>
                             <button type="submit">Enregistrer les dépenses</button>
                             <button type="button" onClick={() => setShowDepenseForm(false)}>Fermer</button>
@@ -116,7 +155,6 @@ export function Depenses() {
                     </div>
                 </div>
             )}
-
         </>
-    )
+    );
 }
