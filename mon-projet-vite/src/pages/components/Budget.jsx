@@ -154,19 +154,23 @@ export default function Budget() {
                                     <input placeholder="Description" value={dep.description}
                                            onChange={(e) => updateDepenseField(index, "description", e.target.value)}/>
                                     <input
-                                        type="text"
-                                        inputMode="numeric"
-                                        placeholder="Montant (entier)"
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        placeholder="Montant (ex : 12.34)"
                                         value={dep.montant}
                                         onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (/^-?\d*$/.test(val)) {
-                                                updateDepenseField(index, "montant", val);
-                                            }
+                                            // Laisser vide si l'utilisateur vide le champ
+                                            updateDepenseField(index, "montant", e.target.value);
                                         }}
                                         onBlur={(e) => {
-                                            const val = parseInt(e.target.value, 10);
-                                            updateDepenseField(index, "montant", isNaN(val) ? 0 : val);
+                                            let val = parseFloat(e.target.value);
+                                            if (isNaN(val)) {
+                                                val = 0;
+                                            } else {
+                                                val = parseFloat(val.toFixed(2));
+                                            }
+                                            updateDepenseField(index, "montant", val);
                                         }}
                                     />
 
@@ -224,7 +228,7 @@ export default function Budget() {
                     }}
                 >
                     <img
-                        src="/../public/assets/pigs/pig_1.png"
+                        src="/assets/pigs/pig_1.png"
                         alt="Cochon épargne"
                         className="piggy-image"
                     />

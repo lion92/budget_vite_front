@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import _ from 'lodash';
 import lien from './lien';
 
 const MonthlyExpensesByCategory = () => {
@@ -13,7 +12,6 @@ const MonthlyExpensesByCategory = () => {
     const [months, setMonths] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Charger les données depuis l'API
     useEffect(() => {
         const fetchAPI = async () => {
             setIsLoading(true);
@@ -45,10 +43,8 @@ const MonthlyExpensesByCategory = () => {
         fetchAPI();
     }, []);
 
-    // Initialiser les données des catégories quand le résumé mensuel est prêt
     useEffect(() => {
         if (Object.keys(monthlySummary).length > 0) {
-            // Extraire toutes les catégories uniques de tous les mois
             const categories = new Set();
             Object.values(monthlySummary).forEach(({ categories: monthCategories }) => {
                 Object.keys(monthCategories).forEach(category => categories.add(category));
@@ -56,17 +52,12 @@ const MonthlyExpensesByCategory = () => {
 
             const allCats = Array.from(categories);
             setAllCategories(allCats);
-            setSelectedCategories(allCats); // Par défaut, toutes les catégories sont sélectionnées
-
-            // Préparer les données pour le graphique
+            setSelectedCategories(allCats);
             prepareChartData(allCats);
-
-            // Stocker les mois pour l'affichage
             setMonths(Object.keys(monthlySummary));
         }
     }, [monthlySummary]);
 
-    // Mettre à jour les données du graphique lorsque les catégories sélectionnées changent
     useEffect(() => {
         if (selectedCategories.length > 0 && Object.keys(monthlySummary).length > 0) {
             prepareChartData(selectedCategories);
@@ -74,9 +65,7 @@ const MonthlyExpensesByCategory = () => {
     }, [selectedCategories]);
 
     const assignCategoryColors = (expenses) => {
-        const colors = [
-            "#6FA3EF", "#7EDABF", "#F9D56E", "#F7A1C4", "#A38DE3", "#F8A978"
-        ];
+        const colors = ["#6FA3EF", "#7EDABF", "#F9D56E", "#F7A1C4", "#A38DE3", "#F8A978"];
         const categoryMap = {};
         let index = 0;
 
@@ -91,36 +80,33 @@ const MonthlyExpensesByCategory = () => {
     const generateMonthlySummary = (expenses) => {
         const summary = {};
         expenses.forEach(({ montant, dateTransaction, categorie }) => {
+            const montantNumber = Number(montant);
             const date = new Date(dateTransaction);
             const month = date.toLocaleString("fr-FR", { month: "long", year: "numeric" });
 
             if (!summary[month]) {
                 summary[month] = { total: 0, categories: {} };
             }
-            summary[month].total += montant;
-            summary[month].categories[categorie] = (summary[month].categories[categorie] || 0) + montant;
+
+            summary[month].total += montantNumber;
+            summary[month].categories[categorie] = (summary[month].categories[categorie] || 0) + montantNumber;
         });
         setMonthlySummary(summary);
     };
 
-    // Préparer les données pour le graphique
     const prepareChartData = (categories) => {
         const data = Object.entries(monthlySummary).map(([month, { categories: monthCategories }]) => {
             const monthData = { month };
-
-            // Ajouter chaque catégorie comme propriété avec sa valeur
             categories.forEach(category => {
-                const amount = monthCategories[category] || 0;
+                const amount = Number(monthCategories[category] || 0);
                 monthData[category] = amount;
             });
-
             return monthData;
         });
 
         setChartData(data);
     };
 
-    // Gérer la sélection/désélection d'une catégorie
     const handleCategoryToggle = (category) => {
         if (selectedCategories.includes(category)) {
             setSelectedCategories(selectedCategories.filter(cat => cat !== category));
@@ -128,15 +114,13 @@ const MonthlyExpensesByCategory = () => {
             setSelectedCategories([...selectedCategories, category]);
         }
     };
-    // Sélectionner toutes les catégories
+
     const handleSelectAllCategories = () => {
         setSelectedCategories([...allCategories]);
     };
 
-    // Désélectionner toutes les catégories sauf une
     const handleDeselectAllCategories = () => {
-
-            setSelectedCategories([]);
+        setSelectedCategories([]);
     };
 
     return (
@@ -216,7 +200,7 @@ const MonthlyExpensesByCategory = () => {
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="month" angle={-45} textAnchor="end" height={70} />
                                     <YAxis />
-                                    <Tooltip formatter={(value) => `${value.toFixed(2)} €`} />
+                                    <Tooltip formatter={(value) => `${Number(value).toFixed(2)} €`} />
                                     <Legend />
                                     {selectedCategories.map(category => (
                                         <Bar
@@ -274,25 +258,25 @@ const MonthlyExpensesByCategory = () => {
                                     return (
                                         <div key={month} style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "12px" }}>
                                             <h4 style={{ marginBottom: "8px", color: "black" }}>{month}</h4>
-                                            <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Total: {total.toFixed(2)} €</p>
+                                            <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Total: {Number(total).toFixed(2)} €</p>
                                             <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
                                                 {Object.entries(monthCategories)
                                                     .filter(([category]) => selectedCategories.includes(category))
                                                     .map(([category, amount]) => (
                                                         <li key={category} style={{ marginBottom: "4px", display: "flex", justifyContent: "space-between" }}>
-                              <span style={{ display: "flex", alignItems: "center" }}>
-                                <div
-                                    style={{
-                                        width: "10px",
-                                        height: "10px",
-                                        borderRadius: "50%",
-                                        backgroundColor: categoryColors[category] || "#6FA3EF",
-                                        marginRight: "6px"
-                                    }}
-                                ></div>
-                                  {category}
-                              </span>
-                                                            <span>{amount.toFixed(2)} €</span>
+                                                            <span style={{ display: "flex", alignItems: "center" }}>
+                                                                <div
+                                                                    style={{
+                                                                        width: "10px",
+                                                                        height: "10px",
+                                                                        borderRadius: "50%",
+                                                                        backgroundColor: categoryColors[category] || "#6FA3EF",
+                                                                        marginRight: "6px"
+                                                                    }}
+                                                                ></div>
+                                                                {category}
+                                                            </span>
+                                                            <span>{Number(amount).toFixed(2)} €</span>
                                                         </li>
                                                     ))}
                                             </ul>
