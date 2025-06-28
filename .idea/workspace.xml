@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="montant décimale pour les dépenses">
+    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Helloword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Helloword.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpendFilters.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpendFilters.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/accueil.css" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/accueil.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +78,7 @@
       <workItem from="1750740047501" duration="2060000" />
       <workItem from="1750872781242" duration="11610000" />
       <workItem from="1751077175237" duration="725000" />
+      <workItem from="1751137152777" duration="1214000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -182,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750886667812</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="bouton bg">
+      <option name="closed" value="true" />
+      <created>1751137418064</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1751137418064</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,7 +218,8 @@
     <MESSAGE value="image pig ok" />
     <MESSAGE value="depenses recurentes" />
     <MESSAGE value="montant décimale pour les dépenses" />
-    <option name="LAST_COMMIT_MESSAGE" value="montant décimale pour les dépenses" />
+    <MESSAGE value="bouton bg" />
+    <option name="LAST_COMMIT_MESSAGE" value="bouton bg" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -189,7 +189,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     padding: var(--spacing-xl);
     background: var(--gradient-surface);
     font-family: var(--font-family-sans);
@@ -505,7 +504,6 @@
 @media (max-width: 768px) {
     .welcome-container {
         padding: var(--spacing-md);
-        min-height: 100vh;
     }
 
     .content-box {
