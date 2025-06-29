@@ -170,26 +170,60 @@ const GraphBudget = () => {
             }
         ];
 
-        // Analyse des tendances (7 derniers jours)
-        const tendanceJournaliere = [];
-        for (let i = 6; i >= 0; i--) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            const jour = date.toLocaleDateString('fr-FR', { weekday: 'short' });
+        // Analyse des dépenses par période sélectionnée (au lieu de 7 derniers jours)
+        const analyseParPeriode = () => {
+            if (selectedPeriod === 'monthly') {
+                // Pour le mois : analyse par semaine
+                const semaines = [];
+                const startOfMonth = new Date(selectedYear, selectedMonth, 1);
+                const endOfMonth = new Date(selectedYear, selectedMonth + 1, 0);
 
-            const depensesJour = (depenses || []).filter(d => {
-                const dDate = new Date(d.dateTransaction);
-                return dDate.toDateString() === date.toDateString();
-            }).reduce((acc, d) => {
-                const montant = parseFloat(d.montant);
-                return acc + (isNaN(montant) ? 0 : montant);
-            }, 0);
+                for (let semaine = 1; semaine <= 4; semaine++) {
+                    const startWeek = new Date(startOfMonth);
+                    startWeek.setDate((semaine - 1) * 7 + 1);
+                    const endWeek = new Date(startOfMonth);
+                    endWeek.setDate(semaine * 7);
 
-            tendanceJournaliere.push({
-                jour,
-                depenses: depensesJour
-            });
-        }
+                    if (endWeek > endOfMonth) endWeek.setTime(endOfMonth.getTime());
+
+                    const depensesSemaine = filteredDepenses.filter(d => {
+                        const dDate = new Date(d.dateTransaction);
+                        return dDate >= startWeek && dDate <= endWeek;
+                    }).reduce((acc, d) => {
+                        const montant = parseFloat(d.montant);
+                        return acc + (isNaN(montant) ? 0 : montant);
+                    }, 0);
+
+                    semaines.push({
+                        periode: `Sem. ${semaine}`,
+                        depenses: depensesSemaine
+                    });
+                }
+
+                return semaines;
+            } else {
+                // Pour l'année : analyse par mois
+                const moisAnalyse = [];
+                for (let mois = 0; mois < 12; mois++) {
+                    const depensesMois = (depenses || []).filter(d => {
+                        const dDate = new Date(d.dateTransaction);
+                        return dDate.getFullYear() === selectedYear && dDate.getMonth() === mois;
+                    }).reduce((acc, d) => {
+                        const montant = parseFloat(d.montant);
+                        return acc + (isNaN(montant) ? 0 : montant);
+                    }, 0);
+
+                    moisAnalyse.push({
+                        periode: new Date(0, mois).toLocaleString('fr-FR', { month: 'short' }),
+                        depenses: depensesMois
+                    });
+                }
+
+                return moisAnalyse;
+            }
+        };
+
+        const analyseTemporelle = analyseParPeriode();
 
         return {
             totalDepenses,
@@ -202,7 +236,7 @@ const GraphBudget = () => {
             radialData,
             progressionEpargne,
             objectifEpargne,
-            tendanceJournaliere
+            analyseTemporelle
         };
     }, [depenses, revenus, categories, selectedPeriod, selectedYear, selectedMonth]);
 
@@ -437,17 +471,29 @@ const GraphBudget = () => {
                         <ResponsiveContainer width="100%" height={350}>
                             <BarChart
                                 data={calculatedData.topCategories}
-                                layout="horizontal"
-                                margin={{ left: 20 }}
+                                margin={{ top: 20, right: 30, left: 80, bottom: 5 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" />
-                                <YAxis type="category" dataKey="name" width={100} />
-                                <Tooltip
-                                    formatter={(value, name) => [`${value.toFixed(2)} €`, 'Montant']}
-                                    labelFormatter={(label) => `Catégorie: ${label}`}
+                                <XAxis />
+                                <YAxis
+                                    dataKey="name"
+                                    type="category"
+                                    width={120}
+                                    tick={{ fontSize: 12 }}
                                 />
-                                <Bar dataKey="value" fill="#667eea" radius={[0, 4, 4, 0]} />
+                                <Tooltip
+                                    formatter={(value) => [`${value.toFixed(2)} €`, 'Montant']}
+                                    labelFormatter={(label) => `${label}`}
+                                />
+                                <Bar
+                                    dataKey="value"
+                                    fill="#667eea"
+                                    radius={[0, 4, 4, 0]}
+                                >
+                                    {calculatedData.topCategories.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                                    ))}
+                                </Bar>
                             </BarChart>
                         </ResponsiveContainer>
                     ) : (
@@ -460,13 +506,18 @@ const GraphBudget = () => {
                     )}
                 </div>
 
-                {/* Tendance 7 derniers jours */}
+                {/* Analyse temporelle intelligente */}
                 <div className="chart-card large">
-                    <h3>Dépenses des 7 derniers jours</h3>
+                    <h3>
+                        {selectedPeriod === 'monthly'
+                            ? `Répartition par semaine - ${new Date(selectedYear, selectedMonth).toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}`
+                            : `Dépenses mensuelles - ${selectedYear}`
+                        }
+                    </h3>
                     <ResponsiveContainer width="100%" height={300}>
-                        <AreaChart data={calculatedData.tendanceJournaliere}>
+                        <AreaChart data={calculatedData.analyseTemporelle}>
                             <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                            <XAxis dataKey="jour" />
+                            <XAxis dataKey="periode" />
                             <YAxis />
                             <Tooltip content={<CustomTooltip />} />
                             <Area

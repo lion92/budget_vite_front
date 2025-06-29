@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="correction centrage css">
-      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashgraphBudget.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/graphBudget.css" afterDir="false" />
+    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardAgenda.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardAgenda.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Form.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Form.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MenuComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/MenuComponent.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/dash.scss" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/dash.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/form.css" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/form.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +79,7 @@
       <workItem from="1750740047501" duration="2060000" />
       <workItem from="1750872781242" duration="11610000" />
       <workItem from="1751077175237" duration="725000" />
-      <workItem from="1751137152777" duration="5988000" />
+      <workItem from="1751137152777" duration="7230000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -209,7 +201,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751138512683</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="analyse dashboard">
+      <option name="closed" value="true" />
+      <created>1751214247454</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1751214247454</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +237,8 @@
     <MESSAGE value="montant décimale pour les dépenses" />
     <MESSAGE value="bouton bg" />
     <MESSAGE value="correction centrage css" />
-    <option name="LAST_COMMIT_MESSAGE" value="correction centrage css" />
+    <MESSAGE value="analyse dashboard" />
+    <option name="LAST_COMMIT_MESSAGE" value="analyse dashboard" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
