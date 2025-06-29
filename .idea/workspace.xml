@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardAgenda.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardAgenda.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +80,7 @@
       <workItem from="1750740047501" duration="2060000" />
       <workItem from="1750872781242" duration="11610000" />
       <workItem from="1751077175237" duration="725000" />
-      <workItem from="1751137152777" duration="7230000" />
+      <workItem from="1751137152777" duration="8160000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -209,7 +210,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751214247454</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="analyse dashboard">
+      <option name="closed" value="true" />
+      <created>1751216273462</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1751216273462</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,6 +260,11 @@
           <url>file://$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx</url>
           <line>2</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardBudget.jsx</url>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

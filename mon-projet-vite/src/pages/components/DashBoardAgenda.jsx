@@ -4,7 +4,7 @@ import MenuComponent from "./MenuComponent.jsx";
 import Agenda from "./Agenda.jsx";
 
 const DashBoardAgenda = () => {
-    let titre = "Budget"
+    let titre = "Agenda"
     let contenue = <Agenda></Agenda>
     return (
         <>
