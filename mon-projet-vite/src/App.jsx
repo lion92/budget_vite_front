@@ -1,7 +1,7 @@
 // src/App.jsx
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import DashBoardAgenda from "./pages/components/DashBoardAgenda.jsx";
-import DashBoardBudget from "./pages/components/DashBoardAgenda.jsx";
+import DashBoardBudget from "./pages/components/DashBoardBudget.jsx";
 import DashBoardHello from "./pages/components/DashBoardHello.jsx";
 import DashLogin from "./pages/components/DashLogin.jsx";
 import DashBoardInscription from "./pages/components/DashInscription.jsx";
