@@ -1,11 +1,11 @@
 import React from 'react';
 import './css/dashboard.scss'
 import MenuComponent from "./MenuComponent.jsx";
-import Agenda from "./Agenda.jsx";
+import GraphBudget from "./GraphBudget.jsx";
 
-const DashBoardAgenda = () => {
+const DashGraphBudget = () => {
     let titre = "Budget"
-    let contenue = <Agenda></Agenda>
+    let contenue = <GraphBudget></GraphBudget>
     return (
         <>
             <MenuComponent contenue={contenue} title={titre}></MenuComponent>
@@ -13,4 +13,4 @@ const DashBoardAgenda = () => {
     );
 };
 
-export default DashBoardAgenda;
+export default DashGraphBudget;

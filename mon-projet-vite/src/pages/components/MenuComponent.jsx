@@ -153,6 +153,7 @@ export default function MenuComponent(props) {
         { path: "/prediction", label: "Prédiction", icon: <CiMoneyBill /> },
         { path: "/agenda", label: "Agenda", icon: <CiMoneyBill /> },
         { path: "/enveloppe", label: "Enveloppe", icon: <CiMoneyBill /> },
+        { path: "/graph", label: "Graphique budget", icon: <CiMoneyBill /> },
     ];
 
     const navLinks = isAuthenticated ? privateLinks : publicLinks;

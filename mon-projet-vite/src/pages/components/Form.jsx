@@ -26,6 +26,10 @@ export default function Form(props) {
         showIncomplete: true
     });
 
+    // États pour le tableau
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [editingItem, setEditingItem] = useState(null);
+
     let attendre = () => {
         setLoad(true);
         setTimeout(() => {
@@ -230,6 +234,8 @@ export default function Form(props) {
         );
         const resbis = await response;
         notify("Todo créé", 'success')
+        setValue(""); // Vider le formulaire après création
+        setDescription("");
         await fetchAPI();
     });
 
@@ -282,16 +288,59 @@ export default function Form(props) {
         setValue("");
         setTitre("");
         setDescription("");
+        setId(-1);
+    };
+
+    // Fonctions pour le tableau
+    const handleEdit = (item) => {
+        setValue(item.title);
+        setDescription(item.description);
+        setId(item.id);
+        setEditingItem(item.id);
+    };
+
+    const handleDelete = (item) => {
+        if (window.confirm(`Êtes-vous sûr de vouloir supprimer "${item.title}" ?`)) {
+            fetchdelete(item.id);
+        }
+    };
+
+    const handleSort = (column) => {
+        if (filters.sortBy === column) {
+            updateFilter('sortOrder', filters.sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            updateFilter('sortBy', column);
+            updateFilter('sortOrder', 'asc');
+        }
+    };
+
+    const formatDate = (dateString) => {
+        try {
+            return new Date(dateString).toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (e) {
+            return dateString;
+        }
+    };
+
+    const truncateText = (text, maxLength = 50) => {
+        if (!text) return '';
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     };
 
     return (
         <div className="form-container">
             <div className="form-wrapper">
-
-
                 <div className="form-content">
                     <div className="id-display">
-                        <label className="id-label">ID: {idVal}</label>
+                        <label className="id-label">
+                            {idVal !== -1 ? `Modification ID: ${idVal}` : 'Nouvelle tâche'}
+                        </label>
                     </div>
 
                     <div className="form-inputs">
@@ -317,12 +366,31 @@ export default function Form(props) {
                         </div>
 
                         <div className="button-group">
-                            <button className="btn btn-update" onClick={modifier}>
-                                Modifier
-                            </button>
+                            {idVal !== -1 ? (
+                                <button className="btn btn-update" onClick={modifier}>
+                                    ✏️ Modifier
+                                </button>
+                            ) : null}
                             <button className="btn btn-create" onClick={fetchCreer}>
-                                Créer
+                                ➕ Créer
                             </button>
+                            {idVal !== -1 && (
+                                <button
+                                    className="btn btn-cancel"
+                                    onClick={() => {
+                                        setValue("");
+                                        setDescription("");
+                                        setId(-1);
+                                        setEditingItem(null);
+                                    }}
+                                    style={{
+                                        background: 'var(--secondary-gradient)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    ❌ Annuler
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -422,25 +490,149 @@ export default function Form(props) {
                     </div>
                 </div>
 
+                {/* TABLEAU REMPLAÇANT LES CARDS */}
                 {!load ? (
-                    <div className="items-container">
-                        {listItem.map((item, index) => {
-                            return (
-                                <div key={index} className="item-wrapper">
-                                    <Item
-                                        del={del}
-                                        changeColor={changeColor}
-                                        changeDec={textebisDesc}
-                                        changetext={textebis}
-                                        updatefunc={idchange}
-                                        title={item.title}
-                                        description={item.description}
-                                        id={item.id}
-                                    />
-                                    <p className="item-date">{item?.createdAt}</p>
+                    <div className="table-container">
+                        <div className="table-wrapper">
+                            <div className="table-header">
+                                <h2 className="table-title">
+                                    <span className="table-icon">📋</span>
+                                    Mes Tâches ({listItem.length})
+                                </h2>
+                                <div className="table-header-actions">
+                                    <span className="table-info">
+                                        {listItem.length} tâche{listItem.length !== 1 ? 's' : ''} affichée{listItem.length !== 1 ? 's' : ''}
+                                    </span>
                                 </div>
-                            );
-                        })}
+                            </div>
+
+                            {listItem.length > 0 ? (
+                                <table className="modern-table">
+                                    <thead>
+                                    <tr>
+                                        <th
+                                            className="sortable"
+                                            onClick={() => handleSort('title')}
+                                            title="Trier par titre"
+                                        >
+                                            Titre
+                                            {filters.sortBy === 'title' && (
+                                                <span style={{marginLeft: '8px', fontSize: '12px'}}>
+                                                        {filters.sortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                            )}
+                                        </th>
+                                        <th
+                                            className="sortable"
+                                            onClick={() => handleSort('description')}
+                                            title="Trier par description"
+                                        >
+                                            Description
+                                            {filters.sortBy === 'description' && (
+                                                <span style={{marginLeft: '8px', fontSize: '12px'}}>
+                                                        {filters.sortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                            )}
+                                        </th>
+                                        <th
+                                            className="sortable"
+                                            onClick={() => handleSort('date')}
+                                            title="Trier par date"
+                                        >
+                                            Date de création
+                                            {filters.sortBy === 'date' && (
+                                                <span style={{marginLeft: '8px', fontSize: '12px'}}>
+                                                        {filters.sortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                            )}
+                                        </th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {listItem.map((item, index) => (
+                                        <tr
+                                            key={item.id || index}
+                                            className={editingItem === item.id ? 'editing-row' : ''}
+                                            style={{
+                                                backgroundColor: editingItem === item.id ? 'rgba(102, 126, 234, 0.1)' : 'transparent'
+                                            }}
+                                        >
+                                            <td data-label="Titre">
+                                                <div style={{
+                                                    fontWeight: '600',
+                                                    color: editingItem === item.id ? '#667eea' : '#374151'
+                                                }}>
+                                                    {item.title || 'Sans titre'}
+                                                </div>
+                                            </td>
+                                            <td data-label="Description">
+                                                <div title={item.description} style={{
+                                                    color: '#6b7280',
+                                                    lineHeight: '1.4'
+                                                }}>
+                                                    {truncateText(item.description, 60) || 'Aucune description'}
+                                                </div>
+                                            </td>
+                                            <td data-label="Date" className="table-date">
+                                                {formatDate(item.createdAt)}
+                                            </td>
+                                            <td data-label="Actions" className="table-actions">
+                                                <button
+                                                    className="table-action-btn edit"
+                                                    onClick={() => handleEdit(item)}
+                                                    title="Modifier cette tâche"
+                                                >
+                                                    ✏️ Modifier
+                                                </button>
+                                                <button
+                                                    className="table-action-btn delete"
+                                                    onClick={() => handleDelete(item)}
+                                                    title="Supprimer cette tâche"
+                                                >
+                                                    🗑️ Supprimer
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <div className="table-empty">
+                                    {filters.searchTerm || filters.dateFilter !== 'all'
+                                        ? 'Aucune tâche ne correspond à vos critères de recherche'
+                                        : 'Aucune tâche créée pour le moment'
+                                    }
+                                </div>
+                            )}
+
+                            <div className="table-pagination">
+                                <div className="pagination-info">
+                                    {listItem.length > 0 ? (
+                                        <>
+                                            Affichage de {listItem.length} tâche{listItem.length !== 1 ? 's' : ''}
+                                            {allItems.length !== listItem.length && (
+                                                <span style={{fontStyle: 'italic', marginLeft: '10px'}}>
+                                                    (sur {allItems.length} au total)
+                                                </span>
+                                            )}
+                                            {filters.searchTerm && (
+                                                <span style={{fontStyle: 'italic', marginLeft: '10px'}}>
+                                                    - filtré pour "{filters.searchTerm}"
+                                                </span>
+                                            )}
+                                        </>
+                                    ) : (
+                                        'Aucune tâche à afficher'
+                                    )}
+                                </div>
+                                <div className="pagination-controls">
+                                    <button className="pagination-btn" disabled>
+                                        Page 1 sur 1
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     <div className="loading-container">
