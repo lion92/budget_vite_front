@@ -21,10 +21,9 @@ const ImportTicket = () => {
     // Calculer le total de tous les tickets
     const calculateTotalAmount = () => {
         return allTickets
-            .filter(ticket => ticket.totalExtrait && ticket.totalExtrait > 0)
-            .reduce((sum, ticket) => sum + ticket.totalExtrait, 0);
+            .filter(ticket => !isNaN(Number(ticket.totalExtrait)) && Number(ticket.totalExtrait) > 0)
+            .reduce((sum, ticket) => sum + Number(ticket.totalExtrait), 0);
     };
-
     // Compter les tickets avec total
     const getTicketsWithTotal = () => {
         return allTickets.filter(ticket => ticket.totalExtrait && ticket.totalExtrait > 0);
@@ -175,11 +174,12 @@ const ImportTicket = () => {
 
     // Formater les montants
     const formatCurrency = (amount) => {
-        if (!amount) return '0,00€';
+        const value = Number(amount);
+        if (isNaN(value)) return '0,00€';
         return new Intl.NumberFormat('fr-FR', {
             style: 'currency',
             currency: 'EUR'
-        }).format(amount);
+        }).format(value);
     };
 
     const totalAmount = calculateTotalAmount();
