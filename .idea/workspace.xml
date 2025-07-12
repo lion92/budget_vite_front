@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/menuComponent.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardAgenda.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardAgenda.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ImportTicket.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ImportTicket.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/TicketList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/TicketList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/lien.js" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/lien.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/useTicketStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/useTicketStore.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,23 +42,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/kriss/IdeaProjects/budget_vite_js/mon-projet-vite/src/pages/components/css",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\kriss\\IdeaProjects\\budget_vite_js\\mon-projet-vite\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/kriss/IdeaProjects/budget_vite_js/mon-projet-vite/src/pages/components/css&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\kriss\\IdeaProjects\\budget_vite_js\\mon-projet-vite\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\kriss\IdeaProjects\budget_vite_js\mon-projet-vite\src\pages\components\css" />
@@ -81,6 +84,12 @@
       <workItem from="1750872781242" duration="11610000" />
       <workItem from="1751077175237" duration="725000" />
       <workItem from="1751137152777" duration="8160000" />
+      <workItem from="1751284202771" duration="2666000" />
+      <workItem from="1751621691392" duration="8000" />
+      <workItem from="1751800914656" duration="1092000" />
+      <workItem from="1752175855947" duration="1425000" />
+      <workItem from="1752232470902" duration="2974000" />
+      <workItem from="1752316960494" duration="2588000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -263,7 +272,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardBudget.jsx</url>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
