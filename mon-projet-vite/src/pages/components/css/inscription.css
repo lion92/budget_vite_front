@@ -1,0 +1,597 @@
+/* ========================================
+   FORMULAIRE D'INSCRIPTION EXTRAORDINAIRE
+   Design immersif et moderne - 2024
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* === VARIABLES CSS EXTRAORDINAIRES === */
+:root {
+    /* Palette de couleurs futuriste */
+    --neon-cyan: #00ffff;
+    --neon-magenta: #ff00ff;
+    --neon-yellow: #ffff00;
+    --electric-blue: #0066ff;
+    --cosmic-purple: #6600ff;
+    --laser-green: #00ff66;
+    --sunset-orange: #ff3366;
+    --deep-space: #0a0a0f;
+    --midnight: #1a1a2e;
+    --galaxy: #16213e;
+    --stardust: #ffffff;
+
+    /* Gradients dynamiques */
+    --cosmic-gradient: linear-gradient(135deg,
+    var(--electric-blue) 0%,
+    var(--cosmic-purple) 25%,
+    var(--neon-magenta) 50%,
+    var(--sunset-orange) 75%,
+    var(--laser-green) 100%
+    );
+
+    --aurora-gradient: linear-gradient(45deg,
+    #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff
+    );
+
+    --hologram-gradient: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.1) 25%,
+    rgba(0,255,255,0.2) 50%,
+    rgba(255,0,255,0.1) 75%,
+    transparent 100%
+    );
+
+    /* Espacements et tailles */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    /* Animations */
+    --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Filtres et effets */
+    --glow-cyan: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-cyan);
+    --glow-magenta: 0 0 20px var(--neon-magenta), 0 0 40px var(--neon-magenta);
+    --glow-multi: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 35px var(--neon-cyan), 0 0 40px var(--neon-cyan);
+}
+
+/* === RESET ET BASE === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--deep-space);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    color: var(--stardust);
+}
+
+/* === FOND ANIMÉ COSMIQUE === */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+            radial-gradient(circle at 20% 80%, var(--cosmic-purple) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, var(--electric-blue) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, var(--neon-magenta) 0%, transparent 50%),
+            var(--deep-space);
+    animation: cosmicPulse 8s ease-in-out infinite alternate;
+    z-index: -2;
+}
+
+/* Particules flottantes */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+            radial-gradient(2px 2px at 20% 30%, var(--stardust), transparent),
+            radial-gradient(2px 2px at 40% 70%, var(--neon-cyan), transparent),
+            radial-gradient(1px 1px at 90% 40%, var(--neon-magenta), transparent),
+            radial-gradient(1px 1px at 60% 10%, var(--laser-green), transparent);
+    background-repeat: repeat;
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+    animation: floatingStars 20s linear infinite;
+    opacity: 0.6;
+    z-index: -1;
+}
+
+/* === CONTAINER PRINCIPAL === */
+.containerInscription {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: var(--space-lg);
+    position: relative;
+    z-index: 1;
+}
+
+/* === CARTE DU FORMULAIRE === */
+.form-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 32px;
+    padding: var(--space-3xl);
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+            0 25px 45px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    animation: cardEntrance 1.2s var(--elastic) forwards;
+    transform: translateY(50px) scale(0.9);
+    opacity: 0;
+}
+
+/* Effet holographique sur la carte */
+.form-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--hologram-gradient);
+    animation: hologramSweep 3s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Bordure arc-en-ciel animée */
+.form-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--aurora-gradient);
+    border-radius: 34px;
+    z-index: -1;
+    animation: rainbowBorder 4s linear infinite;
+    opacity: 0.7;
+    filter: blur(1px);
+}
+
+/* === TITRE === */
+.form-card h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    background: var(--aurora-gradient);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShimmer 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    letter-spacing: -0.02em;
+}
+
+/* === INPUTS FUTURISTES === */
+.form-card input {
+    width: 100%;
+    padding: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    font-size: 1.1rem;
+    font-weight: 400;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    color: var(--stardust);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s var(--smooth);
+    position: relative;
+    z-index: 2;
+    font-family: inherit;
+}
+
+.form-card input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+}
+
+/* États des inputs */
+.form-card input:focus {
+    outline: none;
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.form-card input:hover:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-1px);
+}
+
+/* Animation de saisie */
+.form-card input:not(:placeholder-shown) {
+    border-color: var(--laser-green);
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+}
+
+/* === MESSAGES D'ERREUR STYLÉS === */
+.form-card .error {
+    color: var(--sunset-orange);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 51, 102, 0.1);
+    border: 1px solid rgba(255, 51, 102, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    animation: errorPulse 0.6s ease-out;
+    position: relative;
+    z-index: 2;
+}
+
+.form-card .error:empty {
+    display: none;
+}
+
+/* === MESSAGES DE STATUT === */
+.form-card .success-message {
+    background: rgba(0, 255, 102, 0.1);
+    border: 1px solid rgba(0, 255, 102, 0.3);
+    color: var(--laser-green);
+    padding: var(--space-lg);
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 500;
+    margin: var(--space-lg) 0;
+    backdrop-filter: blur(10px);
+    animation: successGlow 0.8s ease-out;
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+}
+
+.form-card .error-message {
+    background: rgba(255, 51, 102, 0.1);
+    border: 1px solid rgba(255, 51, 102, 0.3);
+    color: var(--sunset-orange);
+    padding: var(--space-lg);
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 500;
+    margin: var(--space-lg) 0;
+    backdrop-filter: blur(10px);
+    animation: errorShake 0.6s ease-out;
+}
+
+/* === BOUTON EXTRAORDINAIRE === */
+.form-card button {
+    width: 100%;
+    padding: var(--space-lg);
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--stardust);
+    background: var(--cosmic-gradient);
+    background-size: 300% 300%;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.4s var(--smooth);
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+    margin: var(--space-xl) 0;
+    box-shadow:
+            0 15px 35px rgba(0, 0, 0, 0.2),
+            0 5px 15px rgba(255, 255, 255, 0.1);
+    animation: gradientShift 3s ease infinite;
+}
+
+/* Effet de particules sur le bouton */
+.form-card button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+    );
+    transition: left 0.6s ease;
+}
+
+.form-card button:hover::before {
+    left: 100%;
+}
+
+.form-card button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow:
+            var(--glow-multi),
+            0 20px 40px rgba(0, 0, 0, 0.3);
+    background-position: 100% 0;
+}
+
+.form-card button:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.form-card button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    animation: pulseLoading 1.5s ease-in-out infinite;
+}
+
+/* === MESSAGE D'INFO ÉLÉGANT === */
+.form-card .info-message {
+    text-align: center;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* === ANIMATIONS EXTRAORDINAIRES === */
+
+@keyframes cosmicPulse {
+    0%, 100% {
+        filter: hue-rotate(0deg) brightness(1);
+        transform: scale(1);
+    }
+    50% {
+        filter: hue-rotate(180deg) brightness(1.2);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes floatingStars {
+    0% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -30px); }
+    66% { transform: translate(-20px, 20px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes cardEntrance {
+    0% {
+        transform: translateY(50px) scale(0.9) rotateX(10deg);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(-10px) scale(1.02) rotateX(-2deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(0) scale(1) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes hologramSweep {
+    0% { left: -100%; opacity: 0; }
+    50% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+}
+
+@keyframes rainbowBorder {
+    0%, 100% {
+        background: var(--aurora-gradient);
+        filter: hue-rotate(0deg);
+    }
+    25% { filter: hue-rotate(90deg); }
+    50% { filter: hue-rotate(180deg); }
+    75% { filter: hue-rotate(270deg); }
+}
+
+@keyframes textShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes errorPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes successGlow {
+    0% {
+        box-shadow: 0 0 5px rgba(0, 255, 102, 0.2);
+        transform: scale(0.95);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 255, 102, 0.6);
+        transform: scale(1.02);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+        transform: scale(1);
+    }
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes pulseLoading {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+}
+
+/* === EFFETS DE SURVOL AVANCÉS === */
+.form-card input:focus + .error,
+.form-card input:focus ~ .error {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+    .containerInscription {
+        padding: var(--space-md);
+    }
+
+    .form-card {
+        padding: var(--space-2xl);
+        border-radius: 24px;
+    }
+
+    .form-card h2 {
+        font-size: 2rem;
+    }
+
+    .form-card input {
+        padding: var(--space-md);
+        font-size: 1rem;
+    }
+
+    .form-card button {
+        padding: var(--space-md);
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-card {
+        padding: var(--space-xl);
+        border-radius: 20px;
+        margin: var(--space-md);
+    }
+
+    .form-card h2 {
+        font-size: 1.75rem;
+    }
+
+    .form-card input {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 16px; /* Évite le zoom sur iOS */
+    }
+}
+
+/* === MODE PERFORMANCE RÉDUITE === */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .form-card::before,
+    .form-card::after,
+    body::before,
+    body::after {
+        animation: none;
+    }
+}
+
+/* === EFFET DE FOCUS GLOBAL === */
+.form-card *:focus-visible {
+    outline: 2px solid var(--neon-cyan);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+/* === ÉTAT HAUTE PERFORMANCE === */
+@media (prefers-reduced-motion: no-preference) {
+    .form-card {
+        will-change: transform;
+    }
+
+    .form-card input {
+        will-change: transform, box-shadow;
+    }
+
+    .form-card button {
+        will-change: transform, box-shadow, background-position;
+    }
+}
+
+/* === MICRO-INTERACTIONS === */
+.form-card input:focus {
+    animation: inputFocus 0.3s var(--bounce);
+}
+
+@keyframes inputFocus {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1.02); }
+}
+
+/* === EFFET DE TYPING === */
+.form-card input:not(:placeholder-shown) {
+    animation: typing 0.1s ease;
+}
+
+@keyframes typing {
+    0% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+}
+
+/* === FINITIONS PROFESSIONNELLES === */
+.form-card {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.form-card input {
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+/* === OPTIMISATIONS WEBKIT === */
+.form-card input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+.form-card input:focus::-webkit-input-placeholder {
+    opacity: 0.3;
+}
+
+/* === CURSEUR PERSONNALISÉ === */
+.form-card button {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="%2300ffff" opacity="0.8"/></svg>'), auto;
+}

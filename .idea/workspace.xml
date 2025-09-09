@@ -4,10 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="">
+    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="correction du nan">
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/allSpend.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/inscription.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ImportTicket.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/ImportTicket.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/lien.js" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/lien.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpend.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpend.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpendFilters.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpendFilters.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Inscription.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Inscription.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/connection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/connection.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/budget_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/budget_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/graphBudget.css" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/graphBudget.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/useBudgetStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/useBudgetStore.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +27,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="CSS File" />
         <option value="JSX File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -86,7 +95,9 @@
       <workItem from="1751800914656" duration="1092000" />
       <workItem from="1752175855947" duration="1425000" />
       <workItem from="1752232470902" duration="2974000" />
-      <workItem from="1752316960494" duration="3957000" />
+      <workItem from="1752316960494" duration="7661000" />
+      <workItem from="1752430516676" duration="4033000" />
+      <workItem from="1757401256588" duration="3823000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -232,7 +243,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752320611114</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="correction du nan">
+      <option name="closed" value="true" />
+      <created>1752324595162</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1752324595162</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,7 +281,8 @@
     <MESSAGE value="correction centrage css" />
     <MESSAGE value="analyse dashboard" />
     <MESSAGE value="ocr" />
-    <option name="LAST_COMMIT_MESSAGE" value="ocr" />
+    <MESSAGE value="correction du nan" />
+    <option name="LAST_COMMIT_MESSAGE" value="correction du nan" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -270,11 +290,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardHello.jsx</url>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx</url>
-          <line>2</line>
-          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/mon-projet-vite/src/pages/components/DashBoardBudget.jsx</url>

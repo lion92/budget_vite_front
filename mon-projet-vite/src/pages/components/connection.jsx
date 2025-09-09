@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import lien from '../components/lien.js';
 import './css/dash.scss';
 import Budget from "./Budget.jsx";
-import './css/connexion.css';
+import './css/connexion.css'
 
 const Connection = () => {
     const [messageLog, setMessageLog] = useState("");
