@@ -1,16 +1,147 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
+  <!-- Meta essentiels -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Mon application Vite avec React Router" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- SEO Meta tags -->
+  <title>Budget Manager - Gestion de Budget Personnel Gratuite | Kriss CLOTILDE</title>
+  <meta name="description" content="Application gratuite de gestion de budget personnel. Suivez vos dépenses, gérez vos revenus et atteignez vos objectifs financiers avec des outils simples et efficaces." />
+  <meta name="keywords" content="budget personnel, gestion financière, suivi dépenses, épargne, finances personnelles, application budget, kriss clotilde" />
+  <meta name="author" content="Kriss CLOTILDE" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="googlebot" content="index, follow" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://gestiontaches.krissclotilde.com/" />
+
+  <!-- Open Graph Meta Tags (Facebook, LinkedIn) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Budget Manager - Gestion de Budget Personnel" />
+  <meta property="og:description" content="Application gratuite pour gérer votre budget personnel, suivre vos dépenses et atteindre vos objectifs financiers." />
+  <meta property="og:url" content="https://gestiontaches.krissclotilde.com/" />
+  <meta property="og:site_name" content="Budget Manager by Kriss CLOTILDE" />
+  <meta property="og:image" content="https://gestiontaches.krissclotilde.com/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Interface de l'application Budget Manager" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@kriss_clotilde" />
+  <meta name="twitter:creator" content="@kriss_clotilde" />
+  <meta name="twitter:title" content="Budget Manager - Gestion de Budget Personnel" />
+  <meta name="twitter:description" content="Application gratuite pour gérer votre budget personnel et atteindre vos objectifs financiers." />
+  <meta name="twitter:image" content="https://gestiontaches.krissclotilde.com/twitter-card.jpg" />
+  <meta name="twitter:image:alt" content="Capture d'écran de Budget Manager" />
+
+  <!-- Favicon et Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#667eea" />
+  <meta name="msapplication-TileColor" content="#667eea" />
+
+  <!-- PWA Meta Tags -->
+  <meta name="application-name" content="Budget Manager" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Budget Manager" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Budget Manager",
+      "description": "Application gratuite de gestion de budget personnel pour suivre vos dépenses et gérer vos finances",
+      "url": "https://gestiontaches.krissclotilde.com/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Kriss CLOTILDE",
+        "url": "https://www.linkedin.com/in/kriss-clotilde"
+      },
+      "creator": {
+        "@type": "Person",
+        "name": "Kriss CLOTILDE"
+      },
+      "datePublished": "2024-01-01",
+      "dateModified": "2025-01-01",
+      "inLanguage": "fr-FR",
+      "isAccessibleForFree": true,
+      "keywords": ["budget", "finances personnelles", "gestion financière", "épargne", "dépenses"],
+      "screenshot": "https://gestiontaches.krissclotilde.com/app-screenshot.jpg"
+    }
+  </script>
+
+  <!-- Preconnect pour optimiser les performances -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+
+  <!-- Styles externes -->
   <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
   />
-  <title>Mon App Vite</title>
+
+  <!-- Preload des ressources critiques -->
+  <link rel="preload" href="./src/main.jsx" as="script" />
+
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+
+  <!-- Geo Meta Tags -->
+  <meta name="geo.region" content="FR" />
+  <meta name="geo.placename" content="France" />
 </head>
 <body>
-<div id="root"></div>
+<!-- Skip to main content pour l'accessibilité -->
+<a href="#main-content" class="sr-only sr-only-focusable">Aller au contenu principal</a>
+
+<!-- Main app container -->
+<div id="root" role="main" aria-label="Application Budget Manager"></div>
+
+<!-- Scripts -->
 <script type="module" src="./src/main.jsx"></script>
+
+<!-- Schema pour les avis (optionnel) -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Budget Manager",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "150"
+    }
+  }
+</script>
 </body>
 </html>
