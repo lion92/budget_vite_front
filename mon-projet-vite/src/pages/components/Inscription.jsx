@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import lien from './lien';
-
+import './css/connexion.css'
 const Inscription = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

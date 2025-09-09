@@ -1,0 +1,564 @@
+/* ========================================
+   ALL SPEND COMPONENT - CSS COHÉRENT
+   ======================================== */
+
+/* Reprise des variables du Budget pour cohérence */
+:root {
+    /* Couleurs principales */
+    --primary: #667eea;
+    --primary-dark: #5a67d8;
+    --secondary: #64748b;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --info: #0284c7;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+    --gradient-warning: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+    --gradient-danger: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+
+    /* Surfaces */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --bg-app: #f1f5f9;
+
+    /* Texte */
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+    --text-inverse: #ffffff;
+
+    /* Bordures */
+    --border: #cbd5e1;
+    --border-light: #e2e8f0;
+    --border-dark: #94a3b8;
+
+    /* Espacements */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 0.75rem;
+    --space-lg: 1rem;
+    --space-xl: 1.5rem;
+    --space-2xl: 2rem;
+    --space-3xl: 3rem;
+
+    /* Rayons */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+
+    /* Ombres */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+    /* Transitions */
+    --transition: 0.2s ease-in-out;
+    --transition-slow: 0.3s ease-in-out;
+}
+
+/* === CONTAINER PRINCIPAL ALLSPEND === */
+.allspend-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    background: var(--bg-app);
+    min-height: 100vh;
+}
+
+/* === TITRE PRINCIPAL === */
+.allspend-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--gradient-primary);
+    color: var(--text-inverse) !important;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.allspend-title::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* === SECTION BILAN === */
+.allspend-section {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    margin-bottom: var(--space-2xl);
+    box-shadow: var(--shadow-md);
+    border: 1.5px solid var(--border);
+    position: relative;
+}
+
+.allspend-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.section-title::before {
+    content: '📊';
+    font-size: 1.25rem;
+}
+
+/* === CONTENEUR DES CARTES MENSUELLES === */
+.monthly-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+}
+
+/* === CARTE MENSUELLE === */
+.monthly-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.monthly-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+.monthly-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gradient-primary);
+}
+
+.monthly-card-header {
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.monthly-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.monthly-total {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.monthly-total::before {
+    content: '💰';
+    font-size: 1.25rem;
+}
+
+/* === LISTE DES CATÉGORIES === */
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+}
+
+.category-item:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(4px);
+}
+
+.category-name {
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.category-name::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: inline-block;
+}
+
+.category-amount {
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+
+/* === SECTION GRAPHIQUE === */
+.chart-section {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    margin-bottom: var(--space-2xl);
+    box-shadow: var(--shadow-md);
+    border: 1.5px solid var(--border);
+    position: relative;
+}
+
+.chart-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-success);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.chart-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+}
+
+.chart-title::before {
+    content: '📈';
+    font-size: 1.25rem;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+/* === BUDGET SUMMARY === */
+.budget-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+}
+
+.budget-stat {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    border: 2px solid var(--border);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.budget-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.budget-stat.used::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--warning);
+}
+
+.budget-stat.remaining::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--success);
+}
+
+.budget-stat.total::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--info);
+}
+
+.budget-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: var(--space-sm);
+}
+
+.budget-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* === ÉTAT DE CHARGEMENT === */
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3xl);
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+}
+
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: var(--space-lg);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* === ÉTAT VIDE === */
+.empty-state {
+    text-align: center;
+    padding: var(--space-3xl);
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-lg);
+}
+
+.empty-state-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.empty-state-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .allspend-container {
+        padding: var(--space-lg);
+    }
+
+    .allspend-title {
+        font-size: 1.75rem;
+        padding: var(--space-lg);
+    }
+
+    .monthly-cards-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+
+    .monthly-card {
+        padding: var(--space-lg);
+    }
+
+    .budget-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        padding: var(--space-md);
+    }
+
+    .category-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .category-amount {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .allspend-container {
+        padding: var(--space-md);
+    }
+
+    .allspend-title {
+        font-size: 1.5rem;
+        padding: var(--space-md);
+    }
+
+    .monthly-card-title {
+        font-size: 1.125rem;
+    }
+
+    .monthly-total {
+        font-size: 1.25rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .chart-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* === ANIMATIONS === */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.monthly-card,
+.chart-section,
+.allspend-section {
+    animation: slideInUp 0.6s ease-out;
+}
+
+.category-item {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* === UTILITAIRES === */
+.text-center {
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-primary {
+    color: var(--text-primary);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+    color: var(--text-inverse);
+}
+
+/* === INTÉGRATION AVEC CHART.JS === */
+.chart-section canvas {
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+}
+
+/* === PDF EXPORT STYLES === */
+@media print {
+    .allspend-container {
+        box-shadow: none;
+        border: none;
+        background: white;
+    }
+
+    .monthly-card,
+    .chart-section,
+    .allspend-section {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+
+    .allspend-title {
+        background: none !important;
+        color: #000 !important;
+    }
+}

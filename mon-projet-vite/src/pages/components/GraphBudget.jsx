@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
     LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -6,7 +6,8 @@ import {
 } from 'recharts';
 import {
     TrendingUp, TrendingDown, DollarSign, CreditCard,
-    PiggyBank, Target, Calendar, ArrowUpRight, ArrowDownRight
+    PiggyBank, Target, Calendar, ArrowUpRight, ArrowDownRight,
+    BarChart3, Activity
 } from 'lucide-react';
 import useBudgetStore from "../../useBudgetStore";
 import './css/graphBudget.css';
@@ -24,21 +25,89 @@ const GraphBudget = () => {
     const [selectedPeriod, setSelectedPeriod] = useState('monthly');
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+    const [isLoading, setIsLoading] = useState(true);
 
+    // Initialisation des données
     useEffect(() => {
-        fetchDepenses();
-        fetchCategories();
-        fetchRevenus();
-    }, []);
+        const initializeData = async () => {
+            setIsLoading(true);
+            try {
+                await Promise.all([
+                    fetchDepenses(),
+                    fetchCategories(),
+                    fetchRevenus()
+                ]);
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    // Couleurs pour les graphiques
+        initializeData();
+    }, [fetchDepenses, fetchCategories, fetchRevenus]);
+
+    // Couleurs pour les graphiques - optimisées pour l'accessibilité
     const colors = [
-        '#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe',
-        '#00f2fe', '#43e97b', '#38f9d7', '#fa709a', '#fee140'
+        '#667eea', '#16a34a', '#dc2626', '#d97706', '#0284c7',
+        '#7c3aed', '#059669', '#ea580c', '#0ea5e9', '#7c2d12'
     ];
 
-    // Calculs des données
+    // Fonction utilitaire pour valider et convertir les montants
+    const safeAmount = useCallback((value) => {
+        const num = parseFloat(value);
+        return isNaN(num) || !isFinite(num) ? 0 : num;
+    }, []);
+
+    // Fonction pour trouver le nom de catégorie
+    const getCategoryName = useCallback((categorieId) => {
+        if (!categorieId || !categories || categories.length === 0) {
+            return 'Non catégorisé';
+        }
+
+        const categorieString = String(categorieId).trim();
+
+        // Recherche par ID ou par nom
+        const categorieFound = categories.find(c =>
+            String(c.id) === categorieString ||
+            c.categorie === categorieId ||
+            c.name === categorieId ||
+            c.nom === categorieId
+        );
+
+        if (categorieFound) {
+            return categorieFound.categorie ||
+                categorieFound.name ||
+                categorieFound.nom ||
+                `Catégorie ${categorieFound.id}`;
+        }
+
+        // Si c'est déjà un nom de catégorie valide
+        if (typeof categorieId === 'string' && categorieString.length > 0) {
+            return categorieString;
+        }
+
+        return 'Non catégorisé';
+    }, [categories]);
+
+    // Calculs des données - optimisé avec useMemo
     const calculatedData = useMemo(() => {
+        if (isLoading || !depenses || !revenus) {
+            return {
+                totalDepenses: 0,
+                totalRevenus: 0,
+                solde: 0,
+                tauxEpargne: 0,
+                pieData: [],
+                evolutionMensuelle: [],
+                topCategories: [],
+                radialData: [],
+                progressionEpargne: 0,
+                objectifEpargne: 0,
+                analyseTemporelle: []
+            };
+        }
+
         const currentYear = selectedYear;
         const currentMonth = selectedMonth;
 
@@ -46,6 +115,8 @@ const GraphBudget = () => {
         const filterByPeriod = (items, dateField) => {
             return items.filter(item => {
                 const date = new Date(item[dateField]);
+                if (!isFinite(date.getTime())) return false; // Date invalide
+
                 if (selectedPeriod === 'monthly') {
                     return date.getFullYear() === currentYear && date.getMonth() === currentMonth;
                 } else if (selectedPeriod === 'yearly') {
@@ -55,60 +126,33 @@ const GraphBudget = () => {
             });
         };
 
-        const filteredDepenses = filterByPeriod(depenses || [], 'dateTransaction');
-        const filteredRevenus = filterByPeriod(revenus || [], 'date');
+        const filteredDepenses = filterByPeriod(depenses, 'dateTransaction');
+        const filteredRevenus = filterByPeriod(revenus, 'date');
 
-        // Totaux avec protection NaN
-        const totalDepenses = filteredDepenses.reduce((acc, dep) => {
-            const montant = parseFloat(dep.montant);
-            return acc + (isNaN(montant) ? 0 : montant);
-        }, 0);
+        // Totaux avec validation
+        const totalDepenses = filteredDepenses.reduce((acc, dep) =>
+            acc + safeAmount(dep.montant), 0);
 
-        const totalRevenus = filteredRevenus.reduce((acc, rev) => {
-            const amount = parseFloat(rev.amount);
-            return acc + (isNaN(amount) ? 0 : amount);
-        }, 0);
+        const totalRevenus = filteredRevenus.reduce((acc, rev) =>
+            acc + safeAmount(rev.amount), 0);
 
         const solde = totalRevenus - totalDepenses;
-        const tauxEpargne = totalRevenus > 0 ? ((solde / totalRevenus) * 100) : 0;
+        const tauxEpargne = totalRevenus > 0 ? (solde / totalRevenus) * 100 : 0;
 
-        // Données par catégorie avec mapping intelligent
+        // Données par catégorie
         const depensesParCategorie = filteredDepenses.reduce((acc, dep) => {
-            let categorieNom = 'Non catégorisé';
-
-            if (dep.categorie && categories && categories.length > 0) {
-                // Conversion sécurisée des IDs
-                const depCategorieId = String(dep.categorie);
-
-                // Recherche de la catégorie correspondante
-                const categorieFound = categories.find(c =>
-                    String(c.id) === depCategorieId ||
-                    c.categorie === dep.categorie ||
-                    c.name === dep.categorie ||
-                    c.nom === dep.categorie
-                );
-
-                if (categorieFound) {
-                    categorieNom = categorieFound.categorie ||
-                        categorieFound.name ||
-                        categorieFound.nom ||
-                        `Catégorie ${categorieFound.id}`;
-                } else if (typeof dep.categorie === 'string' && dep.categorie.trim().length > 0) {
-                    // Si c'est déjà un nom de catégorie
-                    categorieNom = dep.categorie.trim();
-                }
-            }
-
-            const montant = parseFloat(dep.montant);
-            const montantValide = isNaN(montant) ? 0 : montant;
-            acc[categorieNom] = (acc[categorieNom] || 0) + montantValide;
+            const categorieNom = getCategoryName(dep.categorie);
+            const montant = safeAmount(dep.montant);
+            acc[categorieNom] = (acc[categorieNom] || 0) + montant;
             return acc;
         }, {});
 
         const pieData = Object.entries(depensesParCategorie)
-            .filter(([name, value]) => value > 0) // Filtrer les catégories vides
+            .filter(([, value]) => value > 0)
+            .sort(([,a], [,b]) => b - a) // Tri par montant décroissant
             .map(([name, value], index) => ({
-                name,
+                name: name.length > 20 ? name.substring(0, 20) + '...' : name,
+                fullName: name,
                 value,
                 fill: colors[index % colors.length]
             }));
@@ -124,19 +168,17 @@ const GraphBudget = () => {
 
             const depensesMois = (depenses || []).filter(d => {
                 const dDate = new Date(d.dateTransaction);
-                return dDate.getFullYear() === annee && dDate.getMonth() === moisNum;
-            }).reduce((acc, d) => {
-                const montant = parseFloat(d.montant);
-                return acc + (isNaN(montant) ? 0 : montant);
-            }, 0);
+                return isFinite(dDate.getTime()) &&
+                    dDate.getFullYear() === annee &&
+                    dDate.getMonth() === moisNum;
+            }).reduce((acc, d) => acc + safeAmount(d.montant), 0);
 
             const revenusMois = (revenus || []).filter(r => {
                 const rDate = new Date(r.date);
-                return rDate.getFullYear() === annee && rDate.getMonth() === moisNum;
-            }).reduce((acc, r) => {
-                const amount = parseFloat(r.amount);
-                return acc + (isNaN(amount) ? 0 : amount);
-            }, 0);
+                return isFinite(rDate.getTime()) &&
+                    rDate.getFullYear() === annee &&
+                    rDate.getMonth() === moisNum;
+            }).reduce((acc, r) => acc + safeAmount(r.amount), 0);
 
             evolutionMensuelle.push({
                 mois: `${mois} ${annee.toString().slice(-2)}`,
@@ -146,56 +188,53 @@ const GraphBudget = () => {
             });
         }
 
-        // Top 5 des catégories avec protection NaN
+        // Top 5 des catégories
         const topCategories = Object.entries(depensesParCategorie)
             .sort(([,a], [,b]) => b - a)
             .slice(0, 5)
             .map(([name, value], index) => ({
-                name,
-                value: isNaN(value) ? 0 : value,
+                name: name.length > 15 ? name.substring(0, 15) + '...' : name,
+                fullName: name,
+                value,
                 pourcentage: totalDepenses > 0 ? ((value / totalDepenses) * 100).toFixed(1) : '0.0',
                 fill: colors[index]
             }));
 
-        // Données pour le graphique radial (objectifs) avec protection NaN
+        // Données pour le graphique radial
         const objectifEpargne = totalRevenus * 0.2; // 20% objectif
         const soldePositif = Math.max(solde, 0);
-        const progressionEpargne = objectifEpargne > 0 ? Math.min((soldePositif / objectifEpargne) * 100, 100) : 0;
+        const progressionEpargne = objectifEpargne > 0 ?
+            Math.min((soldePositif / objectifEpargne) * 100, 100) : 0;
 
         const radialData = [
             {
                 name: 'Épargne',
-                value: isNaN(progressionEpargne) ? 0 : progressionEpargne,
-                fill: solde >= 0 ? '#10b981' : '#ef4444'
+                value: progressionEpargne,
+                fill: solde >= 0 ? '#16a34a' : '#dc2626'
             }
         ];
 
-        // Analyse des dépenses par période sélectionnée (au lieu de 7 derniers jours)
-        const analyseParPeriode = () => {
+        // Analyse temporelle améliorée
+        const analyseTemporelle = (() => {
             if (selectedPeriod === 'monthly') {
                 // Pour le mois : analyse par semaine
                 const semaines = [];
                 const startOfMonth = new Date(selectedYear, selectedMonth, 1);
                 const endOfMonth = new Date(selectedYear, selectedMonth + 1, 0);
+                const totalDays = endOfMonth.getDate();
+                const weeksInMonth = Math.ceil(totalDays / 7);
 
-                for (let semaine = 1; semaine <= 4; semaine++) {
-                    const startWeek = new Date(startOfMonth);
-                    startWeek.setDate((semaine - 1) * 7 + 1);
-                    const endWeek = new Date(startOfMonth);
-                    endWeek.setDate(semaine * 7);
-
-                    if (endWeek > endOfMonth) endWeek.setTime(endOfMonth.getTime());
+                for (let semaine = 0; semaine < weeksInMonth; semaine++) {
+                    const startWeek = new Date(selectedYear, selectedMonth, semaine * 7 + 1);
+                    const endWeek = new Date(selectedYear, selectedMonth, Math.min((semaine + 1) * 7, totalDays));
 
                     const depensesSemaine = filteredDepenses.filter(d => {
                         const dDate = new Date(d.dateTransaction);
-                        return dDate >= startWeek && dDate <= endWeek;
-                    }).reduce((acc, d) => {
-                        const montant = parseFloat(d.montant);
-                        return acc + (isNaN(montant) ? 0 : montant);
-                    }, 0);
+                        return isFinite(dDate.getTime()) && dDate >= startWeek && dDate <= endWeek;
+                    }).reduce((acc, d) => acc + safeAmount(d.montant), 0);
 
                     semaines.push({
-                        periode: `Sem. ${semaine}`,
+                        periode: `Sem. ${semaine + 1}`,
                         depenses: depensesSemaine
                     });
                 }
@@ -207,11 +246,10 @@ const GraphBudget = () => {
                 for (let mois = 0; mois < 12; mois++) {
                     const depensesMois = (depenses || []).filter(d => {
                         const dDate = new Date(d.dateTransaction);
-                        return dDate.getFullYear() === selectedYear && dDate.getMonth() === mois;
-                    }).reduce((acc, d) => {
-                        const montant = parseFloat(d.montant);
-                        return acc + (isNaN(montant) ? 0 : montant);
-                    }, 0);
+                        return isFinite(dDate.getTime()) &&
+                            dDate.getFullYear() === selectedYear &&
+                            dDate.getMonth() === mois;
+                    }).reduce((acc, d) => acc + safeAmount(d.montant), 0);
 
                     moisAnalyse.push({
                         periode: new Date(0, mois).toLocaleString('fr-FR', { month: 'short' }),
@@ -221,9 +259,7 @@ const GraphBudget = () => {
 
                 return moisAnalyse;
             }
-        };
-
-        const analyseTemporelle = analyseParPeriode();
+        })();
 
         return {
             totalDepenses,
@@ -238,31 +274,31 @@ const GraphBudget = () => {
             objectifEpargne,
             analyseTemporelle
         };
-    }, [depenses, revenus, categories, selectedPeriod, selectedYear, selectedMonth]);
+    }, [depenses, revenus, categories, selectedPeriod, selectedYear, selectedMonth, isLoading, safeAmount, getCategoryName]);
 
+    // Tooltip personnalisé amélioré
     const CustomTooltip = ({ active, payload, label }) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className="custom-tooltip">
-                    <p className="tooltip-label">{label}</p>
-                    {payload.map((entry, index) => {
-                        const value = isNaN(entry.value) ? 0 : entry.value;
-                        return (
-                            <p key={index} style={{ color: entry.color }}>
-                                {entry.name}: {value.toFixed(2)} €
-                            </p>
-                        );
-                    })}
-                </div>
-            );
-        }
-        return null;
+        if (!active || !payload || !payload.length) return null;
+
+        return (
+            <div className="custom-tooltip">
+                <p className="tooltip-label">{label}</p>
+                {payload.map((entry, index) => {
+                    const value = safeAmount(entry.value);
+                    return (
+                        <p key={index} style={{ color: entry.color }}>
+                            {entry.name}: {value.toFixed(2)} €
+                        </p>
+                    );
+                })}
+            </div>
+        );
     };
 
+    // Composant KPI amélioré
     const KPICard = ({ title, value, icon: Icon, trend, color = '#667eea' }) => {
-        // Protection contre les valeurs NaN
-        const safeValue = isNaN(value) ? 0 : value;
-        const safeTrend = isNaN(trend) ? 0 : trend;
+        const safeValue = typeof value === 'string' ? value : safeAmount(value);
+        const safeTrend = safeAmount(trend);
 
         return (
             <div className="kpi-card">
@@ -283,15 +319,46 @@ const GraphBudget = () => {
         );
     };
 
+    // Tooltip personnalisé pour le pie chart
+    const PieTooltip = ({ active, payload }) => {
+        if (!active || !payload || !payload.length) return null;
+
+        const data = payload[0];
+        return (
+            <div className="custom-tooltip">
+                <p className="tooltip-label">{data.payload.fullName || data.name}</p>
+                <p style={{ color: data.fill }}>
+                    Montant: {safeAmount(data.value).toFixed(2)} €
+                </p>
+            </div>
+        );
+    };
+
+    if (isLoading) {
+        return (
+            <div className="dashboard-container">
+                <div className="no-data-message">
+                    <div className="loading-spinner"></div>
+                    <p>Chargement du dashboard...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="dashboard-container">
+            {/* Header */}
             <div className="dashboard-header">
-                <h1>Dashboard Financier</h1>
+                <h1>
+                    <BarChart3 size={32} style={{ marginRight: '12px' }} />
+                    Dashboard Financier
+                </h1>
                 <div className="period-selector">
                     <select
                         value={selectedPeriod}
                         onChange={(e) => setSelectedPeriod(e.target.value)}
                         className="period-select"
+                        aria-label="Sélectionner la période"
                     >
                         <option value="monthly">Mensuel</option>
                         <option value="yearly">Annuel</option>
@@ -303,6 +370,7 @@ const GraphBudget = () => {
                                 value={selectedMonth}
                                 onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
                                 className="month-select"
+                                aria-label="Sélectionner le mois"
                             >
                                 {Array.from({length: 12}).map((_, i) => (
                                     <option key={i} value={i}>
@@ -310,23 +378,18 @@ const GraphBudget = () => {
                                     </option>
                                 ))}
                             </select>
-                            <input
-                                type="number"
-                                value={selectedYear}
-                                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                                className="year-input"
-                            />
                         </>
                     )}
 
-                    {selectedPeriod === 'yearly' && (
-                        <input
-                            type="number"
-                            value={selectedYear}
-                            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                            className="year-input"
-                        />
-                    )}
+                    <input
+                        type="number"
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                        className="year-input"
+                        min="2020"
+                        max="2030"
+                        aria-label="Sélectionner l'année"
+                    />
                 </div>
             </div>
 
@@ -336,19 +399,19 @@ const GraphBudget = () => {
                     title="Revenus"
                     value={calculatedData.totalRevenus}
                     icon={TrendingUp}
-                    color="#10b981"
+                    color="#16a34a"
                 />
                 <KPICard
                     title="Dépenses"
                     value={calculatedData.totalDepenses}
                     icon={TrendingDown}
-                    color="#ef4444"
+                    color="#dc2626"
                 />
                 <KPICard
                     title="Solde"
                     value={calculatedData.solde}
                     icon={DollarSign}
-                    color={calculatedData.solde >= 0 ? '#10b981' : '#ef4444'}
+                    color={calculatedData.solde >= 0 ? '#16a34a' : '#dc2626'}
                 />
                 <KPICard
                     title="Taux d'épargne"
@@ -362,29 +425,40 @@ const GraphBudget = () => {
             <div className="charts-grid">
                 {/* Évolution mensuelle */}
                 <div className="chart-card large">
-                    <h3>Évolution sur 12 mois</h3>
+                    <h3>
+                        <Activity size={20} />
+                        Évolution sur 12 mois
+                    </h3>
                     <ResponsiveContainer width="100%" height={350}>
                         <ComposedChart data={calculatedData.evolutionMensuelle}>
                             <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                            <XAxis dataKey="mois" />
-                            <YAxis />
+                            <XAxis
+                                dataKey="mois"
+                                tick={{ fontSize: 12 }}
+                                angle={-45}
+                                textAnchor="end"
+                                height={60}
+                            />
+                            <YAxis tick={{ fontSize: 12 }} />
                             <Tooltip content={<CustomTooltip />} />
                             <Legend />
                             <Area
                                 type="monotone"
                                 dataKey="revenus"
-                                fill="#10b981"
+                                fill="#16a34a"
                                 fillOpacity={0.3}
-                                stroke="#10b981"
+                                stroke="#16a34a"
                                 name="Revenus"
+                                strokeWidth={2}
                             />
                             <Area
                                 type="monotone"
                                 dataKey="depenses"
-                                fill="#ef4444"
+                                fill="#dc2626"
                                 fillOpacity={0.3}
-                                stroke="#ef4444"
+                                stroke="#dc2626"
                                 name="Dépenses"
+                                strokeWidth={2}
                             />
                             <Line
                                 type="monotone"
@@ -392,6 +466,7 @@ const GraphBudget = () => {
                                 stroke="#667eea"
                                 strokeWidth={3}
                                 name="Solde"
+                                dot={{ r: 4 }}
                             />
                             <ReferenceLine y={0} stroke="#666" strokeDasharray="2 2" />
                         </ComposedChart>
@@ -400,7 +475,10 @@ const GraphBudget = () => {
 
                 {/* Répartition par catégorie */}
                 <div className="chart-card medium">
-                    <h3>Dépenses par catégorie</h3>
+                    <h3>
+                        <Target size={20} />
+                        Dépenses par catégorie
+                    </h3>
                     {calculatedData.pieData.length > 0 ? (
                         <ResponsiveContainer width="100%" height={350}>
                             <PieChart>
@@ -417,23 +495,28 @@ const GraphBudget = () => {
                                         <Cell key={`cell-${index}`} fill={entry.fill} />
                                     ))}
                                 </Pie>
-                                <Tooltip formatter={(value) => `${value.toFixed(2)} €`} />
-                                <Legend />
+                                <Tooltip content={<PieTooltip />} />
+                                <Legend
+                                    verticalAlign="bottom"
+                                    height={36}
+                                    iconType="circle"
+                                />
                             </PieChart>
                         </ResponsiveContainer>
                     ) : (
                         <div className="no-data-message">
                             <p>📊 Aucune donnée de catégorie disponible</p>
-                            <p style={{fontSize: '14px', color: '#6b7280', marginTop: '10px'}}>
-                                Vérifiez que vos dépenses ont des catégories assignées
-                            </p>
+                            <p>Vérifiez que vos dépenses ont des catégories assignées</p>
                         </div>
                     )}
                 </div>
 
                 {/* Objectif d'épargne */}
                 <div className="chart-card medium">
-                    <h3>Objectif d'épargne (20%)</h3>
+                    <h3>
+                        <PiggyBank size={20} />
+                        Objectif d'épargne (20%)
+                    </h3>
                     <ResponsiveContainer width="100%" height={350}>
                         <RadialBarChart
                             cx="50%"
@@ -441,6 +524,8 @@ const GraphBudget = () => {
                             innerRadius="40%"
                             outerRadius="80%"
                             data={calculatedData.radialData}
+                            startAngle={90}
+                            endAngle={-270}
                         >
                             <RadialBar
                                 dataKey="value"
@@ -454,36 +539,43 @@ const GraphBudget = () => {
                                 dominantBaseline="middle"
                                 className="radial-label"
                             >
-                                {isNaN(calculatedData.progressionEpargne) ? '0' : calculatedData.progressionEpargne.toFixed(0)}%
+                                {calculatedData.progressionEpargne.toFixed(0)}%
                             </text>
                         </RadialBarChart>
                     </ResponsiveContainer>
                     <div className="objectif-details">
-                        <p>Objectif: {isNaN(calculatedData.objectifEpargne) ? '0.00' : calculatedData.objectifEpargne.toFixed(2)} €</p>
+                        <p>Objectif: {calculatedData.objectifEpargne.toFixed(2)} €</p>
                         <p>Réalisé: {Math.max(calculatedData.solde, 0).toFixed(2)} €</p>
                     </div>
                 </div>
 
                 {/* Top 5 catégories */}
                 <div className="chart-card medium">
-                    <h3>Top 5 des catégories</h3>
+                    <h3>
+                        <BarChart3 size={20} />
+                        Top 5 des catégories
+                    </h3>
                     {calculatedData.topCategories.length > 0 ? (
                         <ResponsiveContainer width="100%" height={350}>
                             <BarChart
                                 data={calculatedData.topCategories}
-                                margin={{ top: 20, right: 30, left: 80, bottom: 5 }}
+                                layout="horizontal"
+                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis />
+                                <XAxis type="number" tick={{ fontSize: 12 }} />
                                 <YAxis
                                     dataKey="name"
                                     type="category"
-                                    width={120}
+                                    width={100}
                                     tick={{ fontSize: 12 }}
                                 />
                                 <Tooltip
-                                    formatter={(value) => [`${value.toFixed(2)} €`, 'Montant']}
-                                    labelFormatter={(label) => `${label}`}
+                                    formatter={(value, name, props) => [
+                                        `${safeAmount(value).toFixed(2)} €`,
+                                        'Montant'
+                                    ]}
+                                    labelFormatter={(label, payload) => payload?.[0]?.payload?.fullName || label}
                                 />
                                 <Bar
                                     dataKey="value"
@@ -499,16 +591,15 @@ const GraphBudget = () => {
                     ) : (
                         <div className="no-data-message">
                             <p>📊 Aucune catégorie à afficher</p>
-                            <p style={{fontSize: '14px', color: '#6b7280', marginTop: '10px'}}>
-                                Ajoutez des dépenses avec des catégories pour voir ce graphique
-                            </p>
+                            <p>Ajoutez des dépenses avec des catégories pour voir ce graphique</p>
                         </div>
                     )}
                 </div>
 
-                {/* Analyse temporelle intelligente */}
+                {/* Analyse temporelle */}
                 <div className="chart-card large">
                     <h3>
+                        <Calendar size={20} />
                         {selectedPeriod === 'monthly'
                             ? `Répartition par semaine - ${new Date(selectedYear, selectedMonth).toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}`
                             : `Dépenses mensuelles - ${selectedYear}`
@@ -517,8 +608,8 @@ const GraphBudget = () => {
                     <ResponsiveContainer width="100%" height={300}>
                         <AreaChart data={calculatedData.analyseTemporelle}>
                             <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                            <XAxis dataKey="periode" />
-                            <YAxis />
+                            <XAxis dataKey="periode" tick={{ fontSize: 12 }} />
+                            <YAxis tick={{ fontSize: 12 }} />
                             <Tooltip content={<CustomTooltip />} />
                             <Area
                                 type="monotone"
@@ -527,6 +618,7 @@ const GraphBudget = () => {
                                 fill="#667eea"
                                 fillOpacity={0.6}
                                 name="Dépenses"
+                                strokeWidth={2}
                             />
                         </AreaChart>
                     </ResponsiveContainer>
@@ -534,30 +626,38 @@ const GraphBudget = () => {
 
                 {/* Analyse détaillée */}
                 <div className="chart-card medium">
-                    <h3>Analyse du mois</h3>
+                    <h3>
+                        <Activity size={20} />
+                        Analyse détaillée
+                    </h3>
                     <div className="analysis-content">
                         <div className="analysis-item">
-                            <span className="analysis-label">Budget moyen/jour:</span>
+                            <span className="analysis-label">Moyenne quotidienne:</span>
                             <span className="analysis-value">
-                                {(calculatedData.totalDepenses / 30).toFixed(2)} €
+                                {(calculatedData.totalDepenses / (selectedPeriod === 'monthly' ? 30 : 365)).toFixed(2)} €
                             </span>
                         </div>
                         <div className="analysis-item">
                             <span className="analysis-label">Plus grosse catégorie:</span>
                             <span className="analysis-value">
-                                {calculatedData.topCategories[0]?.name || 'N/A'}
+                                {calculatedData.topCategories[0]?.fullName || 'N/A'}
                             </span>
                         </div>
                         <div className="analysis-item">
-                            <span className="analysis-label">Économies potentielles:</span>
+                            <span className="analysis-label">Économies potentielles (10%):</span>
                             <span className="analysis-value">
                                 {(calculatedData.totalDepenses * 0.1).toFixed(2)} €
                             </span>
                         </div>
                         <div className="analysis-item">
-                            <span className="analysis-label">Projection annuelle:</span>
+                            <span className="analysis-label">
+                                {selectedPeriod === 'monthly' ? 'Projection annuelle:' : 'Projection mois suivant:'}
+                            </span>
                             <span className="analysis-value">
-                                {(calculatedData.solde * 12).toFixed(2)} €
+                                {selectedPeriod === 'monthly'
+                                    ? (calculatedData.solde * 12).toFixed(2)
+                                    : (calculatedData.totalDepenses / 12).toFixed(2)
+                                } €
                             </span>
                         </div>
                     </div>
@@ -567,19 +667,25 @@ const GraphBudget = () => {
             {/* Footer avec conseils */}
             <div className="dashboard-footer">
                 <div className="tips-section">
-                    <h4>💡 Conseils du mois</h4>
+                    <h4>💡 Conseils personnalisés</h4>
                     <ul>
-                        {calculatedData.tauxEpargne < 10 && (
-                            <li>Votre taux d'épargne est faible. Essayez de réduire vos dépenses non essentielles.</li>
+                        {calculatedData.tauxEpargne < 5 && calculatedData.totalRevenus > 0 && (
+                            <li>Votre taux d'épargne est très faible ({calculatedData.tauxEpargne.toFixed(1)}%). Visez au moins 10% de vos revenus.</li>
                         )}
-                        {calculatedData.topCategories[0]?.value > calculatedData.totalDepenses * 0.4 && (
-                            <li>La catégorie "{calculatedData.topCategories[0]?.name}" représente une grande part de vos dépenses.</li>
+                        {calculatedData.tauxEpargne >= 5 && calculatedData.tauxEpargne < 15 && (
+                            <li>Bon début ! Essayez d'atteindre un taux d'épargne de 20% pour optimiser votre avenir financier.</li>
                         )}
-                        {calculatedData.solde < 0 && (
-                            <li>Attention ! Vos dépenses dépassent vos revenus ce mois-ci.</li>
+                        {calculatedData.topCategories[0]?.value > calculatedData.totalDepenses * 0.5 && (
+                            <li>La catégorie "{calculatedData.topCategories[0]?.fullName}" représente {((calculatedData.topCategories[0]?.value / calculatedData.totalDepenses) * 100).toFixed(0)}% de vos dépenses. Analysez si c'est optimal.</li>
+                        )}
+                        {calculatedData.solde < -calculatedData.totalRevenus * 0.1 && (
+                            <li>Attention ! Vos dépenses dépassent significativement vos revenus. Révisez votre budget d'urgence.</li>
                         )}
                         {calculatedData.progressionEpargne >= 100 && (
-                            <li>Félicitations ! Vous avez atteint votre objectif d'épargne !</li>
+                            <li>Félicitations ! Vous avez dépassé votre objectif d'épargne de 20%. Envisagez d'investir le surplus.</li>
+                        )}
+                        {calculatedData.totalDepenses === 0 && calculatedData.totalRevenus === 0 && (
+                            <li>Aucune donnée financière trouvée pour cette période. Commencez par ajouter vos revenus et dépenses.</li>
                         )}
                     </ul>
                 </div>

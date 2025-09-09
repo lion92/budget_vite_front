@@ -190,6 +190,32 @@ const useBudgetStore = create((set, get) => ({
         } else {
             notify("Erreur suppression", "error");
         }
+    },
+    updateDepense: async ({ id, montant, categorie, description, date }, notify) => {
+        const jwt = localStorage.getItem("jwt");
+        const body = {
+            montant,
+            categorie,
+            description,
+            dateTransaction: date.toLocaleDateString("en-CA"),
+            jwt
+        };
+
+        const res = await fetch(`${lien.url}action/${id}`, {
+            method: "PUT",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+            notify("Dépense modifiée", "success");
+            await get().fetchDepenses();
+            get().generateMonthlySummary();
+            get().assignCategoryColors();
+            await get().fetchGraphData();
+        } else {
+            notify("Erreur lors de la modification", "error");
+        }
     }
 }));
 
