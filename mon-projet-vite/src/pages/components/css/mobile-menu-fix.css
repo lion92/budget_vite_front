@@ -1,0 +1,405 @@
+/* ========================================
+   CORRECTIONS MENU MOBILE - FINAL
+   ======================================== */
+
+/* === CORRECTIONS POUR LE CONTENU MOBILE === */
+@media (max-width: 768px) {
+    /* Espace en bas pour la barre de navigation mobile */
+    .content,
+    .home-section,
+    .main-content,
+    section {
+        padding-bottom: 90px !important;
+        min-height: calc(100vh - 90px) !important;
+    }
+    
+    /* Container principal avec espacement mobile */
+    .container,
+    .container2,
+    .budget-container {
+        margin-bottom: 80px !important;
+        padding-bottom: 20px !important;
+    }
+    
+    /* Overlay sombre pour fermer le menu */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1040;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mobile-menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Sidebar mobile améliorée */
+    .sidebar {
+        transform: translateX(-100%) !important;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1050 !important;
+        width: 320px !important;
+        height: 100vh !important;
+        box-shadow: 8px 0 32px rgba(139, 92, 246, 0.3) !important;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0) !important;
+    }
+    
+    /* Empêcher le scroll quand le menu est ouvert */
+    body.menu-open {
+        overflow: hidden !important;
+        touch-action: none !important;
+    }
+    
+    /* Barre de navigation mobile */
+    .mobile-navbar {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 70px !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        border-top: 1px solid rgba(139, 92, 246, 0.2) !important;
+        display: flex !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        z-index: 1030 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Chat bouton repositionné */
+    .chatBubbleBtn,
+    .chat-bubble-btn {
+        bottom: 90px !important;
+        right: 20px !important;
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 22px !important;
+        z-index: 1000 !important;
+    }
+    
+    /* Chat container repositionné */
+    .chatContainer,
+    .chat-container {
+        bottom: 160px !important;
+        left: 15px !important;
+        right: 15px !important;
+        width: auto !important;
+        max-height: 400px !important;
+    }
+    
+    /* Header mobile avec bouton menu */
+    .header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 999 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .toggle-btn,
+    .menu-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 12px !important;
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+        color: white !important;
+        border: none !important;
+        cursor: pointer !important;
+        font-size: 18px !important;
+        transition: all 0.3s ease !important;
+        z-index: 1060 !important;
+    }
+    
+    .toggle-btn:hover,
+    .menu-toggle:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4) !important;
+    }
+    
+    /* Formulaires mobiles optimisés */
+    .form-container,
+    form {
+        margin: 10px !important;
+        padding: 15px !important;
+        margin-bottom: 90px !important;
+    }
+    
+    /* Tables mobiles */
+    .table-container {
+        overflow-x: auto !important;
+        margin-bottom: 80px !important;
+    }
+    
+    .modern-table {
+        font-size: 12px !important;
+        min-width: 600px !important;
+    }
+    
+    /* Cards mobiles */
+    .card,
+    .card-responsive {
+        margin: 8px !important;
+        padding: 15px !important;
+    }
+    
+    /* Boutons mobiles pleine largeur */
+    .btn,
+    .button,
+    .card-btn {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 12px 20px !important;
+        font-size: 16px !important;
+        margin: 5px 0 !important;
+        min-height: 44px !important;
+        touch-action: manipulation !important;
+    }
+    
+    /* Inputs mobiles optimisés */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important; /* Évite le zoom sur iOS */
+        padding: 12px !important;
+        min-height: 44px !important;
+        touch-action: manipulation !important;
+    }
+    
+    /* Navigation links dans le sidebar */
+    .navItem,
+    .nav-item {
+        padding: 15px 20px !important;
+        font-size: 16px !important;
+        min-height: 54px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 15px !important;
+    }
+}
+
+/* === TRÈS PETITS ÉCRANS === */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 280px !important;
+    }
+    
+    .mobile-navbar {
+        height: 60px !important;
+    }
+    
+    .content,
+    .home-section {
+        padding-bottom: 80px !important;
+    }
+    
+    .chatBubbleBtn {
+        bottom: 80px !important;
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 20px !important;
+    }
+    
+    .chatContainer {
+        bottom: 140px !important;
+        max-height: 350px !important;
+    }
+    
+    /* Textes plus petits */
+    .card-title,
+    h1, h2, h3 {
+        font-size: 1.2rem !important;
+    }
+    
+    .card-description,
+    p {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* === LANDSCAPE MOBILE === */
+@media (max-height: 500px) and (orientation: landscape) {
+    .sidebar {
+        height: 100vh !important;
+        overflow-y: auto !important;
+    }
+    
+    .mobile-navbar {
+        height: 50px !important;
+    }
+    
+    .content {
+        padding-bottom: 60px !important;
+    }
+    
+    .chatContainer {
+        max-height: 250px !important;
+    }
+}
+
+/* === ANIMATIONS MOBILES === */
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutToLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3) translateY(100px);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05) translateY(-10px);
+    }
+    70% {
+        transform: scale(0.9) translateY(0);
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Applications des animations */
+@media (max-width: 768px) {
+    .sidebar.open {
+        animation: slideInFromLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mobile-navbar {
+        animation: bounceIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mobile-menu-overlay.active {
+        animation: fadeIn 0.3s ease;
+    }
+}
+
+/* === ACCESSIBILITÉ MOBILE === */
+@media (max-width: 768px) {
+    /* Focus plus visible sur mobile */
+    button:focus,
+    input:focus,
+    select:focus,
+    textarea:focus,
+    a:focus {
+        outline: 3px solid #8b5cf6 !important;
+        outline-offset: 2px !important;
+    }
+    
+    /* Zones de touch plus grandes */
+    .nav-item,
+    .mobile-nav-item,
+    button,
+    .btn {
+        min-height: 44px !important;
+        min-width: 44px !important;
+    }
+    
+    /* Espacement entre éléments cliquables */
+    .btn + .btn,
+    button + button {
+        margin-top: 8px !important;
+    }
+}
+
+/* === SAFE AREAS POUR iOS === */
+@supports (padding: max(0px)) {
+    @media (max-width: 768px) {
+        .mobile-navbar {
+            padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+            height: calc(70px + max(0px, env(safe-area-inset-bottom))) !important;
+        }
+        
+        .content,
+        .home-section {
+            padding-bottom: calc(90px + max(0px, env(safe-area-inset-bottom))) !important;
+        }
+        
+        .chatBubbleBtn {
+            bottom: calc(90px + max(0px, env(safe-area-inset-bottom))) !important;
+        }
+    }
+}
+
+/* === FIXES SPÉCIFIQUES === */
+@media (max-width: 768px) {
+    /* Éviter les débordements */
+    * {
+        max-width: 100% !important;
+        word-wrap: break-word !important;
+    }
+    
+    /* Images responsives */
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Fixes pour les modales */
+    .modal,
+    .modal-content {
+        margin: 10px !important;
+        width: calc(100% - 20px) !important;
+        max-height: calc(100vh - 100px) !important;
+    }
+    
+    /* Fixes pour les tooltips */
+    .tooltip {
+        display: none !important;
+    }
+}
+
+/* === PRINT MOBILE === */
+@media print {
+    .mobile-navbar,
+    .sidebar,
+    .chatBubbleBtn,
+    .chatContainer {
+        display: none !important;
+    }
+    
+    .content {
+        padding-bottom: 0 !important;
+    }
+}

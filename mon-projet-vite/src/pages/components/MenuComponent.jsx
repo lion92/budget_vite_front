@@ -20,7 +20,8 @@ export default function MenuComponent(props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [afficher, setAfficher] = useState(window.innerWidth >= 768);
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("jwt"));
-    const [showChatBot, setShowChatBot] = useState(false); // 👉 état pour ouvrir/fermer la bulle chat
+    const [showChatBot, setShowChatBot] = useState(false);
+    const [showMobileOverlay, setShowMobileOverlay] = useState(false); // Nouvel état pour l'overlay mobile
 
     useEffect(() => {
         const handleResize = () => {
@@ -42,9 +43,30 @@ export default function MenuComponent(props) {
         };
     }, []);
 
-    const handlemenu = () => setAfficher(!afficher);
+    const handlemenu = () => {
+        const newState = !afficher;
+        setAfficher(newState);
+        if (isMobile) {
+            setShowMobileOverlay(newState);
+            // Empêcher le scroll du body quand le menu est ouvert sur mobile
+            document.body.style.overflow = newState ? 'hidden' : 'auto';
+        }
+    };
+    
     const handleLinkClick = () => {
-        if (isMobile) setAfficher(false);
+        if (isMobile) {
+            setAfficher(false);
+            setShowMobileOverlay(false);
+            document.body.style.overflow = 'auto';
+        }
+    };
+    
+    const handleOverlayClick = () => {
+        if (isMobile) {
+            setAfficher(false);
+            setShowMobileOverlay(false);
+            document.body.style.overflow = 'auto';
+        }
     };
 
     const styles = {
@@ -56,20 +78,34 @@ export default function MenuComponent(props) {
             fontFamily: "var(--font-family-sans)",
         },
         sidebar: {
-            width: 280,
+            width: isMobile ? 320 : 280,
             background: "linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)",
             backdropFilter: "blur(10px)",
             paddingTop: 20,
             minHeight: "100vh",
             transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-            boxShadow: "4px 0 20px rgba(139, 92, 246, 0.15)",
+            boxShadow: isMobile ? "8px 0 32px rgba(139, 92, 246, 0.3)" : "4px 0 20px rgba(139, 92, 246, 0.15)",
             borderRight: "1px solid rgba(255, 255, 255, 0.1)",
-            position: "relative",
+            position: isMobile ? "fixed" : "relative",
+            top: isMobile ? 0 : "auto",
+            left: isMobile ? 0 : "auto",
+            zIndex: isMobile ? 1050 : "auto",
             overflow: "hidden",
         },
         sidebarHidden: {
             transform: isMobile ? "translateX(-100%)" : "translateX(-280px)",
-            opacity: 0,
+            opacity: isMobile ? 1 : 0,
+        },
+        mobileOverlay: {
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(4px)",
+            zIndex: 1040,
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         },
         sidebarOverlay: {
             content: '""',
@@ -158,6 +194,8 @@ export default function MenuComponent(props) {
         },
         contentWithSidebar: {
             marginLeft: isMobile ? 0 : (afficher ? 0 : 0),
+            filter: (isMobile && showMobileOverlay) ? "blur(2px)" : "none",
+            transition: "filter 0.3s ease",
         },
         header: {
             display: "flex",
@@ -190,6 +228,8 @@ export default function MenuComponent(props) {
             borderRadius: 12,
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)",
+            position: "relative",
+            zIndex: 1060,
         },
         toggleBtnHover: {
             transform: "translateY(-2px)",
@@ -204,17 +244,17 @@ export default function MenuComponent(props) {
         },
         chatBubbleBtn: {
             position: "fixed",
-            bottom: 30,
-            right: 30,
-            width: 65,
-            height: 65,
+            bottom: isMobile ? 90 : 30,
+            right: isMobile ? 20 : 30,
+            width: isMobile ? 55 : 65,
+            height: isMobile ? 55 : 65,
             borderRadius: "50%",
             background: "linear-gradient(135deg, var(--primary-500), var(--primary-600))",
             color: "white",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            fontSize: 26,
+            fontSize: isMobile ? 22 : 26,
             cursor: "pointer",
             zIndex: 1000,
             boxShadow: "0 8px 25px rgba(139, 92, 246, 0.4)",
@@ -227,10 +267,11 @@ export default function MenuComponent(props) {
         },
         chatContainer: {
             position: "fixed",
-            bottom: 110,
-            right: 30,
-            width: "350px",
-            maxHeight: "500px",
+            bottom: isMobile ? 160 : 110,
+            right: isMobile ? 15 : 30,
+            left: isMobile ? 15 : "auto",
+            width: isMobile ? "auto" : "350px",
+            maxHeight: isMobile ? "400px" : "500px",
             background: "rgba(255, 255, 255, 0.95)",
             border: "1px solid rgba(139, 92, 246, 0.2)",
             borderRadius: 20,
@@ -283,9 +324,24 @@ export default function MenuComponent(props) {
     const [hoveredItem, setHoveredItem] = useState(null);
     const [hoveredButton, setHoveredButton] = useState(null);
 
+    // Cleanup effect pour le scroll du body
+    useEffect(() => {
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
+
     return (
         <div style={styles.container}>
             <div style={styles.notification}><Notifications /></div>
+
+            {/* Overlay mobile */}
+            {isMobile && showMobileOverlay && (
+                <div 
+                    style={styles.mobileOverlay} 
+                    onClick={handleOverlayClick}
+                />
+            )}
 
             {afficher && (
                 <div style={{...styles.sidebar, ...(afficher ? {} : styles.sidebarHidden)}}>
@@ -385,6 +441,77 @@ export default function MenuComponent(props) {
             {showChatBot && (
                 <div style={styles.chatContainer}>
                     <ChatBotAction/>
+                </div>
+            )}
+
+            {/* Navigation mobile en bas */}
+            {isMobile && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 70,
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(20px)',
+                    borderTop: '1px solid rgba(139, 92, 246, 0.2)',
+                    display: 'flex',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    zIndex: 1030,
+                    boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.1)',
+                }}>
+                    {navLinks.slice(0, 4).map((link, index) => (
+                        <NavLink 
+                            key={index}
+                            to={link.path}
+                            style={({ isActive }) => ({
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '8px 12px',
+                                borderRadius: 12,
+                                textDecoration: 'none',
+                                color: isActive ? '#8b5cf6' : '#666',
+                                background: isActive ? 'rgba(139, 92, 246, 0.1)' : 'transparent',
+                                transform: isActive ? 'translateY(-2px)' : 'none',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                minWidth: 60,
+                                flex: 1,
+                            })}
+                            onClick={handleLinkClick}
+                        >
+                            <div style={{ fontSize: 20, marginBottom: 2 }}>{link.icon}</div>
+                            <span style={{ fontSize: 10, fontWeight: '600', textAlign: 'center', lineHeight: 1 }}>
+                                {link.label.length > 8 ? link.label.substring(0, 8) + '...' : link.label}
+                            </span>
+                        </NavLink>
+                    ))}
+                    <button 
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '8px 12px',
+                            borderRadius: 12,
+                            border: 'none',
+                            background: afficher ? 'rgba(139, 92, 246, 0.1)' : 'transparent',
+                            color: '#8b5cf6',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            minWidth: 60,
+                            flex: 1,
+                            transform: afficher ? 'translateY(-2px)' : 'none',
+                        }}
+                        onClick={handlemenu}
+                    >
+                        <CiMenuBurger style={{ fontSize: 20, marginBottom: 2 }} />
+                        <span style={{ fontSize: 10, fontWeight: '600', textAlign: 'center', lineHeight: 1 }}>
+                            Menu
+                        </span>
+                    </button>
                 </div>
             )}
 
