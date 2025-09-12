@@ -93,9 +93,14 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.krisscode.fr" />
+  <link rel="preconnect" href="https://www.youtube.com" />
+  <link rel="preconnect" href="https://byjaris.com" />
 
   <!-- DNS Prefetch -->
   <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="//www.krisscode.fr" />
 
   <!-- Styles externes -->
   <link
@@ -109,16 +114,58 @@
   <!-- Preload des ressources critiques -->
   <link rel="preload" href="./src/main.jsx" as="script" />
 
-  <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'" />
+  <!-- Security Headers - CSP corrigé -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com;
+    style-src 'self' 'unsafe-inline'
+      https://cdnjs.cloudflare.com
+      https://fonts.googleapis.com
+      https://byjaris.com;
+    font-src 'self'
+      https://cdnjs.cloudflare.com
+      https://fonts.gstatic.com
+      https://byjaris.com;
+    img-src 'self' data: https: blob:;
+    connect-src 'self'
+      https://www.krisscode.fr
+      https://api.krisscode.fr
+      wss: ws:;
+    frame-src 'self'
+      https://www.youtube.com
+      https://youtube.com;
+    media-src 'self' https:;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    upgrade-insecure-requests;
+  " />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
   <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
 
   <!-- Geo Meta Tags -->
   <meta name="geo.region" content="FR" />
   <meta name="geo.placename" content="France" />
+
+  <!-- Permissions Policy (remplace Feature Policy) -->
+  <meta http-equiv="Permissions-Policy" content="
+    accelerometer=(),
+    autoplay=(self),
+    camera=(),
+    encrypted-media=(self),
+    fullscreen=(self),
+    geolocation=(),
+    gyroscope=(),
+    magnetometer=(),
+    microphone=(),
+    midi=(),
+    payment=(),
+    picture-in-picture=(self),
+    usb=(),
+    clipboard-write=(self)
+  " />
 </head>
 <body>
 <!-- Skip to main content pour l'accessibilité -->
@@ -143,5 +190,35 @@
     }
   }
 </script>
+
+<!-- CSS pour le lien d'accessibilité -->
+<style>
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  .sr-only-focusable:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+    background: #000 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    z-index: 1000 !important;
+  }
+</style>
 </body>
 </html>

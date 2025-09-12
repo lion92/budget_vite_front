@@ -219,14 +219,15 @@ const Connection = () => {
                 </div>
             ) : (
                 <div className="container2">
+                    <h1>Budget Manager</h1>
                     <div className="status-indicator">{messageLog || probleme}</div>
 
                     <input
                         id="email"
                         value={email}
-                        placeholder="email"
+                        placeholder="📧 Adresse email"
                         onChange={e => setEmail(e.target.value)}
-                        type="text"
+                        type="email"
                         className={mailError ? "input-error" : isEmailValid ? "input-success" : ""}
                     />
                     <p className="error">{mailError}</p>
@@ -234,7 +235,7 @@ const Connection = () => {
                     <input
                         id="password"
                         value={password}
-                        placeholder="password"
+                        placeholder="🔒 Mot de passe"
                         onChange={e => setPassword(e.target.value)}
                         type="password"
                         className={passwordError ? "input-error" : isPasswordValid ? "input-success" : ""}
@@ -251,7 +252,7 @@ const Connection = () => {
                         <div className="forgot-container">
                             <input
                                 type="email"
-                                placeholder="Votre email"
+                                placeholder="📧 Votre adresse email"
                                 value={forgotEmail}
                                 onChange={e => setForgotEmail(e.target.value)}
                                 className={mailError ? "input-error" : ""}

@@ -12,6 +12,9 @@ import {Depenses} from "./Depenses.jsx";
 import {Revenues} from "../../Revenues.jsx";
 import BaniereLetchi from "./BaniereLetchi.jsx";
 import ChatBotAction from "./ChatBotAction.jsx";
+import DarkModeToggleSimple from "./DarkModeToggleSimple.jsx";
+import ThemeDebug from "./ThemeDebug.jsx";
+import AccessibilityTester from "./AccessibilityTester.jsx";
 
 export default function MenuComponent(props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -50,50 +53,147 @@ export default function MenuComponent(props) {
             flexDirection: "row",
             width: "100vw",
             minHeight: "100vh",
+            fontFamily: "var(--font-family-sans)",
         },
         sidebar: {
-            width: 220,
-            backgroundColor: "#EBDDFB",
-            paddingTop: 60,
+            width: 280,
+            background: "linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)",
+            backdropFilter: "blur(10px)",
+            paddingTop: 20,
             minHeight: "100vh",
-            transition: "transform 0.3s ease",
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "4px 0 20px rgba(139, 92, 246, 0.15)",
+            borderRight: "1px solid rgba(255, 255, 255, 0.1)",
+            position: "relative",
+            overflow: "hidden",
         },
         sidebarHidden: {
-            display: "none",
+            transform: isMobile ? "translateX(-100%)" : "translateX(-280px)",
+            opacity: 0,
+        },
+        sidebarOverlay: {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+            pointerEvents: "none",
+        },
+        logoContainer: {
+            padding: "30px 20px",
+            textAlign: "center",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            marginBottom: 20,
+            position: "relative",
+        },
+        logoName: {
+            fontSize: 28,
+            fontWeight: "800",
+            color: "white",
+            textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+            letterSpacing: "0.5px",
+            background: "linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+        },
+        logoSubtext: {
+            fontSize: 12,
+            color: "rgba(255, 255, 255, 0.8)",
+            marginTop: 5,
+            letterSpacing: "1px",
+            textTransform: "uppercase",
         },
         navList: {
             listStyle: "none",
-            padding: 0,
+            padding: "0 10px",
             margin: 0,
         },
+        navLink: {
+            textDecoration: "none",
+            display: "block",
+            margin: "8px 0",
+            borderRadius: 12,
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            position: "relative",
+            overflow: "hidden",
+        },
         navItem: {
-            padding: "15px",
-            color: "#5D3A9B",
-            fontWeight: "bold",
+            padding: "16px 20px",
+            color: "white",
+            fontWeight: "600",
             display: "flex",
             alignItems: "center",
-            gap: "10px",
+            gap: "15px",
             cursor: "pointer",
+            fontSize: 15,
+            borderRadius: 12,
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            position: "relative",
+            background: "rgba(255, 255, 255, 0.05)",
+            backdropFilter: "blur(5px)",
+        },
+        navItemHover: {
+            background: "rgba(255, 255, 255, 0.15)",
+            transform: "translateX(5px)",
+            boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+        },
+        navItemActive: {
+            background: "rgba(255, 255, 255, 0.2)",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+        },
+        navItemIcon: {
+            fontSize: 20,
+            opacity: 0.9,
         },
         content: {
             padding: 20,
             flexGrow: 1,
             width: "100%",
+            background: "var(--gradient-surface)",
+            minHeight: "100vh",
+            transition: "margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         },
         contentWithSidebar: {
-            marginLeft: isMobile ? 0 : 10,
+            marginLeft: isMobile ? 0 : (afficher ? 0 : 0),
         },
         header: {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            background: "rgba(255, 255, 255, 0.9)",
+            padding: "20px 30px",
+            borderRadius: 16,
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+            marginBottom: 30,
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+        },
+        headerTitle: {
+            fontSize: 28,
+            fontWeight: "700",
+            background: "linear-gradient(135deg, var(--primary-600), var(--primary-800))",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            margin: 0,
         },
         toggleBtn: {
-            background: "none",
+            background: "linear-gradient(135deg, var(--primary-500), var(--primary-600))",
             border: "none",
             cursor: "pointer",
-            fontSize: 25,
-            color: "#5D3A9B",
+            fontSize: 20,
+            color: "white",
+            padding: "12px 16px",
+            borderRadius: 12,
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)",
+        },
+        toggleBtnHover: {
+            transform: "translateY(-2px)",
+            boxShadow: "0 6px 20px rgba(139, 92, 246, 0.4)",
         },
         notification: {
             position: "fixed",
@@ -102,39 +202,61 @@ export default function MenuComponent(props) {
             fontSize: 30,
             zIndex: 1000,
         },
-        logoName: {
-            textAlign: "center",
-            fontSize: 24,
-            fontWeight: "bold",
-            color: "#5D3A9B",
-        },
         chatBubbleBtn: {
             position: "fixed",
-            bottom: 20,
-            right: 20,
-            width: 60,
-            height: 60,
+            bottom: 30,
+            right: 30,
+            width: 65,
+            height: 65,
             borderRadius: "50%",
-            backgroundColor: "#5D3A9B",
+            background: "linear-gradient(135deg, var(--primary-500), var(--primary-600))",
             color: "white",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            fontSize: 30,
+            fontSize: 26,
             cursor: "pointer",
-            zIndex: 1000
+            zIndex: 1000,
+            boxShadow: "0 8px 25px rgba(139, 92, 246, 0.4)",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            border: "2px solid rgba(255, 255, 255, 0.2)",
+        },
+        chatBubbleBtnHover: {
+            transform: "scale(1.1) translateY(-3px)",
+            boxShadow: "0 12px 35px rgba(139, 92, 246, 0.5)",
         },
         chatContainer: {
             position: "fixed",
-            bottom: 90,
-            right: 20,
-            width: "300px",
+            bottom: 110,
+            right: 30,
+            width: "350px",
             maxHeight: "500px",
-            backgroundColor: "white",
-            border: "1px solid #ccc",
-            borderRadius: "10px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-            zIndex: 999
+            background: "rgba(255, 255, 255, 0.95)",
+            border: "1px solid rgba(139, 92, 246, 0.2)",
+            borderRadius: 20,
+            boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15)",
+            zIndex: 999,
+            backdropFilter: "blur(20px)",
+            animation: "slideUpFade 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        },
+        logoutSection: {
+            textAlign: 'center',
+            marginBottom: 20,
+        },
+        logoutBtn: {
+            background: "linear-gradient(135deg, #ef4444, #dc2626)",
+            color: "white",
+            border: "none",
+            padding: "12px 24px",
+            borderRadius: 12,
+            fontWeight: "600",
+            cursor: "pointer",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "0 4px 15px rgba(239, 68, 68, 0.3)",
+        },
+        logoutBtnHover: {
+            transform: "translateY(-2px)",
+            boxShadow: "0 6px 20px rgba(239, 68, 68, 0.4)",
         }
     };
 
@@ -158,18 +280,41 @@ export default function MenuComponent(props) {
 
     const navLinks = isAuthenticated ? privateLinks : publicLinks;
 
+    const [hoveredItem, setHoveredItem] = useState(null);
+    const [hoveredButton, setHoveredButton] = useState(null);
+
     return (
         <div style={styles.container}>
             <div style={styles.notification}><Notifications /></div>
 
             {afficher && (
-                <div style={styles.sidebar}>
-                    <div style={styles.logoName}>Budget</div>
+                <div style={{...styles.sidebar, ...(afficher ? {} : styles.sidebarHidden)}}>
+                    <div style={styles.sidebarOverlay} />
+                    <div style={styles.logoContainer}>
+                        <div style={styles.logoName}>Budget Manager</div>
+                        <div style={styles.logoSubtext}>Gestion Financière</div>
+                        <div style={{ marginTop: '20px' }}>
+                            <DarkModeToggleSimple />
+                        </div>
+                    </div>
                     <ul style={styles.navList}>
                         {navLinks.map((link, index) => (
-                            <NavLink to={link.path} key={index} onClick={handleLinkClick}>
-                                <li style={styles.navItem}>
-                                    {link.label} {link.icon}
+                            <NavLink 
+                                to={link.path} 
+                                key={index} 
+                                onClick={handleLinkClick}
+                                style={styles.navLink}
+                            >
+                                <li 
+                                    style={{
+                                        ...styles.navItem,
+                                        ...(hoveredItem === index ? styles.navItemHover : {})
+                                    }}
+                                    onMouseEnter={() => setHoveredItem(index)}
+                                    onMouseLeave={() => setHoveredItem(null)}
+                                >
+                                    <span style={styles.navItemIcon}>{link.icon}</span>
+                                    <span>{link.label}</span>
                                 </li>
                             </NavLink>
                         ))}
@@ -180,9 +325,17 @@ export default function MenuComponent(props) {
             <section style={{...styles.content, ...styles.contentWithSidebar}}>
                 <CookieConsent/>
                 <div style={styles.header}>
-                    <h1>{props.title}</h1>
+                    <h1 style={styles.headerTitle}>{props.title}</h1>
                     {isMobile && (
-                        <button style={styles.toggleBtn} onClick={handlemenu}>
+                        <button 
+                            style={{
+                                ...styles.toggleBtn,
+                                ...(hoveredButton === 'toggle' ? styles.toggleBtnHover : {})
+                            }}
+                            onClick={handlemenu}
+                            onMouseEnter={() => setHoveredButton('toggle')}
+                            onMouseLeave={() => setHoveredButton(null)}
+                        >
                             <CiMenuBurger/>
                         </button>
                     )}
@@ -190,18 +343,22 @@ export default function MenuComponent(props) {
                 {isAuthenticated && (
                     <div className="container">
                         {localStorage.getItem("jwt") ?
-                            <div style={{textAlign:'center'}} className="logout-section">
+                            <div style={styles.logoutSection}>
                                 <button
-                                    className="logout-btn"
+                                    style={{
+                                        ...styles.logoutBtn,
+                                        ...(hoveredButton === 'logout' ? styles.logoutBtnHover : {})
+                                    }}
                                     onClick={() => {
                                         localStorage.removeItem("jwt");
                                         localStorage.removeItem("utilisateur");
                                         window.location.reload();
                                     }}
+                                    onMouseEnter={() => setHoveredButton('logout')}
+                                    onMouseLeave={() => setHoveredButton(null)}
                                 >
-                                    Déconnexion
+                                    🚪 Déconnexion
                                 </button>
-
                             </div>
                             : ""}
                         <BaniereLetchi/>
@@ -213,7 +370,15 @@ export default function MenuComponent(props) {
             </section>
 
             {/* Bulle flottante pour ouvrir le chat */}
-            <div style={styles.chatBubbleBtn} onClick={() => setShowChatBot(!showChatBot)}>
+            <div 
+                style={{
+                    ...styles.chatBubbleBtn,
+                    ...(hoveredButton === 'chat' ? styles.chatBubbleBtnHover : {})
+                }} 
+                onClick={() => setShowChatBot(!showChatBot)}
+                onMouseEnter={() => setHoveredButton('chat')}
+                onMouseLeave={() => setHoveredButton(null)}
+            >
                 <CiChat1/>
             </div>
 
@@ -222,6 +387,27 @@ export default function MenuComponent(props) {
                     <ChatBotAction/>
                 </div>
             )}
+
+            {/* Debug et tests - temporaires pour développement */}
+            {process.env.NODE_ENV === 'development' && (
+                <>
+                    <ThemeDebug />
+                    <AccessibilityTester />
+                </>
+            )}
+
+            <style jsx>{`
+                @keyframes slideUpFade {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px) scale(0.95);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+            `}</style>
         </div>
     );
 }
