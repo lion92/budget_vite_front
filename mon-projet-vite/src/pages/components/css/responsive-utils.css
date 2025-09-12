@@ -1,0 +1,515 @@
+/* ========================================
+   UTILITAIRES RESPONSIVE POUR BUDGET APP
+   ======================================== */
+
+/* === CLASSES UTILITAIRES RESPONSIVE === */
+
+/* Visibilité responsive */
+.show-mobile { display: none !important; }
+.show-tablet { display: none !important; }
+.show-desktop { display: block !important; }
+
+@media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+    .show-mobile { display: block !important; }
+    .show-desktop { display: none !important; }
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+    .hide-tablet { display: none !important; }
+    .show-tablet { display: block !important; }
+    .hide-desktop { display: none !important; }
+}
+
+/* === BREAKPOINTS PERSONNALISÉS === */
+:root {
+    --breakpoint-xs: 320px;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-xxl: 1400px;
+}
+
+/* === CONTAINERS RESPONSIVE === */
+.container-fluid {
+    width: 100%;
+    padding: 0 1rem;
+    margin: 0 auto;
+}
+
+.container-responsive {
+    width: 100%;
+    max-width: var(--breakpoint-xxl);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+@media (min-width: 576px) {
+    .container-responsive { padding: 0 1.5rem; }
+}
+
+@media (min-width: 768px) {
+    .container-responsive { padding: 0 2rem; }
+}
+
+@media (min-width: 992px) {
+    .container-responsive { padding: 0 2.5rem; }
+}
+
+/* === GRILLES FLEXIBLES === */
+.grid-responsive {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 576px) {
+    .grid-responsive { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) {
+    .grid-responsive { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 992px) {
+    .grid-responsive { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 1200px) {
+    .grid-responsive { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* Grilles spécifiques */
+.grid-2-cols { grid-template-columns: repeat(2, 1fr); }
+.grid-3-cols { grid-template-columns: repeat(3, 1fr); }
+.grid-4-cols { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+    .grid-2-cols,
+    .grid-3-cols,
+    .grid-4-cols {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+    .grid-3-cols,
+    .grid-4-cols {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* === FLEX UTILITAIRES === */
+.flex-responsive {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.flex-column-mobile {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 768px) {
+    .flex-column-mobile {
+        flex-direction: column;
+    }
+}
+
+/* === ESPACEMENTS RESPONSIVE === */
+.p-responsive { padding: 1rem; }
+.m-responsive { margin: 1rem; }
+
+@media (max-width: 768px) {
+    .p-responsive { padding: 0.5rem; }
+    .m-responsive { margin: 0.5rem; }
+}
+
+@media (min-width: 992px) {
+    .p-responsive { padding: 1.5rem; }
+    .m-responsive { margin: 1.5rem; }
+}
+
+/* Espacements spécifiques mobile */
+.mb-mobile-0 { margin-bottom: 0; }
+.mt-mobile-0 { margin-top: 0; }
+.p-mobile-sm { padding: 0.5rem; }
+
+@media (max-width: 768px) {
+    .mb-mobile-0 { margin-bottom: 0 !important; }
+    .mt-mobile-0 { margin-top: 0 !important; }
+    .p-mobile-sm { padding: 0.5rem !important; }
+}
+
+/* === TYPOGRAPHIE RESPONSIVE === */
+.text-responsive {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .text-responsive {
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+}
+
+@media (min-width: 992px) {
+    .text-responsive {
+        font-size: 1.125rem;
+        line-height: 1.6;
+    }
+}
+
+.title-responsive {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .title-responsive {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+}
+
+@media (min-width: 992px) {
+    .title-responsive {
+        font-size: 2.5rem;
+    }
+}
+
+/* === BOUTONS RESPONSIVE === */
+.btn-responsive {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-block;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+@media (max-width: 768px) {
+    .btn-responsive {
+        width: 100%;
+        padding: 1rem;
+        font-size: 0.875rem;
+        margin: 0.25rem 0;
+    }
+}
+
+.btn-group-responsive {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .btn-group-responsive {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-group-responsive .btn-responsive {
+        margin: 0;
+    }
+}
+
+/* === CARTES RESPONSIVE === */
+.card-responsive {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .card-responsive {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.card-responsive:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+    .card-responsive:hover {
+        transform: none;
+    }
+}
+
+/* === TABLEAUX RESPONSIVE === */
+.table-responsive-wrapper {
+    overflow-x: auto;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-responsive {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.table-responsive th,
+.table-responsive td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+@media (max-width: 768px) {
+    .table-responsive th,
+    .table-responsive td {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.75rem;
+    }
+}
+
+/* Table mobile en carte */
+@media (max-width: 576px) {
+    .table-mobile-cards {
+        display: none;
+    }
+    
+    .table-mobile-cards + .mobile-cards-view {
+        display: block;
+    }
+    
+    .mobile-card-item {
+        background: white;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e5e5;
+    }
+    
+    .mobile-card-field {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.25rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .mobile-card-field:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-card-label {
+        font-weight: 600;
+        color: #666;
+        font-size: 0.875rem;
+    }
+    
+    .mobile-card-value {
+        color: #333;
+        font-size: 0.875rem;
+    }
+}
+
+/* === FORMULAIRES RESPONSIVE === */
+.form-responsive {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .form-responsive {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin: 0.5rem;
+    }
+}
+
+.form-group-responsive {
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .form-group-responsive {
+        margin-bottom: 1rem;
+    }
+}
+
+.input-responsive {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .input-responsive {
+        font-size: 16px; /* Évite le zoom sur iOS */
+        padding: 1rem;
+    }
+}
+
+.input-responsive:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* === NAVIGATION RESPONSIVE === */
+.nav-responsive {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .nav-responsive {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+.nav-links-responsive {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .nav-links-responsive {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* === MODAL RESPONSIVE === */
+.modal-responsive {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal-content-responsive {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+    .modal-responsive {
+        padding: 0.5rem;
+        align-items: flex-start;
+        padding-top: 2rem;
+    }
+    
+    .modal-content-responsive {
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        max-height: 85vh;
+    }
+}
+
+/* === ANIMATIONS RESPONSIVE === */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Désactiver les hover effects sur mobile */
+@media (hover: none) {
+    .card-responsive:hover,
+    .btn-responsive:hover,
+    .interactive-hover:hover {
+        transform: none;
+        box-shadow: initial;
+    }
+}
+
+/* === UTILITAIRES D'ACCESSIBILITÉ === */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.focus-visible:focus-visible {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* === PRINT STYLES === */
+@media print {
+    .no-print { display: none !important; }
+    
+    .card-responsive,
+    .form-responsive,
+    .modal-content-responsive {
+        background: white !important;
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .btn-responsive {
+        background: #333 !important;
+        color: white !important;
+        border: 1px solid #333 !important;
+    }
+}
+
+/* === ORIENTATION === */
+@media (orientation: landscape) and (max-height: 500px) {
+    .modal-responsive {
+        align-items: flex-start;
+        padding-top: 1rem;
+    }
+    
+    .modal-content-responsive {
+        max-height: 80vh;
+    }
+}
