@@ -3,19 +3,19 @@
 /* Import fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap');
 
-/* CSS Variables harmonisées avec le thème mauve clair */
+/* CSS Variables harmonisées avec le thème mauve clair - Version optimisée pour les contrastes */
 :root {
-  /* === PALETTE PRINCIPALE MAUVE CLAIR === */
-  --primary-50: #fdf4ff;
-  --primary-100: #fae8ff;
-  --primary-200: #f3e8ff;
-  --primary-300: #e9d5ff;
-  --primary-400: #c4b5fd;
-  --primary-500: #a78bfa;  /* Couleur principale */
-  --primary-600: #8b5cf6;
-  --primary-700: #7c3aed;
-  --primary-800: #6b21a8;
-  --primary-900: #581c87;
+  /* === PALETTE PRINCIPALE MAUVE OPTIMISÉE === */
+  --primary-50: #faf7ff;
+  --primary-100: #f3edff;
+  --primary-200: #e8d8ff;
+  --primary-300: #d4bcff;
+  --primary-400: #b794f6;
+  --primary-500: #9f7aea;  /* Couleur principale - contraste amélioré */
+  --primary-600: #805ad5;  /* Plus sombre pour meilleur contraste */
+  --primary-700: #6b46c1;  /* Contraste élevé */
+  --primary-800: #553c9a;  /* Très bon contraste */
+  --primary-900: #44337a;  /* Excellent contraste */
 
   /* === COULEURS HARMONISÉES === */
   --primary: var(--primary-500);
@@ -25,16 +25,19 @@
   --secondary-light: #fbbf24;
   --secondary-dark: #d97706;
 
-  /* === COULEURS DE STATUT === */
-  --success: #22c55e;
-  --success-light: #4ade80;
-  --success-dark: #16a34a;
-  --error: #ef4444;
-  --error-light: #f87171;
-  --error-dark: #dc2626;
-  --warning: #f59e0b;
-  --warning-light: #fbbf24;
-  --warning-dark: #d97706;
+  /* === COULEURS DE STATUT AMÉLIORÉES === */
+  --success: #059669;  /* Contraste 4.5:1 sur fond blanc */
+  --success-light: #10b981;
+  --success-dark: #047857;
+  --error: #dc2626;  /* Contraste élevé */
+  --error-light: #ef4444;
+  --error-dark: #b91c1c;
+  --warning: #d97706;  /* Meilleur contraste que #f59e0b */
+  --warning-light: #f59e0b;
+  --warning-dark: #b45309;
+  --info: #0284c7;  /* Nouveau: couleur info avec bon contraste */
+  --info-light: #0ea5e9;
+  --info-dark: #0369a1;
   --accent: var(--primary-600);
   --accent-dark: var(--primary-700);
 
@@ -49,14 +52,16 @@
   --border: var(--primary-200);
   --border-hover: var(--primary-300);
 
-  /* === COULEURS DE TEXTE === */
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
+  /* === COULEURS DE TEXTE OPTIMISÉES === */
+  --text-primary: #111827;    /* Contraste AAA (7:1) */
+  --text-secondary: #4b5563;  /* Contraste AA (4.5:1) */
+  --text-muted: #6b7280;      /* Contraste AA pour texte secondaire */
+  --text-disabled: #9ca3af;   /* Pour éléments désactivés */
   --text-inverse: #ffffff;
   --text-light: var(--text-primary);
   --text-dark: var(--text-primary);
-  --link-color: var(--primary-600);
+  --link-color: var(--primary-700);  /* Meilleur contraste pour les liens */
+  --link-hover: var(--primary-800);  /* État hover des liens */
 
   /* === OMBRES === */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -111,6 +116,86 @@
   --gradient-surface: linear-gradient(135deg, var(--background) 0%, var(--primary-50) 50%, var(--primary-100) 100%);
   --button-gradient: var(--gradient-primary);
   --button-hover-gradient: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+
+  /* === VARIABLES POUR DARK MODE === */
+  --bg-primary: var(--background);
+  --bg-secondary: var(--surface);
+  --bg-tertiary: var(--surface-hover);
+  --text-color: var(--text-primary);
+  --text-muted-color: var(--text-muted);
+  --border-color: var(--border);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* === DARK MODE THEME AMÉLIORÉ === */
+[data-theme="dark"],
+.dark-mode {
+  /* Couleurs de fond optimisées pour le mode sombre */
+  --background: #0d1117 !important;        /* GitHub dark background */
+  --surface: #161b22 !important;           /* Meilleur contraste */
+  --surface-hover: #21262d !important;     /* État hover plus visible */
+  --card-bg: #161b22 !important;          /* Cartes plus contrastées */
+  --border: #30363d !important;           /* Bordures plus visibles */
+  --border-hover: #484f58 !important;     /* Hover borders plus prononcé */
+
+  /* Couleurs de texte optimisées pour le mode sombre */
+  --text-primary: #f0f6fc !important;     /* Contraste AAA (7:1) */
+  --text-secondary: #c9d1d9 !important;   /* Contraste AA+ (6:1) */
+  --text-muted: #8b949e !important;       /* Contraste AA (4.5:1) */
+  --text-disabled: #6e7681 !important;    /* Éléments désactivés */
+  --text-inverse: #0d1117 !important;     /* Texte sur fond clair */
+
+  /* Couleurs d'état améliorées pour dark mode */
+  --success: #238636 !important;          /* Vert plus visible en dark */
+  --success-light: #2ea043 !important;
+  --success-dark: #1f7328 !important;
+  --error: #f85149 !important;            /* Rouge plus visible */
+  --error-light: #ff7b72 !important;
+  --error-dark: #da3633 !important;
+  --warning: #d29922 !important;          /* Jaune plus contrasté */
+  --warning-light: #f2cc60 !important;
+  --warning-dark: #bb8009 !important;
+  --info: #58a6ff !important;             /* Bleu optimisé */
+  --info-light: #79c0ff !important;
+  --info-dark: #388bfd !important;
+
+  /* Liens optimisés */
+  --link-color: #58a6ff !important;       /* Bleu plus visible */
+  --link-hover: #79c0ff !important;       /* Hover plus clair */
+
+  /* Gradients pour le mode sombre */
+  --gradient-surface: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%) !important;
+  
+  /* Ombres adaptées au mode sombre avec plus de profondeur */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4) !important;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5) !important;
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6) !important;
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7) !important;
+
+  /* Variables spécifiques au dark mode */
+  --bg-primary: #0d1117 !important;
+  --bg-secondary: #161b22 !important;
+  --bg-tertiary: #21262d !important;
+  --text-color: #f0f6fc !important;
+  --text-muted-color: #c9d1d9 !important;
+  --border-color: #30363d !important;
+  --shadow-color: rgba(0, 0, 0, 0.6) !important;
+  
+  /* Couleurs harmonisées pour dark mode */
+  --primary-50: #21262d !important;
+  --primary-100: #30363d !important;
+  --primary-200: #484f58 !important;
+  --primary-300: #6e7681 !important;
+  --light: #161b22 !important;
+  --dark: #21262d !important;
+}
+
+/* Styles spécifiques body pour dark mode */
+[data-theme="dark"] body,
+body.dark-mode {
+  background: var(--background) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Base styles */
@@ -187,23 +272,34 @@ label {
 
 a {
   color: var(--link-color);
-  text-decoration: none;
+  text-decoration: underline;  /* Toujours visible pour l'accessibilité */
+  text-decoration-color: transparent;  /* Invisible par défaut */
   padding: var(--spacing-xs);
   font-size: var(--font-size-md);
   transition: var(--transition-normal);
   font-weight: var(--font-weight-medium);
+  border-radius: var(--border-radius-sm);
+  position: relative;
 }
 
-a:hover {
-  color: var(--primary-700);
-  text-decoration: underline;
+a:hover,
+a:focus-visible {
+  color: var(--link-hover);
+  text-decoration-color: currentColor;  /* Soulignement visible au hover/focus */
+  background: rgba(var(--primary-500-rgb, 159, 122, 234), 0.1);
+  transform: translateY(-1px);
 }
 
-/* Buttons harmonisés */
+a:focus-visible {
+  outline: 2px solid var(--primary-600);
+  outline-offset: 2px;
+}
+
+/* Buttons améliorés pour l'accessibilité */
 button, .btn, .but1, .card-btn {
   background: var(--gradient-primary);
   color: var(--text-inverse);
-  border: none;
+  border: 2px solid transparent;  /* Bordure pour le focus */
   padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--border-radius-lg);
   font-size: var(--font-size-md);
@@ -218,6 +314,8 @@ button, .btn, .but1, .card-btn {
   letter-spacing: 0.05em;
   position: relative;
   overflow: hidden;
+  min-height: 44px;  /* Taille minimale pour l'accessibilité tactile */
+  min-width: 44px;
 }
 
 /* Effet de brillance sur les boutons */
@@ -242,12 +340,98 @@ button:hover, .btn:hover, .but1:hover, .card-btn:hover {
   box-shadow: var(--shadow-lg);
 }
 
+button:focus-visible, .btn:focus-visible, .but1:focus-visible, .card-btn:focus-visible {
+  outline: none;
+  border-color: var(--text-inverse);  /* Bordure blanche visible */
+  box-shadow: var(--shadow-lg), 0 0 0 3px var(--primary-300);  /* Double focus ring */
+}
+
 button:active, .btn:active, .but1:active, .card-btn:active {
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
 
-/* Variantes de boutons */
+/* États désactivés */
+button:disabled, .btn:disabled, .but1:disabled, .card-btn:disabled {
+  background: var(--text-disabled);
+  color: var(--text-inverse);
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Variantes de boutons avec contrastes améliorés */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  color: var(--text-inverse);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--primary-700);
+  border-color: var(--primary-600);
+  box-shadow: inset 0 0 0 1px var(--primary-600);
+}
+
+.btn-secondary:hover {
+  background: var(--primary-50);
+  color: var(--primary-800);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--success), var(--success-dark));
+  color: var(--text-inverse);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, var(--success-dark), #065f46);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--error), var(--error-dark));
+  color: var(--text-inverse);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, var(--error-dark), #991b1b);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+  color: var(--text-inverse);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, var(--warning-dark), #92400e);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, var(--info), var(--info-dark));
+  color: var(--text-inverse);
+}
+
+.btn-info:hover {
+  background: linear-gradient(135deg, var(--info-dark), #1e40af);
+}
+
+/* Variantes outline pour meilleur contraste */
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary-600);
+  color: var(--primary-700);
+}
+
+.btn-outline:hover {
+  background: var(--primary-600);
+  color: var(--text-inverse);
+}
+
+/* Variantes legacy maintenues */
 .btn {
   background: var(--gradient-primary);
 }
@@ -389,17 +573,41 @@ form input, form div input, form select {
   display: block;
   transition: var(--transition-normal);
   box-sizing: border-box;
+  min-height: 44px;  /* Accessibilité tactile */
 }
 
 form input:focus, form div input:focus, form select:focus {
   background: var(--background);
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+  border-color: var(--primary-600);  /* Contraste plus fort */
+  box-shadow: 0 0 0 3px rgba(159, 122, 234, 0.25);  /* Focus ring plus visible */
   transform: translateY(-1px);
 }
 
 form input:hover, form div input:hover, form select:hover {
-  border-color: var(--border-hover);
+  border-color: var(--primary-400);  /* Hover plus visible */
+}
+
+/* États d'erreur pour les formulaires */
+form input.error, form div input.error, form select.error {
+  border-color: var(--error);
+  background: rgba(220, 38, 38, 0.05);
+}
+
+form input.error:focus, form div input.error:focus, form select.error:focus {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+/* États de succès */
+form input.success, form div input.success, form select.success {
+  border-color: var(--success);
+  background: rgba(5, 150, 105, 0.05);
+}
+
+/* Placeholder avec meilleur contraste */
+form input::placeholder, form div input::placeholder, form select::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
 }
 
 form button, form div button {
@@ -449,7 +657,7 @@ form .message a:hover {
   text-decoration: underline;
 }
 
-/* Card styles harmonisés */
+/* Card styles avec contrastes améliorés */
 .card {
   width: 100%;
   max-width: 320px;
@@ -471,14 +679,53 @@ form .message a:hover {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 4px;  /* Plus visible */
   background: var(--gradient-primary);
+  border-radius: var(--border-radius-2xl) var(--border-radius-2xl) 0 0;
 }
 
 .card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-xl);
+  border-color: var(--primary-400);  /* Plus contrasté */
+}
+
+.card:focus-within {
+  outline: 2px solid var(--primary-600);
+  outline-offset: 2px;
+}
+
+/* Variantes de cartes */
+.card-primary {
   border-color: var(--primary-300);
+  background: var(--primary-50);
+}
+
+.card-success {
+  border-color: var(--success-light);
+  background: rgba(5, 150, 105, 0.05);
+}
+
+.card-success::before {
+  background: var(--success);
+}
+
+.card-warning {
+  border-color: var(--warning-light);
+  background: rgba(217, 119, 6, 0.05);
+}
+
+.card-warning::before {
+  background: var(--warning);
+}
+
+.card-error {
+  border-color: var(--error-light);
+  background: rgba(220, 38, 38, 0.05);
+}
+
+.card-error::before {
+  background: var(--error);
 }
 
 .card-img {
@@ -769,6 +1016,48 @@ li:hover {
     padding: var(--spacing-lg);
     width: 95%;
   }
+
+  /* Améliorations responsives mobiles */
+  .container, .container2, .containerCote {
+    padding: var(--spacing-md);
+    margin: 0;
+  }
+
+  .card {
+    margin: var(--spacing-sm) 0;
+    padding: var(--spacing-md);
+    max-width: 100%;
+  }
+
+  /* Navigation mobile améliorée */
+  nav.menu {
+    flex-direction: column;
+    padding: var(--spacing-sm);
+  }
+
+  .menu > ul {
+    width: 100%;
+  }
+
+  .menu > ul > li {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Boutons mobiles */
+  button, .btn, .but1, .card-btn {
+    width: 100%;
+    max-width: none;
+    margin: var(--spacing-xs) 0;
+  }
+
+  /* Tables responsives */
+  table {
+    font-size: var(--font-size-xs);
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
 }
 
 /* Extra small screens (small mobile phones, less than 576px) */
@@ -841,6 +1130,165 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
+/* === ANIMATIONS ET MICRO-INTERACTIONS === */
+
+/* Animation de chargement pour les skeletons */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--border-radius-md);
+}
+
+/* Animation d'apparition pour les éléments */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Classes d'animation */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out both;
+}
+
+/* Délais d'animation */
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-500 { animation-delay: 0.5s; }
+
+/* Micro-interactions pour les éléments interactifs */
+.interactive-scale:hover {
+  transform: scale(1.05);
+}
+
+.interactive-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.interactive-glow:hover {
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+}
+
+/* Animation de pulsation pour les éléments importants */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(167, 139, 250, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
+  }
+}
+
+.pulse-notification {
+  animation: pulse-glow 2s infinite;
+}
+
+/* États de focus améliorés */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+}
+
+/* Animation de rotation pour les icônes */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-on-hover:hover {
+  animation: rotate 0.5s ease-in-out;
+}
+
+/* Effet de vague pour les clics */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple-effect:active::before {
+  width: 300px;
+  height: 300px;
+}
+
 /* Print styles */
 @media print {
   body {
@@ -861,5 +1309,13 @@ a:focus-visible {
 
   .hidden, .cache, .displaynone {
     display: none !important;
+  }
+
+  /* Masquer les animations en impression */
+  *, *::before, *::after {
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
   }
 }

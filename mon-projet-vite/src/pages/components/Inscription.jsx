@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import lien from './lien';
-import './css/connexion.css'
+import './css/connexion.css';
+
 const Inscription = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -13,6 +14,18 @@ const Inscription = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [inscriptionMessage, setInscriptionMessage] = useState("");
+    const [notification, setNotification] = useState({
+        show: false,
+        type: "error",
+        message: "",
+    });
+
+    const showNotification = (type, message) => {
+        setNotification({ show: true, type, message });
+        setTimeout(() => {
+            setNotification(prev => ({ ...prev, show: false }));
+        }, 5000);
+    };
 
     const validateEmail = (mail) => {
         const valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail);
@@ -22,13 +35,32 @@ const Inscription = () => {
 
     const validateForm = () => {
         let valid = true;
-        if (!nom) { setNomError("Le nom est obligatoire"); valid = false; } else setNomError("");
-        if (!prenom) { setPrenomError("Le prénom est obligatoire"); valid = false; } else setPrenomError("");
-        if (!validateEmail(email)) valid = false;
+        
+        if (!nom.trim()) { 
+            setNomError("Le nom est obligatoire"); 
+            valid = false; 
+        } else {
+            setNomError("");
+        }
+        
+        if (!prenom.trim()) { 
+            setPrenomError("Le prénom est obligatoire"); 
+            valid = false; 
+        } else {
+            setPrenomError("");
+        }
+        
+        if (!validateEmail(email)) {
+            valid = false;
+        }
+        
         if (password.length < 3) {
             setPasswordError("Le mot de passe doit comporter au moins 3 caractères");
             valid = false;
-        } else setPasswordError("");
+        } else {
+            setPasswordError("");
+        }
+        
         return valid;
     };
 
@@ -37,65 +69,132 @@ const Inscription = () => {
         setIsSuccess(false);
         setInscriptionMessage("");
 
-        if (!validateForm()) return;
+        if (!validateForm()) {
+            showNotification("error", "Veuillez corriger les erreurs dans le formulaire");
+            return;
+        }
+
         setIsLoading(true);
 
         try {
             const response = await fetch(`${lien.url}connection/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nom, prenom, email, password })
+                body: JSON.stringify({ nom: nom.trim(), prenom: prenom.trim(), email, password })
             });
 
             const data = await response.json().catch(() => ({}));
+            
             if (response.ok) {
                 setIsSuccess(true);
                 setInscriptionMessage("Inscription réussie ! Vérifiez votre email pour activer votre compte.");
-                setNom(""); setPrenom(""); setEmail(""); setPassword("");
+                showNotification("success", "Inscription réussie ! Vérifiez vos emails.");
+                
+                // Reset form
+                setNom(""); 
+                setPrenom(""); 
+                setEmail(""); 
+                setPassword("");
+                setNomError("");
+                setPrenomError("");
+                setEmailError("");
+                setPasswordError("");
             } else {
                 setIsSuccess(false);
-                setInscriptionMessage(data.message || "Une erreur est survenue. Veuillez réessayer.");
+                const errorMsg = data.message || "Une erreur est survenue. Veuillez réessayer.";
+                setInscriptionMessage(errorMsg);
+                showNotification("error", errorMsg);
             }
         } catch (error) {
             console.error("Erreur inscription :", error);
-            setInscriptionMessage("Erreur de connexion au serveur.");
+            const errorMsg = "Erreur de connexion au serveur.";
+            setInscriptionMessage(errorMsg);
+            showNotification("error", errorMsg);
         } finally {
             setIsLoading(false);
         }
     }, [nom, prenom, email, password]);
 
+    const isFormValid = nom.trim() && prenom.trim() && email && password.length >= 3 && !emailError;
+
     return (
-        <div className="containerInscription">
-            <div className="form-card">
-                <h2>Inscription</h2>
+        <div>
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    <div className="notification-content">
+                        <span>{notification.message}</span>
+                        <button onClick={() => setNotification(prev => ({ ...prev, show: false }))}>&times;</button>
+                    </div>
+                </div>
+            )}
 
-                <input type="text" placeholder="Nom" value={nom}
-                       onChange={e => setNom(e.target.value)}/>
-                <p className="error">{nomError}</p>
+            <div className="container2">
+                <h1>Créer un compte</h1>
+                <div className="status-indicator">
+                    Rejoignez Budget Manager pour gérer vos finances
+                </div>
 
-                <input type="text" placeholder="Prénom" value={prenom}
-                       onChange={e => setPrenom(e.target.value)}/>
-                <p className="error">{prenomError}</p>
+                <form onSubmit={fetchInscription}>
+                    <input 
+                        type="text" 
+                        placeholder="👤 Nom" 
+                        value={nom}
+                        onChange={(e) => setNom(e.target.value)}
+                        required
+                        className={nomError ? "input-error" : nom.trim() ? "input-success" : ""}
+                    />
+                    {nomError && <p className="error">{nomError}</p>}
 
-                <input type="text" placeholder="Email" value={email}
-                       onChange={e => setEmail(e.target.value)}/>
-                <p className="error">{emailError}</p>
+                    <input 
+                        type="text" 
+                        placeholder="🙂 Prénom" 
+                        value={prenom}
+                        onChange={(e) => setPrenom(e.target.value)}
+                        required
+                        className={prenomError ? "input-error" : prenom.trim() ? "input-success" : ""}
+                    />
+                    {prenomError && <p className="error">{prenomError}</p>}
 
-                <input type="password" placeholder="Mot de passe" value={password}
-                       onChange={e => setPassword(e.target.value)}/>
-                <p className="error">{passwordError}</p>
+                    <input 
+                        type="email" 
+                        placeholder="📧 Adresse email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className={emailError ? "input-error" : email && !emailError ? "input-success" : ""}
+                    />
+                    {emailError && <p className="error">{emailError}</p>}
 
-                <p className={isSuccess ? "success-message" : "error-message"}>
-                    {inscriptionMessage}
-                </p>
+                    <input 
+                        type="password" 
+                        placeholder="🔒 Mot de passe (min. 3 caractères)" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={3}
+                        className={passwordError ? "input-error" : password.length >= 3 ? "input-success" : ""}
+                    />
+                    {passwordError && <p className="error">{passwordError}</p>}
 
-                <button onClick={fetchInscription} disabled={isLoading}>
-                    {isLoading ? "Inscription en cours..." : "S'inscrire"}
-                </button>
+                    {inscriptionMessage && (
+                        <div className={isSuccess ? "success-message" : "error-message"}>
+                            {inscriptionMessage}
+                        </div>
+                    )}
 
-                <p className="info-message">
-                    Vous recevrez un email pour activer votre compte.
-                </p>
+                    <button 
+                        type="submit" 
+                        id="btnInscription"
+                        disabled={isLoading || !isFormValid}
+                        className={isLoading ? "loading" : ""}
+                    >
+                        {isLoading ? "Inscription en cours..." : "S'INSCRIRE"}
+                    </button>
+
+                    <div className="info-message">
+                        ℹ️ Vous recevrez un email pour activer votre compte.
+                    </div>
+                </form>
             </div>
         </div>
     );
