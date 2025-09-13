@@ -37,7 +37,7 @@ const iconOptions = [
     { label: "🍷 Sorties", value: "fa-solid fa-wine-glass" },
 ];
 
-export function Categorie() {
+export function Categorie({ activeView = 'create' }) {
     const [categorieDescription, setCategorieDescription] = useState("");
     const [idVal, setId] = useState(-1);
     const [categorie, setCategorie] = useState("");
@@ -183,57 +183,155 @@ export function Categorie() {
         item.categorie.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    return (
-        <div className="categorie-wrapper">
-            <form className="categorie-form" onSubmit={fetchCreate}>
-                <input type="color" value={colorCategorie} onChange={(e) => setColorCategorie(e.target.value)} />
-                <input type="text" placeholder="Catégorie" value={categorie} onChange={(e) => setCategorie(e.target.value)} />
-                <input type="number" placeholder="Année" value={annee} onChange={(e) => setAnnee(e.target.value)} />
-                <select value={month} onChange={(e) => setMonth(e.target.value)}>
-                    <option value="">Mois</option>
-                    {["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"].map((mois) => (
-                        <option key={mois} value={mois}>{mois}</option>
-                    ))}
-                </select>
-                <input type="number" placeholder="Budget" value={budgetDebutMois} onChange={(e) => setBudgetDebutMois(e.target.value)} />
-                <select value={iconName} onChange={(e) => setIconName(e.target.value)}>
-                    <option value="">Icône</option>
-                    {iconOptions.map((icon) => (
-                        <option key={icon.value} value={icon.value}>{icon.label}</option>
-                    ))}
-                </select>
-                <input type="text" placeholder="Rechercher..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                <div className="form-buttons">
-                    <button type="button" onClick={fetchUpdate}>Modifier</button>
-                    <button type="submit">Créer</button>
-                </div>
-            </form>
+    const renderCreateView = () => (
+        <div className="modal-section">
+            <div className="section-header">
+                <h3 className="section-title">Nouvelle Catégorie</h3>
+                <p className="section-description">Créez une nouvelle catégorie pour organiser vos dépenses</p>
+            </div>
 
-            <div className="categorie-list">
-                {filteredCategories.map((item) => (
-                    <div key={item.id} className="categorie-card">
-                        <ItemCategorie
-                            del={() => fetchDelete(item.id)}
-                            color={item.color}
-                            changeColor={setColorCategorie}
-                            changecategorie={setCategorie}
-                            changeTitle={setCategorieDescription}
-                            changeDec={setCategorieDescription}
-                            idFunc={setId}
-                            changeMonth={setMonth}
-                            changeAnnee={setAnnee}
-                            changeBudgetDebutMois={setBudgetDebutMois}
-                            changeIcon={setIconName}
-                            categorie={item.categorie}
-                            annee={item.annee}
-                            month={item.month}
-                            budgetDebutMois={item.budgetDebutMois}
-                            id={item.id}
-                            iconName={item.iconName}
+            <form className="categorie-form modal-form" onSubmit={fetchCreate}>
+                <div className="form-row">
+                    <div className="form-group">
+                        <label className="form-label">Couleur</label>
+                        <input
+                            type="color"
+                            value={colorCategorie}
+                            onChange={(e) => setColorCategorie(e.target.value)}
+                            className="color-input"
                         />
                     </div>
-                ))}
+
+                    <div className="form-group flex-2">
+                        <label className="form-label">Nom de la catégorie</label>
+                        <input
+                            type="text"
+                            placeholder="Ex: Alimentation, Transport..."
+                            value={categorie}
+                            onChange={(e) => setCategorie(e.target.value)}
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div className="form-row">
+                    <div className="form-group">
+                        <label className="form-label">Année</label>
+                        <input
+                            type="number"
+                            placeholder="2024"
+                            value={annee}
+                            onChange={(e) => setAnnee(e.target.value)}
+                            min="2020"
+                            max="2030"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Mois</label>
+                        <select value={month} onChange={(e) => setMonth(e.target.value)}>
+                            <option value="">Sélectionner...</option>
+                            {["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"].map((mois) => (
+                                <option key={mois} value={mois}>{mois}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Budget initial (€)</label>
+                        <input
+                            type="number"
+                            placeholder="0"
+                            value={budgetDebutMois}
+                            onChange={(e) => setBudgetDebutMois(e.target.value)}
+                            min="0"
+                            step="0.01"
+                        />
+                    </div>
+                </div>
+
+                <div className="form-row">
+                    <div className="form-group flex-2">
+                        <label className="form-label">Icône</label>
+                        <select value={iconName} onChange={(e) => setIconName(e.target.value)}>
+                            <option value="">Choisir une icône...</option>
+                            {iconOptions.map((icon) => (
+                                <option key={icon.value} value={icon.value}>{icon.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="form-buttons">
+                    <button type="button" className="btn-secondary" onClick={fetchUpdate} disabled={idVal === -1}>
+                        {idVal === -1 ? 'Sélectionner pour modifier' : 'Mettre à jour'}
+                    </button>
+                    <button type="submit" className="btn-primary">
+                        Créer la catégorie
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+
+    const renderManageView = () => (
+        <div className="modal-section">
+            <div className="section-header">
+                <h3 className="section-title">Mes Catégories</h3>
+                <p className="section-description">Gérez vos catégories existantes</p>
             </div>
+
+            <div className="search-section">
+                <div className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Rechercher une catégorie..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
+            </div>
+
+            <div className="categorie-grid">
+                {filteredCategories.length > 0 ? (
+                    filteredCategories.map((item) => (
+                        <div key={item.id} className="categorie-card modern-card">
+                            <ItemCategorie
+                                del={() => fetchDelete(item.id)}
+                                color={item.color}
+                                changeColor={setColorCategorie}
+                                changecategorie={setCategorie}
+                                changeTitle={setCategorieDescription}
+                                changeDec={setCategorieDescription}
+                                idFunc={setId}
+                                changeMonth={setMonth}
+                                changeAnnee={setAnnee}
+                                changeBudgetDebutMois={setBudgetDebutMois}
+                                changeIcon={setIconName}
+                                categorie={item.categorie}
+                                annee={item.annee}
+                                month={item.month}
+                                budgetDebutMois={item.budgetDebutMois}
+                                id={item.id}
+                                iconName={item.iconName}
+                            />
+                        </div>
+                    ))
+                ) : (
+                    <div className="empty-state">
+                        <div className="empty-icon">📁</div>
+                        <h4>Aucune catégorie trouvée</h4>
+                        <p>Essayez de modifier votre recherche ou créez une nouvelle catégorie.</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="categorie-modal-wrapper">
+            {activeView === 'create' ? renderCreateView() : renderManageView()}
         </div>
     );
 }
