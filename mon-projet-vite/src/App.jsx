@@ -17,7 +17,7 @@ import DashGraphBudget from "./pages/components/DashgraphBudget.jsx";
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true }}>
             <Routes>
                     <Route path="/" element={<DashBoardHello/>}/>
                     <Route path="/login" element={<DashLogin/>}/>

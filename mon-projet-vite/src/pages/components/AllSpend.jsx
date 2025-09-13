@@ -1,4 +1,4 @@
-// AllSpend.jsx amélioré avec classes CSS cohérentes
+// AllSpend.jsx amélioré avec classes CSS cohérentes et mode sombre
 import React, {useEffect, useRef, useState} from "react";
 import {Bar} from "react-chartjs-2";
 import "jspdf-autotable";
@@ -11,6 +11,7 @@ const AllSpend = () => {
     const [budget, setBudget] = useState(0);
     const [budgetUsed, setBudgetUsed] = useState(0);
     const [budgetRemaining, setBudgetRemaining] = useState(0);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     const {
         depenses,
@@ -28,6 +29,22 @@ const AllSpend = () => {
             assignCategoryColors();
         };
         init();
+
+        // Détection du mode sombre
+        const checkDarkMode = () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const bodyClass = document.body.className;
+            setIsDarkMode(theme === 'dark' || bodyClass.includes('dark-mode'));
+        };
+
+        checkDarkMode();
+
+        // Observer les changements de thème
+        const observer = new MutationObserver(checkDarkMode);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+        return () => observer.disconnect();
     }, [fetchDepenses, generateMonthlySummary, assignCategoryColors]);
 
     useEffect(() => {
@@ -62,7 +79,7 @@ const AllSpend = () => {
                 display: true,
                 position: 'top',
                 labels: {
-                    color: '#0f172a',
+                    color: isDarkMode ? '#f0f6fc' : '#0f172a',
                     font: {
                         size: 14,
                         weight: '500'
@@ -70,10 +87,10 @@ const AllSpend = () => {
                 }
             },
             tooltip: {
-                backgroundColor: '#ffffff',
-                titleColor: '#0f172a',
-                bodyColor: '#334155',
-                borderColor: '#cbd5e1',
+                backgroundColor: isDarkMode ? '#161b22' : '#ffffff',
+                titleColor: isDarkMode ? '#f0f6fc' : '#0f172a',
+                bodyColor: isDarkMode ? '#c9d1d9' : '#334155',
+                borderColor: isDarkMode ? '#30363d' : '#cbd5e1',
                 borderWidth: 1
             }
         },
@@ -81,18 +98,18 @@ const AllSpend = () => {
             y: {
                 beginAtZero: true,
                 grid: {
-                    color: '#e2e8f0'
+                    color: isDarkMode ? '#30363d' : '#e2e8f0'
                 },
                 ticks: {
-                    color: '#334155'
+                    color: isDarkMode ? '#c9d1d9' : '#334155'
                 }
             },
             x: {
                 grid: {
-                    color: '#e2e8f0'
+                    color: isDarkMode ? '#30363d' : '#e2e8f0'
                 },
                 ticks: {
-                    color: '#334155'
+                    color: isDarkMode ? '#c9d1d9' : '#334155'
                 }
             }
         }

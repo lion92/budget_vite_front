@@ -37,7 +37,7 @@ const iconOptions = [
     { label: "🍷 Sorties", value: "fa-solid fa-wine-glass" },
 ];
 
-export function Categorie({ activeView = 'create' }) {
+export function Categorie({ activeView = 'manage' }) {
     const [categorieDescription, setCategorieDescription] = useState("");
     const [idVal, setId] = useState(-1);
     const [categorie, setCategorie] = useState("");
@@ -48,6 +48,7 @@ export function Categorie({ activeView = 'create' }) {
     const [budgetDebutMois, setBudgetDebutMois] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
     const [iconName, setIconName] = useState("");
+    const [currentView, setCurrentView] = useState(activeView);
     const notify = useNotify();
 
     useEffect(() => {
@@ -331,7 +332,21 @@ export function Categorie({ activeView = 'create' }) {
 
     return (
         <div className="categorie-modal-wrapper">
-            {activeView === 'create' ? renderCreateView() : renderManageView()}
+            <div className="tab-navigation">
+                <button
+                    className={`tab-button ${currentView === 'manage' ? 'active' : ''}`}
+                    onClick={() => setCurrentView('manage')}
+                >
+                    📋 Mes Catégories
+                </button>
+                <button
+                    className={`tab-button ${currentView === 'create' ? 'active' : ''}`}
+                    onClick={() => setCurrentView('create')}
+                >
+                    ➕ Nouvelle Catégorie
+                </button>
+            </div>
+            {currentView === 'create' ? renderCreateView() : renderManageView()}
         </div>
     );
 }

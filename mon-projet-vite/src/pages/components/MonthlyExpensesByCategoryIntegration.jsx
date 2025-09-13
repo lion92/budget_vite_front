@@ -11,6 +11,7 @@ const MonthlyExpensesByCategory = () => {
     const [allCategories, setAllCategories] = useState([]);
     const [months, setMonths] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
         const fetchAPI = async () => {
@@ -41,6 +42,22 @@ const MonthlyExpensesByCategory = () => {
         };
 
         fetchAPI();
+
+        // Détection du mode sombre
+        const checkDarkMode = () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const bodyClass = document.body.className;
+            setIsDarkMode(theme === 'dark' || bodyClass.includes('dark-mode'));
+        };
+
+        checkDarkMode();
+
+        // Observer les changements de thème
+        const observer = new MutationObserver(checkDarkMode);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+        return () => observer.disconnect();
     }, []);
 
     useEffect(() => {
@@ -124,16 +141,36 @@ const MonthlyExpensesByCategory = () => {
     };
 
     return (
-        <div style={{ padding: "16px", backgroundColor: "white", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
-            <h2 style={{ fontSize: 18, color: "blueviolet", textAlign: "center", marginBottom: "16px" }}>Dépenses mensuelles par catégorie</h2>
+        <div style={{
+            padding: "16px",
+            backgroundColor: isDarkMode ? "#161b22" : "white",
+            borderRadius: "8px",
+            boxShadow: isDarkMode ? "0 2px 4px rgba(0,0,0,0.4)" : "0 2px 4px rgba(0,0,0,0.1)",
+            border: isDarkMode ? "1px solid #30363d" : "none"
+        }}>
+            <h2 style={{
+                fontSize: 18,
+                color: isDarkMode ? "#f0f6fc" : "blueviolet",
+                textAlign: "center",
+                marginBottom: "16px"
+            }}>Dépenses mensuelles par catégorie</h2>
 
             {isLoading ? (
                 <div style={{ textAlign: "center", padding: "20px" }}>Chargement des données...</div>
             ) : (
                 <>
-                    <div style={{ marginBottom: "16px", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px" }}>
+                    <div style={{
+                        marginBottom: "16px",
+                        border: `1px solid ${isDarkMode ? '#30363d' : '#e2e8f0'}`,
+                        borderRadius: "8px",
+                        padding: "16px",
+                        backgroundColor: isDarkMode ? "#0d1117" : "transparent"
+                    }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-                            <h3 style={{ fontWeight: "600" }}>Filtrer par catégorie</h3>
+                            <h3 style={{
+                                fontWeight: "600",
+                                color: isDarkMode ? "#f0f6fc" : "#0f172a"
+                            }}>Filtrer par catégorie</h3>
                             <div style={{ display: "flex", gap: "8px" }}>
                                 <button
                                     onClick={handleSelectAllCategories}
@@ -197,11 +234,37 @@ const MonthlyExpensesByCategory = () => {
                                     data={chartData}
                                     margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
                                 >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month" angle={-45} textAnchor="end" height={70} />
-                                    <YAxis />
-                                    <Tooltip formatter={(value) => `${Number(value).toFixed(2)} €`} />
-                                    <Legend />
+                                    <CartesianGrid
+                                        strokeDasharray="3 3"
+                                        stroke={isDarkMode ? '#30363d' : '#e2e8f0'}
+                                    />
+                                    <XAxis
+                                        dataKey="month"
+                                        angle={-45}
+                                        textAnchor="end"
+                                        height={70}
+                                        tick={{ fill: isDarkMode ? '#c9d1d9' : '#334155', fontSize: 12 }}
+                                    />
+                                    <YAxis
+                                        tick={{ fill: isDarkMode ? '#c9d1d9' : '#334155', fontSize: 12 }}
+                                    />
+                                    <Tooltip
+                                        formatter={(value) => `${Number(value).toFixed(2)} €`}
+                                        contentStyle={{
+                                            backgroundColor: isDarkMode ? '#161b22' : '#ffffff',
+                                            border: `1px solid ${isDarkMode ? '#30363d' : '#cbd5e1'}`,
+                                            borderRadius: '8px',
+                                            color: isDarkMode ? '#f0f6fc' : '#0f172a'
+                                        }}
+                                        labelStyle={{
+                                            color: isDarkMode ? '#f0f6fc' : '#0f172a'
+                                        }}
+                                    />
+                                    <Legend
+                                        wrapperStyle={{
+                                            color: isDarkMode ? '#c9d1d9' : '#334155'
+                                        }}
+                                    />
                                     {selectedCategories.map(category => (
                                         <Bar
                                             key={category}
@@ -214,14 +277,29 @@ const MonthlyExpensesByCategory = () => {
                                 </BarChart>
                             </ResponsiveContainer>
                         ) : (
-                            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#6B7280" }}>
+                            <div style={{
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: isDarkMode ? "#8b949e" : "#6B7280"
+                            }}>
                                 Aucune donnée à afficher
                             </div>
                         )}
                     </div>
 
-                    <div style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px" }}>
-                        <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>Légende des couleurs</h3>
+                    <div style={{
+                        border: `1px solid ${isDarkMode ? '#30363d' : '#e2e8f0'}`,
+                        borderRadius: "8px",
+                        padding: "16px",
+                        backgroundColor: isDarkMode ? "#0d1117" : "transparent"
+                    }}>
+                        <h3 style={{
+                            fontWeight: "600",
+                            marginBottom: "8px",
+                            color: isDarkMode ? "#f0f6fc" : "#0f172a"
+                        }}>Légende des couleurs</h3>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                             {allCategories.map(category => (
                                 <div
@@ -230,7 +308,9 @@ const MonthlyExpensesByCategory = () => {
                                         display: "flex",
                                         alignItems: "center",
                                         padding: "4px 8px",
-                                        backgroundColor: selectedCategories.includes(category) ? "#F9FAFB" : "#F3F4F6",
+                                        backgroundColor: selectedCategories.includes(category)
+                                            ? (isDarkMode ? "#21262d" : "#F9FAFB")
+                                            : (isDarkMode ? "#161b22" : "#F3F4F6"),
                                         borderRadius: "4px"
                                     }}
                                 >
@@ -243,22 +323,46 @@ const MonthlyExpensesByCategory = () => {
                                             marginRight: "8px"
                                         }}
                                     ></div>
-                                    <span>{category}</span>
+                                    <span style={{
+                                        color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                    }}>{category}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
                     {months.length > 0 && (
-                        <div style={{ marginTop: "16px", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px" }}>
-                            <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>Résumé par mois</h3>
+                        <div style={{
+                            marginTop: "16px",
+                            border: `1px solid ${isDarkMode ? '#30363d' : '#e2e8f0'}`,
+                            borderRadius: "8px",
+                            padding: "16px",
+                            backgroundColor: isDarkMode ? "#0d1117" : "transparent"
+                        }}>
+                            <h3 style={{
+                                fontWeight: "600",
+                                marginBottom: "8px",
+                                color: isDarkMode ? "#f0f6fc" : "#0f172a"
+                            }}>Résumé par mois</h3>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "16px" }}>
                                 {months.map(month => {
                                     const { total, categories: monthCategories } = monthlySummary[month];
                                     return (
-                                        <div key={month} style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "12px" }}>
-                                            <h4 style={{ marginBottom: "8px", color: "black" }}>{month}</h4>
-                                            <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Total: {Number(total).toFixed(2)} €</p>
+                                        <div key={month} style={{
+                                            border: `1px solid ${isDarkMode ? '#30363d' : '#e2e8f0'}`,
+                                            borderRadius: "8px",
+                                            padding: "12px",
+                                            backgroundColor: isDarkMode ? "#161b22" : "transparent"
+                                        }}>
+                                            <h4 style={{
+                                                marginBottom: "8px",
+                                                color: isDarkMode ? "#f0f6fc" : "black"
+                                            }}>{month}</h4>
+                                            <p style={{
+                                                fontWeight: "bold",
+                                                marginBottom: "8px",
+                                                color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                            }}>Total: {Number(total).toFixed(2)} €</p>
                                             <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
                                                 {Object.entries(monthCategories)
                                                     .filter(([category]) => selectedCategories.includes(category))
@@ -274,9 +378,13 @@ const MonthlyExpensesByCategory = () => {
                                                                         marginRight: "6px"
                                                                     }}
                                                                 ></div>
-                                                                {category}
+                                                                <span style={{
+                                                                    color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                                                }}>{category}</span>
                                                             </span>
-                                                            <span>{Number(amount).toFixed(2)} €</span>
+                                                            <span style={{
+                                                                color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                                            }}>{Number(amount).toFixed(2)} €</span>
                                                         </li>
                                                     ))}
                                             </ul>

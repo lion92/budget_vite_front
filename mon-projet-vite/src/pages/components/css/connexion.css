@@ -603,6 +603,44 @@
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
 }
 
+/* === STYLES POUR LES INPUTS EN MODE SOMBRE - FOND BLANC === */
+[data-theme="dark"] .input,
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea,
+.dark-mode .input,
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: var(--border-color, #30363d) !important;
+}
+
+[data-theme="dark"] .input::placeholder,
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder,
+.dark-mode .input::placeholder,
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+    color: #666666 !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] .input:focus,
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus,
+.dark-mode .input:focus,
+.dark-mode input:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: var(--primary-500, #8b5cf6) !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2) !important;
+}
+
 /* Accessibilité */
 @media (prefers-reduced-motion: reduce) {
     *,
