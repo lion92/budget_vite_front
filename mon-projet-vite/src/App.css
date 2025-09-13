@@ -145,6 +145,12 @@
   --text-disabled: #6e7681 !important;    /* Éléments désactivés */
   --text-inverse: #0d1117 !important;     /* Texte sur fond clair */
 
+  /* Variables spécifiques pour les inputs en mode sombre - FOND BLANC */
+  --input-bg-dark: #ffffff !important;      /* Fond blanc pour tous les inputs */
+  --input-text-dark: #000000 !important;    /* Texte noir sur fond blanc */
+  --input-placeholder-dark: #666666 !important; /* Placeholder gris foncé mais lisible */
+  --input-border-dark: #30363d !important;  /* Bordure qui s'harmonise avec le thème sombre */
+
   /* Couleurs d'état améliorées pour dark mode */
   --success: #238636 !important;          /* Vert plus visible en dark */
   --success-light: #2ea043 !important;
@@ -198,11 +204,106 @@ body.dark-mode {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* === STYLES POUR LES INPUTS EN MODE SOMBRE - FOND BLANC === */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea,
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background: var(--input-bg-dark) !important;
+  color: var(--input-text-dark) !important;
+  border-color: var(--input-border-dark) !important;
+}
+
+/* Placeholders en mode sombre */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder,
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+  color: var(--input-placeholder-dark) !important;
+  opacity: 1 !important;
+}
+
+/* Focus states pour les inputs en mode sombre */
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus,
+.dark-mode input:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+  background: var(--input-bg-dark) !important;
+  color: var(--input-text-dark) !important;
+  border-color: var(--primary-500) !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Styles spécifiques pour les inputs de type color en mode sombre */
+[data-theme="dark"] input[type="color"],
+.dark-mode input[type="color"] {
+  background: var(--input-bg-dark) !important;
+  border-color: var(--input-border-dark) !important;
+}
+
+/* Styles pour les options des selects en mode sombre */
+[data-theme="dark"] select option,
+.dark-mode select option {
+  background: var(--input-bg-dark) !important;
+  color: var(--input-text-dark) !important;
+}
+
+/* === SUPPRESSION GLOBALE DU BACKGROUND JAUNE === */
+
+/* Désactiver la surbrillance de recherche automatique */
+*::-webkit-search-decoration,
+*::-webkit-search-cancel-button,
+*::-webkit-search-results-button,
+*::-webkit-search-results-decoration {
+  -webkit-appearance: none !important;
+  display: none !important;
+}
+
+/* Personnaliser la sélection de texte */
+*::selection {
+  background-color: var(--primary-100, rgba(139, 92, 246, 0.2)) !important;
+  color: var(--text-primary, #111827) !important;
+}
+
+*::-moz-selection {
+  background-color: var(--primary-100, rgba(139, 92, 246, 0.2)) !important;
+  color: var(--text-primary, #111827) !important;
+}
+
+/* Mode sombre pour la sélection */
+[data-theme="dark"] *::selection,
+.dark-mode *::selection {
+  background-color: rgba(139, 92, 246, 0.4) !important;
+  color: #f0f6fc !important;
+}
+
+[data-theme="dark"] *::-moz-selection,
+.dark-mode *::-moz-selection {
+  background-color: rgba(139, 92, 246, 0.4) !important;
+  color: #f0f6fc !important;
+}
+
+/* Supprimer tout élément mark ou highlight */
+mark,
+.highlight,
+.search-highlight,
+.filter-highlight {
+  background: transparent !important;
+  color: inherit !important;
+  border: none !important;
+  outline: none !important;
+}
+
 /* Base styles */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 html {

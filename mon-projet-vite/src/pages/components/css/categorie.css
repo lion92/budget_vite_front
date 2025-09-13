@@ -431,6 +431,57 @@
     flex-direction: column;
 }
 
+/* Navigation par onglets */
+.tab-navigation {
+    display: flex;
+    background: var(--surface, #f9fafb);
+    border-bottom: 1px solid var(--border, #e5e7eb);
+    margin: 0 -2rem 2rem -2rem;
+    padding: 0 2rem;
+    gap: 0;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 1rem 2rem;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary, #6b7280);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tab-button:hover {
+    color: var(--primary-600, #7c3aed);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.tab-button.active {
+    color: var(--primary-600, #7c3aed);
+    background: var(--background, white);
+    border-bottom-color: var(--primary-600, #7c3aed);
+    font-weight: 700;
+}
+
+.tab-button.active::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-600, #7c3aed);
+    border-radius: 2px 2px 0 0;
+}
+
 .modal-section {
     padding: 2rem;
     height: 100%;
@@ -691,6 +742,55 @@
     .modal-form {
         padding: 1.5rem;
     }
+}
+
+/* === STYLES POUR LES INPUTS EN MODE SOMBRE - FOND BLANC === */
+[data-theme="dark"] .categorie-form input,
+[data-theme="dark"] .categorie-form select,
+[data-theme="dark"] .modal-form input,
+[data-theme="dark"] .modal-form select,
+[data-theme="dark"] .search-input,
+.dark-mode .categorie-form input,
+.dark-mode .categorie-form select,
+.dark-mode .modal-form input,
+.dark-mode .modal-form select,
+.dark-mode .search-input {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: var(--border, #e5e7eb) !important;
+}
+
+[data-theme="dark"] .categorie-form input::placeholder,
+[data-theme="dark"] .modal-form input::placeholder,
+[data-theme="dark"] .search-input::placeholder,
+.dark-mode .categorie-form input::placeholder,
+.dark-mode .modal-form input::placeholder,
+.dark-mode .search-input::placeholder {
+    color: #666666 !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] .categorie-form input:focus,
+[data-theme="dark"] .categorie-form select:focus,
+[data-theme="dark"] .modal-form input:focus,
+[data-theme="dark"] .modal-form select:focus,
+[data-theme="dark"] .search-input:focus,
+.dark-mode .categorie-form input:focus,
+.dark-mode .categorie-form select:focus,
+.dark-mode .modal-form input:focus,
+.dark-mode .modal-form select:focus,
+.dark-mode .search-input:focus {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: var(--primary-500, #8b5cf6) !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+}
+
+/* Styles spécifiques pour l'input color en mode sombre */
+[data-theme="dark"] .color-input,
+.dark-mode .color-input {
+    background: #ffffff !important;
+    border-color: var(--border, #e5e7eb) !important;
 }
 
 /* Accessibilité */

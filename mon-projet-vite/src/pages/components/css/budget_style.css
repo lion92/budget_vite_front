@@ -1072,6 +1072,106 @@ body {
     animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* === STYLES POUR LES INPUTS EN MODE SOMBRE - FOND BLANC GLOBAL === */
+[data-theme="dark"] .modern-input,
+[data-theme="dark"] .modern-select,
+[data-theme="dark"] .filter-input,
+[data-theme="dark"] .control-select,
+.dark-mode .modern-input,
+.dark-mode .modern-select,
+.dark-mode .filter-input,
+.dark-mode .control-select {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: var(--border, #30363d) !important;
+}
+
+[data-theme="dark"] .modern-input::placeholder,
+[data-theme="dark"] .filter-input::placeholder,
+.dark-mode .modern-input::placeholder,
+.dark-mode .filter-input::placeholder {
+    color: #666666 !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] .modern-input:focus,
+[data-theme="dark"] .modern-select:focus,
+[data-theme="dark"] .filter-input:focus,
+[data-theme="dark"] .control-select:focus,
+.dark-mode .modern-input:focus,
+.dark-mode .modern-select:focus,
+.dark-mode .filter-input:focus,
+.dark-mode .control-select:focus {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* === SUPPRESSION DU BACKGROUND JAUNE SUR DONNÉES FILTRÉES === */
+
+/* Désactiver la surbrillance automatique du navigateur */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Désactiver la surbrillance de recherche du navigateur */
+*::-webkit-search-decoration,
+*::-webkit-search-cancel-button,
+*::-webkit-search-results-button,
+*::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+}
+
+/* Surbrillance personnalisée pour les correspondances de recherche */
+*::selection {
+    background-color: var(--primary-100) !important;
+    color: var(--text-primary) !important;
+}
+
+*::-moz-selection {
+    background-color: var(--primary-100) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Mode sombre pour la sélection */
+[data-theme="dark"] *::selection,
+.dark-mode *::selection {
+    background-color: var(--primary-600) !important;
+    color: white !important;
+}
+
+[data-theme="dark"] *::-moz-selection,
+.dark-mode *::-moz-selection {
+    background-color: var(--primary-600) !important;
+    color: white !important;
+}
+
+/* Forcer la suppression des backgrounds de surbrillance automatique */
+.modern-table td,
+.modern-table th,
+.modern-table tr,
+.table-container * {
+    background-color: transparent !important;
+}
+
+.modern-table tbody tr {
+    background-color: var(--bg-primary) !important;
+}
+
+.modern-table tbody tr:hover {
+    background-color: var(--bg-secondary) !important;
+}
+
+.modern-table th {
+    background-color: var(--bg-secondary) !important;
+}
+
+/* Désactiver tout style de surbrillance automatique */
+mark,
+.highlight {
+    background: transparent !important;
+    color: inherit !important;
+}
+
 /* Animations supplémentaires pour les éléments interactifs */
 .btn:active {
     animation: pulse 0.2s ease-in-out;
