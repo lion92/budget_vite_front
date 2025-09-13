@@ -605,21 +605,17 @@ export default function Budget() {
 
             {/* === MODALES === */}
             {showModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <ModalCategorie
-                            onClose={() => {
-                                setShowModal(false);
-                                fetchCategories();
-                            }}
-                        />
-                    </div>
-                </div>
+                <ModalCategorie
+                    onClose={() => {
+                        setShowModal(false);
+                        fetchCategories();
+                    }}
+                />
             )}
 
             {showRevenuForm && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
+                    <div className="modal-content revenue-form-modal">
                         <div className="modal-header">
                             <h3>Ajouter un revenu</h3>
                             <button
@@ -629,7 +625,9 @@ export default function Budget() {
                                 <X size={20} />
                             </button>
                         </div>
-                        <RevenueManager onClose={() => setShowRevenuForm(false)} />
+                        <div className="modal-body">
+                            <RevenueManager onClose={() => setShowRevenuForm(false)} />
+                        </div>
                     </div>
                 </div>
             )}
