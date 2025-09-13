@@ -23,6 +23,27 @@
     z-index: 1001;
 }
 
+/* Tablette: adaptation de la sidebar */
+@media (max-width: 991px) and (min-width: 769px) {
+    .sidebar {
+        width: 200px;
+        padding-top: 50px;
+    }
+
+    .logoName {
+        font-size: 20px;
+    }
+
+    .navItem {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .content {
+        padding: 16px;
+    }
+}
+
 /* Mobile: masquer la sidebar par défaut */
 @media (max-width: 768px) {
     .sidebar {
@@ -30,16 +51,71 @@
         left: 0;
         top: 0;
         transform: translateX(-100%);
-        width: 280px;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        box-shadow: 4px 0 20px rgba(93, 58, 155, 0.3);
+        background: linear-gradient(135deg, #EBDDFB 0%, #f8f4ff 100%);
+        z-index: 1050;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
     }
-    
+
     .sidebar.open {
         transform: translateX(0);
+        box-shadow: 4px 0 30px rgba(93, 58, 155, 0.4);
     }
-    
+
     .menu-container {
         flex-direction: column;
+        position: relative;
+    }
+
+    /* Overlay pour fermer le menu */
+    .menu-container::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1040;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .menu-container.menu-open::before {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .logoName {
+        font-size: 22px;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 2px solid rgba(93, 58, 155, 0.2);
+        margin-bottom: 10px;
+        background: rgba(93, 58, 155, 0.1);
+    }
+
+    .navItem {
+        padding: 16px 20px;
+        font-size: 16px;
+        border-radius: 0 25px 25px 0;
+        margin: 4px 0;
+        margin-right: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .navItem:hover {
+        background: rgba(93, 58, 155, 0.15);
+        transform: translateX(5px);
+    }
+
+    .navItem:active {
+        background: rgba(93, 58, 155, 0.25);
+        transform: scale(0.98);
     }
 }
 
@@ -75,9 +151,18 @@
 
 @media (max-width: 768px) {
     .content {
-        padding: 15px;
-        padding-bottom: 80px; /* Espace pour la navbar mobile */
+        padding: 16px;
+        padding-bottom: 90px; /* Espace pour la navbar mobile */
         margin-left: 0;
+        width: 100%;
+        min-height: calc(100vh - 90px);
+        transition: all 0.3s ease;
+    }
+
+    /* Empêcher le scroll quand le menu est ouvert */
+    body.menu-open {
+        overflow: hidden;
+        position: fixed;
         width: 100%;
     }
 }
@@ -106,19 +191,41 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 60px;
-    background: #EBDDFB;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(235, 221, 251, 0.95) 0%, rgba(248, 244, 255, 0.95) 100%);
+    backdrop-filter: blur(15px);
     display: none;
     justify-content: space-around;
     align-items: center;
-    border-top: 1px solid #ccc;
-    z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    border-top: 2px solid rgba(93, 58, 155, 0.3);
+    z-index: 1030;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+/* Support pour safe areas iOS */
+@supports (padding: max(0px)) {
+    .mobile-navbar {
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        height: calc(70px + max(0px, env(safe-area-inset-bottom)));
+    }
 }
 
 @media (max-width: 768px) {
     .mobile-navbar {
         display: flex;
+        animation: slideUpFromBottom 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+@keyframes slideUpFromBottom {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
 
@@ -128,84 +235,250 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 12px;
-    padding: 8px;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-    min-width: 60px;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 64px;
+    min-height: 48px;
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-navbar a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(93, 58, 155, 0.1) 0%, rgba(93, 58, 155, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+}
+
+.mobile-navbar a:hover::before,
+.mobile-navbar a.active::before {
+    opacity: 1;
 }
 
 .mobile-navbar a:hover,
 .mobile-navbar a.active {
-    background-color: rgba(93, 58, 155, 0.1);
+    background-color: transparent;
     color: #5D3A9B;
+    transform: translateY(-2px) scale(1.05);
+    text-shadow: 0 1px 2px rgba(93, 58, 155, 0.2);
+}
+
+.mobile-navbar a:active {
+    transform: translateY(0) scale(0.95);
 }
 
 .mobile-navbar svg {
-    font-size: 20px;
+    font-size: 22px;
+    margin-bottom: 2px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(93, 58, 155, 0.2));
+}
+
+.mobile-navbar a:hover svg {
+    transform: scale(1.1);
+    filter: drop-shadow(0 2px 4px rgba(93, 58, 155, 0.3));
+}
+
+/* Badge de notification pour mobile navbar */
+.mobile-navbar a .badge {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .chatBubbleBtn {
     position: fixed;
-    bottom: 80px;
+    bottom: 90px;
     right: 20px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #5D3A9B;
+    background: linear-gradient(135deg, #5D3A9B 0%, #7C3AED 100%);
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 30px;
+    font-size: 28px;
     cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(93, 58, 155, 0.3);
-    transition: transform 0.2s ease;
+    z-index: 1020;
+    box-shadow: 0 6px 20px rgba(93, 58, 155, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.chatBubbleBtn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #5D3A9B, #7C3AED, #8B5CF6);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .chatBubbleBtn:hover {
-    transform: scale(1.1);
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(93, 58, 155, 0.5);
+}
+
+.chatBubbleBtn:hover::before {
+    opacity: 1;
+}
+
+.chatBubbleBtn:active {
+    transform: scale(0.95);
+}
+
+/* Badge de notification pour chat */
+.chatBubbleBtn .notification-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    background: #ff4757;
+    border-radius: 50%;
+    border: 2px solid white;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+    }
 }
 
 @media (max-width: 768px) {
     .chatBubbleBtn {
+        bottom: 150px;
+        right: 16px;
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+    }
+
+    /* Support pour safe areas iOS */
+    @supports (padding: max(0px)) {
+        .chatBubbleBtn {
+            bottom: calc(150px + max(0px, env(safe-area-inset-bottom)));
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .chatBubbleBtn {
         bottom: 140px;
-        right: 15px;
+        right: 12px;
         width: 50px;
         height: 50px;
-        font-size: 24px;
+        font-size: 22px;
     }
 }
 
 .chatContainer {
     position: fixed;
-    bottom: 150px;
+    bottom: 160px;
     right: 20px;
-    width: 300px;
+    width: 320px;
     max-height: 500px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    z-index: 999;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(93, 58, 155, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 1010;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.chatContainer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #5D3A9B, #7C3AED, #8B5CF6);
+}
+
+.chatContainer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
 }
 
 @media (max-width: 768px) {
     .chatContainer {
-        bottom: 210px;
-        right: 15px;
-        left: 15px;
+        bottom: 220px;
+        right: 16px;
+        left: 16px;
         width: auto;
-        max-height: 400px;
+        max-height: 420px;
+        border-radius: 12px;
+    }
+
+    /* Support pour safe areas iOS */
+    @supports (padding: max(0px)) {
+        .chatContainer {
+            bottom: calc(220px + max(0px, env(safe-area-inset-bottom)));
+        }
     }
 }
 
 @media (max-width: 480px) {
     .chatContainer {
         bottom: 200px;
-        right: 10px;
-        left: 10px;
-        max-height: 350px;
+        right: 12px;
+        left: 12px;
+        max-height: 360px;
+        border-radius: 10px;
+    }
+}
+
+/* Animation d'apparition du chat */
+.chatContainer.show {
+    animation: slideInFromBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInFromBottom {
+    from {
+        transform: translateY(100%) scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
     }
 }
