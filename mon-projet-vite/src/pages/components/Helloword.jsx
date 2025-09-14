@@ -112,21 +112,6 @@ const Helloword = () => {
                         </button>
                     </div>
 
-                    {/* Statistiques impressionnantes */}
-                    <div className="stats-section">
-                        <div className="stat-item">
-                            <div className="stat-number" data-count="10000">0</div>
-                            <div className="stat-label">Utilisateurs actifs</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-number" data-count="50">0</div>
-                            <div className="stat-label">Fonctionnalités</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-number" data-count="99">0</div>
-                            <div className="stat-label">% Satisfaction</div>
-                        </div>
-                    </div>
 
                     {/* Wrapper vidéo amélioré */}
                     <div className="video-section">

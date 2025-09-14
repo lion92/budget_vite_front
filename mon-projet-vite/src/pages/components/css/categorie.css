@@ -486,6 +486,29 @@
     padding: 2rem;
     height: 100%;
     overflow-y: auto;
+    /* Scrollbar améliorée pour la section principale */
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-400, #a78bfa) var(--surface, #f9fafb);
+}
+
+/* Scrollbar personnalisée pour la section modale */
+.modal-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-section::-webkit-scrollbar-track {
+    background: var(--surface, #f9fafb);
+    border-radius: 4px;
+}
+
+.modal-section::-webkit-scrollbar-thumb {
+    background: var(--primary-400, #a78bfa);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.modal-section::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-600, #7c3aed);
 }
 
 .section-header {
@@ -595,6 +618,29 @@
     max-height: 60vh;
     overflow-y: auto;
     padding-right: 0.5rem;
+    /* Scrollbar améliorée pour une meilleure visibilité */
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-400, #a78bfa) var(--surface, #f9fafb);
+}
+
+/* Scrollbar personnalisée pour WebKit */
+.categorie-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.categorie-grid::-webkit-scrollbar-track {
+    background: var(--surface, #f9fafb);
+    border-radius: 4px;
+}
+
+.categorie-grid::-webkit-scrollbar-thumb {
+    background: var(--primary-400, #a78bfa);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.categorie-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-600, #7c3aed);
 }
 
 .modern-card {
@@ -791,6 +837,35 @@
 .dark-mode .color-input {
     background: #ffffff !important;
     border-color: var(--border, #e5e7eb) !important;
+}
+
+/* Scrollbars en mode sombre */
+[data-theme="dark"] .categorie-grid,
+[data-theme="dark"] .modal-section,
+.dark-mode .categorie-grid,
+.dark-mode .modal-section {
+    scrollbar-color: var(--primary-300, #c4b5fd) var(--background, #1f2937);
+}
+
+[data-theme="dark"] .categorie-grid::-webkit-scrollbar-track,
+[data-theme="dark"] .modal-section::-webkit-scrollbar-track,
+.dark-mode .categorie-grid::-webkit-scrollbar-track,
+.dark-mode .modal-section::-webkit-scrollbar-track {
+    background: var(--background, #1f2937);
+}
+
+[data-theme="dark"] .categorie-grid::-webkit-scrollbar-thumb,
+[data-theme="dark"] .modal-section::-webkit-scrollbar-thumb,
+.dark-mode .categorie-grid::-webkit-scrollbar-thumb,
+.dark-mode .modal-section::-webkit-scrollbar-thumb {
+    background: var(--primary-300, #c4b5fd);
+}
+
+[data-theme="dark"] .categorie-grid::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] .modal-section::-webkit-scrollbar-thumb:hover,
+.dark-mode .categorie-grid::-webkit-scrollbar-thumb:hover,
+.dark-mode .modal-section::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-400, #a78bfa);
 }
 
 /* Accessibilité */

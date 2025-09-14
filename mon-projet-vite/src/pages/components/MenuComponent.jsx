@@ -523,7 +523,7 @@ export default function MenuComponent(props) {
                 </>
             )}
 
-            <style jsx={true}>{`
+            <style jsx="true">{`
                 @keyframes slideUpFade {
                     from {
                         opacity: 0;
