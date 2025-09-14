@@ -1,74 +1,689 @@
+/* ========================================
+   BILAN FINANCIER MODERNE
+   ======================================== */
+
 :root {
-    --text: #333333;
+    --text: #2d3748;
+    --primary: #667eea;
+    --success: #48bb78;
+    --warning: #ed8936;
+    --danger: #f56565;
+    --background: #ffffff;
+    --background-secondary: #f7fafc;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    --text-secondary: #4a5568;
+    --text-tertiary: #718096;
 }
-.bilan-financier {
-    background-color: var(--background);
-    color: var(--text);
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+/* Container principal */
+.bilan-financier-modern {
+    background: var(--background);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     padding: 2rem;
-    max-width: 700px;
-    margin: 2rem auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background 0.3s, color 0.3s;
+    margin: 1rem 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Header */
+.bilan-header {
     text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-light);
+}
+
+.bilan-title {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.75rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 0.5rem 0;
 }
 
-.bilan-financier h2 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    color: var(--primary, #4a90e2);
+.bilan-subtitle {
+    color: var(--text-tertiary);
+    font-size: 1rem;
+    margin: 0;
 }
 
-.periode-select {
+/* Section headers */
+.section-header {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+}
+
+/* Boutons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+/* Section des 6 derniers mois */
+.recent-months-section {
+    margin-bottom: 2rem;
+}
+
+.months-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Cartes mensuelles */
+.month-card {
+    background: var(--background);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.month-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+}
+
+.month-card.positive {
+    border-color: rgba(72, 187, 120, 0.3);
+}
+
+.month-card.positive::before {
+    background: linear-gradient(90deg, #48bb78, #38b2ac);
+}
+
+.month-card.negative {
+    border-color: rgba(245, 101, 101, 0.3);
+}
+
+.month-card.negative::before {
+    background: linear-gradient(90deg, #f56565, #fc8181);
+}
+
+.month-card.neutral {
+    border-color: rgba(113, 128, 150, 0.3);
+}
+
+.month-card.neutral::before {
+    background: linear-gradient(90deg, #718096, #a0aec0);
+}
+
+.month-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.month-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.month-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.stat-badge.revenue {
+    background: rgba(72, 187, 120, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(72, 187, 120, 0.2);
+}
+
+.stat-badge.expense {
+    background: rgba(245, 101, 101, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(245, 101, 101, 0.2);
+}
+
+/* Montants dans les cartes */
+.month-amounts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.amount-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: var(--background-secondary);
+}
+
+.amount-item.revenue {
+    border-left: 3px solid var(--success);
+}
+
+.amount-item.expense {
+    border-left: 3px solid var(--danger);
+}
+
+.amount-item.balance.positive {
+    border-left: 3px solid var(--success);
+    background: rgba(72, 187, 120, 0.05);
+}
+
+.amount-item.balance.negative {
+    border-left: 3px solid var(--danger);
+    background: rgba(245, 101, 101, 0.05);
+}
+
+.amount-item.balance.neutral {
+    border-left: 3px solid var(--text-tertiary);
+}
+
+.amount-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+.amount-value {
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: 'Monaco', monospace;
+}
+
+.amount-item.revenue .amount-value {
+    color: var(--success);
+}
+
+.amount-item.expense .amount-value {
+    color: var(--danger);
+}
+
+.amount-item.balance.positive .amount-value {
+    color: var(--success);
+}
+
+.amount-item.balance.negative .amount-value {
+    color: var(--danger);
+}
+
+/* Status des mois */
+.month-status {
+    text-align: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: var(--background-secondary);
+}
+
+.status-message {
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.status-message.positive {
+    color: var(--success);
+}
+
+.status-message.negative {
+    color: var(--danger);
+}
+
+.status-message.neutral {
+    color: var(--text-secondary);
+}
+
+/* Section de recherche */
+.search-section {
+    background: var(--background-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.search-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.search-controls {
+    margin-bottom: 2rem;
+}
+
+.search-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
     gap: 1rem;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.search-input,
+.search-select {
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--background);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus,
+.search-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Résultats de recherche */
+.search-results {
+    background: var(--background);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.results-header {
+    background: var(--background-secondary);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.results-header h4 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.1rem;
+}
+
+.results-table {
+    overflow-x: auto;
+}
+
+.monthly-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.monthly-table th,
+.monthly-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.monthly-table th {
+    background: var(--background-secondary);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.monthly-table tr:hover {
+    background: var(--background-secondary);
+}
+
+.monthly-table tr.positive {
+    background: rgba(72, 187, 120, 0.02);
+}
+
+.monthly-table tr.negative {
+    background: rgba(245, 101, 101, 0.02);
+}
+
+.period-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.period-info .month-name {
+    font-weight: 600;
+    color: var(--text);
+    text-transform: capitalize;
+}
+
+.period-info .year {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+}
+
+.amount-cell {
+    font-weight: 600;
+    font-family: 'Monaco', monospace;
+}
+
+.amount-cell.positive {
+    color: var(--success);
+}
+
+.amount-cell.negative {
+    color: var(--danger);
+}
+
+.amount-cell.balance.positive {
+    color: var(--success);
+}
+
+.amount-cell.balance.negative {
+    color: var(--danger);
+}
+
+.operations-info {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.op-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.op-badge.revenue {
+    background: rgba(72, 187, 120, 0.1);
+    color: var(--success);
+}
+
+.op-badge.expense {
+    background: rgba(245, 101, 101, 0.1);
+    color: var(--danger);
+}
+
+.status-indicator {
+    font-size: 1.2rem;
+}
+
+/* Section bilan personnalisé */
+.custom-period-section {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.date-selectors {
+    display: flex;
+    gap: 2rem;
     justify-content: center;
     margin-bottom: 2rem;
 }
 
-.periode-select label {
+.date-group {
     display: flex;
     flex-direction: column;
-    font-weight: bold;
-    color: var(--text);
+    gap: 0.5rem;
+}
+
+.date-group label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.date-picker {
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--background);
     font-size: 1rem;
+    transition: all 0.2s ease;
 }
 
-.periode-select .react-datepicker-wrapper {
-    width: 100%;
-    margin-top: 0.3rem;
-
+.date-picker:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.bilan-financier p {
-    font-size: 1.1rem;
-    margin: 0.6rem 0;
+.custom-results {
     text-align: center;
 }
 
-.bilan-financier strong {
-    color: var(--primary, #4a90e2);
+.custom-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: var(--background-secondary);
+    border: 2px solid var(--border);
+}
+
+.summary-item.revenue {
+    border-color: rgba(72, 187, 120, 0.3);
+    background: rgba(72, 187, 120, 0.05);
+}
+
+.summary-item.expense {
+    border-color: rgba(245, 101, 101, 0.3);
+    background: rgba(245, 101, 101, 0.05);
+}
+
+.summary-item.balance.positive {
+    border-color: rgba(72, 187, 120, 0.3);
+    background: rgba(72, 187, 120, 0.05);
+}
+
+.summary-item.balance.negative {
+    border-color: rgba(245, 101, 101, 0.3);
+    background: rgba(245, 101, 101, 0.05);
+}
+
+.summary-item.balance.neutral {
+    border-color: rgba(113, 128, 150, 0.3);
+    background: rgba(113, 128, 150, 0.05);
+}
+
+.summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+}
+
+.summary-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.summary-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'Monaco', monospace;
+}
+
+.summary-item.revenue .summary-value {
+    color: var(--success);
+}
+
+.summary-item.expense .summary-value {
+    color: var(--danger);
+}
+
+.summary-item.balance.positive .summary-value {
+    color: var(--success);
+}
+
+.summary-item.balance.negative .summary-value {
+    color: var(--danger);
+}
+
+.period-message {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.period-message.positive {
+    background: rgba(72, 187, 120, 0.1);
+    border: 1px solid rgba(72, 187, 120, 0.2);
+    color: var(--success);
+}
+
+.period-message.negative {
+    background: rgba(245, 101, 101, 0.1);
+    border: 1px solid rgba(245, 101, 101, 0.2);
+    color: var(--danger);
+}
+
+.period-message.neutral {
+    background: rgba(113, 128, 150, 0.1);
+    border: 1px solid rgba(113, 128, 150, 0.2);
+    color: var(--text-secondary);
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-    .periode-select {
-        flex-direction: column;
-        align-items: center;
+@media (max-width: 768px) {
+    .bilan-financier-modern {
+        padding: 1.5rem;
+        margin: 0.5rem 0;
     }
 
-    .bilan-financier {
+    .bilan-title {
+        font-size: 1.5rem;
+    }
+
+    .months-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .search-filters {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .date-selectors {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .custom-summary {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .month-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .month-stats {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+    .results-table {
+        font-size: 0.85rem;
+    }
+
+    .monthly-table th,
+    .monthly-table td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bilan-financier-modern {
+        padding: 1rem;
+    }
+
+    .search-section {
         padding: 1.5rem;
     }
 
-    .bilan-financier h2 {
-        font-size: 1.5rem;
+    .custom-period-section {
+        padding: 1.5rem;
     }
 }

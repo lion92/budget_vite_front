@@ -67,9 +67,7 @@ export const useTicketStore = create(
                         set({ result: data, uploading: false });
 
                         // Rafraîchir automatiquement la liste des tickets
-                        setTimeout(() => {
-                            get().fetchTickets();
-                        }, 1000);
+                        get().fetchTickets();
 
                     } catch (err) {
                         console.error('❌ Erreur importTicket:', err);
@@ -212,6 +210,85 @@ export const useTicketStore = create(
                     }
                 },
 
+                // Modifier le montant d'un ticket
+                updateTicketAmount: async (id, newAmount) => {
+                    // Utiliser un état de mise à jour spécifique
+                    set(state => ({
+                        deleting: { ...state.deleting, [id]: true },
+                        error: null
+                    }));
+
+                    try {
+                        const jwt = localStorage.getItem('jwt');
+                        if (!jwt) {
+                            throw new Error('Session expirée. Veuillez vous reconnecter.');
+                        }
+
+                        const response = await fetch(`${lien.url}ticket/update-amount`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ jwt, id, amount: newAmount }),
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            if (response.status === 401) {
+                                throw new Error('Session expirée. Veuillez vous reconnecter.');
+                            }
+                            throw new Error(data.message || `Erreur ${response.status}`);
+                        }
+
+                        if (!data.success) {
+                            throw new Error(data.message || 'Échec de la mise à jour');
+                        }
+
+                        // Mise à jour immédiate et complète du state
+                        set(state => {
+                            const updatedTickets = state.allTickets.map(ticket =>
+                                ticket.id === id
+                                    ? { ...ticket, totalExtrait: newAmount }
+                                    : ticket
+                            );
+
+                            // Calculer les nouvelles stats immédiatement
+                            const newTotalAmount = updatedTickets.reduce((sum, ticket) =>
+                                sum + (ticket.totalExtrait || 0), 0
+                            );
+
+                            const updatedStats = state.ticketStats ? {
+                                ...state.ticketStats,
+                                totalAmount: newTotalAmount,
+                                recentTickets: state.ticketStats.recentTickets.map(ticket =>
+                                    ticket.id === id
+                                        ? { ...ticket, totalExtrait: newAmount }
+                                        : ticket
+                                )
+                            } : null;
+
+                            return {
+                                ...state,
+                                allTickets: updatedTickets,
+                                ticketStats: updatedStats,
+                                deleting: { ...state.deleting, [id]: false },
+                                error: null
+                            };
+                        });
+
+                        // Les stats sont déjà mises à jour localement, pas besoin de refetch
+
+                        return { ...data, ticket: { id, totalExtrait: newAmount } };
+
+                    } catch (err) {
+                        console.error('❌ Erreur updateTicketAmount:', err);
+                        set(state => ({
+                            error: err.message || 'Erreur lors de la mise à jour du montant',
+                            deleting: { ...state.deleting, [id]: false }
+                        }));
+                        throw err;
+                    }
+                },
+
                 // Utilitaires
                 clearError: () => set({ error: null }),
 
@@ -234,38 +311,61 @@ export const useTicketStore = create(
     )
 );
 
-// Hooks utilitaires pour faciliter l'usage
+// Hooks utilitaires pour faciliter l'usage avec mémoisation
 export const useTicketActions = () => {
-    const store = useTicketStore();
-    return {
-        importTicket: store.importTicket,
-        fetchTickets: store.fetchTickets,
-        deleteTicket: store.deleteTicket,
-        getTicketStats: store.getTicketStats,
-        clearError: store.clearError,
-        clearResult: store.clearResult,
-        reset: store.reset,
-    };
+    return useTicketStore(
+        (state) => ({
+            importTicket: state.importTicket,
+            fetchTickets: state.fetchTickets,
+            deleteTicket: state.deleteTicket,
+            getTicketStats: state.getTicketStats,
+            updateTicketAmount: state.updateTicketAmount,
+            clearError: state.clearError,
+            clearResult: state.clearResult,
+            reset: state.reset,
+        }),
+        (prev, next) => {
+            // Les fonctions ne changent jamais dans Zustand
+            return true;
+        }
+    );
 };
 
 export const useTicketData = () => {
-    const store = useTicketStore();
-    return {
-        allTickets: store.allTickets,
-        result: store.result,
-        error: store.error,
-        ticketStats: store.ticketStats,
-    };
+    return useTicketStore(
+        (state) => ({
+            allTickets: state.allTickets,
+            result: state.result,
+            error: state.error,
+            ticketStats: state.ticketStats,
+        }),
+        (prev, next) => {
+            return (
+                prev.allTickets === next.allTickets &&
+                prev.result === next.result &&
+                prev.error === next.error &&
+                prev.ticketStats === next.ticketStats
+            );
+        }
+    );
 };
 
 export const useTicketLoadingStates = () => {
-    const store = useTicketStore();
-    return {
-        loading: store.loading,
-        uploading: store.uploading,
-        deleting: store.deleting,
-        isDeleting: (id) => store.deleting[id] || false,
-    };
+    return useTicketStore(
+        (state) => ({
+            loading: state.loading,
+            uploading: state.uploading,
+            deleting: state.deleting,
+            isDeleting: (id) => state.deleting[id] || false,
+        }),
+        (prev, next) => {
+            return (
+                prev.loading === next.loading &&
+                prev.uploading === next.uploading &&
+                JSON.stringify(prev.deleting) === JSON.stringify(next.deleting)
+            );
+        }
+    );
 };
 
 // Sélecteurs utiles

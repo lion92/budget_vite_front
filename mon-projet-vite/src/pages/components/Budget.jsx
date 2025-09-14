@@ -35,10 +35,14 @@ export default function Budget() {
     const [showDepenseForm, setShowDepenseForm] = useState(false);
     const [showRevenuForm, setShowRevenuForm] = useState(false);
 
-    // États d'affichage
-    const [showDepenseTable, setShowDepenseTable] = useState(true);
-    const [showGraph, setShowGraph] = useState(true);
+    // États d'affichage - NOUVEAU SYSTÈME D'ONGLETS
+    const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, expenses, analytics, tools, history
     const [showFilters, setShowFilters] = useState(false);
+
+    // États pour l'historique des budgets
+    const [showBudgetHistory, setShowBudgetHistory] = useState(false);
+    const [budgetSearchTerm, setBudgetSearchTerm] = useState('');
+    const [budgetSearchYear, setBudgetSearchYear] = useState('');
 
     // Nouveaux états pour la pagination/limitation
     const [maxDepensesDisplay, setMaxDepensesDisplay] = useState(50);
@@ -190,6 +194,62 @@ export default function Budget() {
 
     const advice = getFinancialAdvice();
 
+    // Génération de l'historique des budgets
+    const generateBudgetHistory = () => {
+        const history = [];
+        const currentDate = new Date();
+
+        // Générer les 24 derniers mois (2 ans)
+        for (let i = 0; i < 24; i++) {
+            const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+            const month = date.getMonth();
+            const year = date.getFullYear();
+
+            // Filtrer les données pour ce mois
+            const monthRevenus = (revenus || []).filter(r => {
+                const d = new Date(r.date);
+                return d.getMonth() === month && d.getFullYear() === year;
+            });
+
+            const monthDepenses = (depenses || []).filter(d => {
+                const dDate = new Date(d.dateTransaction);
+                return dDate.getMonth() === month && dDate.getFullYear() === year;
+            });
+
+            const totalRevenusMois = monthRevenus.reduce((acc, val) => acc + parseFloat(val.amount || 0), 0);
+            const totalDepensesMois = monthDepenses.reduce((acc, val) => acc + parseFloat(val.montant || 0), 0);
+            const soldeMois = totalRevenusMois - totalDepensesMois;
+
+            history.push({
+                month,
+                year,
+                monthName: date.toLocaleString('fr-FR', { month: 'long' }),
+                totalRevenus: totalRevenusMois,
+                totalDepenses: totalDepensesMois,
+                solde: soldeMois,
+                isCurrentMonth: month === selectedMonth && year === selectedYear,
+                depensesCount: monthDepenses.length,
+                revenusCount: monthRevenus.length
+            });
+        }
+
+        return history;
+    };
+
+    const budgetHistory = generateBudgetHistory();
+
+    // Filtrer l'historique selon la recherche
+    const filteredBudgetHistory = budgetHistory.filter(budget => {
+        const matchesSearchTerm = budgetSearchTerm === '' ||
+            budget.monthName.toLowerCase().includes(budgetSearchTerm.toLowerCase());
+        const matchesYear = budgetSearchYear === '' ||
+            budget.year.toString() === budgetSearchYear;
+        return matchesSearchTerm && matchesYear;
+    });
+
+    // Les 6 derniers budgets (excluant le mois courant)
+    const recentBudgets = budgetHistory.filter(b => !b.isCurrentMonth).slice(0, 6);
+
     return (
         <div className="budget-container">
             {/* === 1. HEADER PRINCIPAL === */}
@@ -242,366 +302,632 @@ export default function Budget() {
                 </div>
 
                 <div className="actions-toolbar">
-                    <div className="primary-actions">
+                    {/* Navigation par onglets - Mise en avant */}
+                    <div className="tab-navigation">
                         <button
-                            className="btn btn-primary"
-                            onClick={() => setShowDepenseForm(true)}
+                            className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('dashboard')}
                         >
-                            <Plus size={18} />
-                            Ajouter des dépenses
+                            <Wallet size={18} />
+                            Tableau de bord
                         </button>
                         <button
-                            className="btn btn-primary"
-                            onClick={() => setShowRevenuForm(true)}
-                        >
-                            <TrendingUp size={18} />
-                            Ajouter un revenu
-                        </button>
-                        <button
-                            className="btn btn-secondary"
-                            onClick={() => setShowModal(true)}
-                        >
-                            <Settings size={18} />
-                            Gérer les catégories
-                        </button>
-                    </div>
-
-                    <div className="view-toggles">
-                        <button
-                            className={`btn btn-toggle ${showGraph ? 'active' : ''}`}
-                            onClick={() => setShowGraph(!showGraph)}
-                        >
-                            <BarChartBig size={18} />
-                            Graphiques
-                        </button>
-                        <button
-                            className={`btn btn-toggle ${showDepenseTable ? 'active' : ''}`}
-                            onClick={() => setShowDepenseTable(!showDepenseTable)}
+                            className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('expenses')}
                         >
                             <Table size={18} />
-                            Tableau
+                            Dépenses détaillées
                         </button>
-                    </div>
-                </div>
-            </section>
-
-            {/* === 3. ÉVOLUTION MENSUELLE (DÉPLACÉE EN HAUT) === */}
-            <section className="evolution-section">
-                <div className="section-header">
-                    <h2 className="section-title">
-                        <TrendingUp size={24} />
-                        Évolution mensuelle
-                    </h2>
-                    <p className="section-subtitle">
-                        Suivez l'évolution de vos finances sur 12 mois
-                    </p>
-                </div>
-                <div className="chart-card featured-chart">
-                    <MonthlyReportChart />
-                </div>
-            </section>
-
-            {/* === 4. BILAN FINANCIER PRINCIPAL === */}
-            <section className="dashboard-section">
-                <div className={`bilan-card ${getSoldeStatus()}`} ref={bilanRef}>
-                    <div className="bilan-header">
-                        <h2 className="bilan-title">
-                            Bilan de {new Date(selectedYear, selectedMonth).toLocaleString('fr-FR', {
-                            month: 'long',
-                            year: 'numeric'
-                        })}
-                        </h2>
                         <button
-                            className="btn btn-outline"
-                            onClick={downloadBilanPDF}
+                            className={`tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('analytics')}
                         >
-                            <Download size={18} />
-                            Télécharger PDF
+                            <BarChartBig size={18} />
+                            Analyses & Graphiques
+                        </button>
+                        <button
+                            className={`tab-btn ${activeTab === 'tools' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('tools')}
+                        >
+                            <FilePlus size={18} />
+                            Outils & Import
+                        </button>
+                        <button
+                            className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('history')}
+                        >
+                            <Calendar size={18} />
+                            Historique
                         </button>
                     </div>
 
-                    <div className="bilan-grid">
-                        <div className="stat-card revenue">
-                            <div className="stat-icon">
-                                <TrendingUp />
-                            </div>
-                            <div className="stat-content">
-                                <span className="stat-label">Revenus</span>
-                                <span className="stat-value">{totalRevenus.toFixed(2)} €</span>
-                            </div>
-                        </div>
-
-                        <div className="stat-card expense">
-                            <div className="stat-icon">
-                                <TrendingDown />
-                            </div>
-                            <div className="stat-content">
-                                <span className="stat-label">Dépenses</span>
-                                <span className="stat-value">{totalDepenses.toFixed(2)} €</span>
-                            </div>
-                        </div>
-
-                        <div className={`stat-card balance ${getSoldeStatus()}`}>
-                            <div className="stat-icon">
-                                <Wallet />
-                            </div>
-                            <div className="stat-content">
-                                <span className="stat-label">Solde</span>
-                                <span className="stat-value">{solde.toFixed(2)} €</span>
-                            </div>
-                        </div>
-
-                        <div className="stat-card savings">
-                            <div className="stat-icon">
-                                <PiggyBank />
-                            </div>
-                            <div className="stat-content">
-                                <span className="stat-label">Taux d'épargne</span>
-                                <span className="stat-value">{tauxEpargne.toFixed(1)}%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Conseil financier */}
-                    <div className={`financial-advice ${advice.type}`}>
-                        {advice.icon}
-                        <span>{advice.text}</span>
-                    </div>
-
-                    {/* Cochon épargne amélioré */}
-                    <div className="piggy-section">
-                        <div className="piggy-container">
-                            <div
-                                className="piggy-wrapper"
-                                style={{
-                                    transform: `scale(${totalRevenus > 0 ? Math.max(Math.min(solde / totalRevenus, 1.2), 0.3) : 0.3})`
-                                }}
+                    {/* Actions rapides - Réorganisées */}
+                    <div className="quick-actions">
+                        <div className="primary-actions">
+                            <button
+                                className="btn btn-primary btn-lg"
+                                onClick={() => setShowDepenseForm(true)}
+                                title="Ajouter une ou plusieurs dépenses"
                             >
-                                <img
-                                    src="/assets/pigs/pig_1.png"
-                                    alt="Cochon épargne"
-                                    className="piggy-image"
-                                />
-                            </div>
-                            <div className="piggy-stats">
-                                <p className="piggy-text">
-                                    Vous avez économisé <strong>{solde.toFixed(2)} €</strong>
-                                </p>
-                                <p className="piggy-percentage">
-                                    {tauxEpargne.toFixed(1)}% de vos revenus
-                                </p>
-                            </div>
+                                <Plus size={20} />
+                                <span className="btn-text">
+                                    <span className="btn-main">Ajouter</span>
+                                    <span className="btn-sub">Dépenses</span>
+                                </span>
+                            </button>
+                            <button
+                                className="btn btn-success btn-lg"
+                                onClick={() => setShowRevenuForm(true)}
+                                title="Ajouter un nouveau revenu"
+                            >
+                                <TrendingUp size={20} />
+                                <span className="btn-text">
+                                    <span className="btn-main">Ajouter</span>
+                                    <span className="btn-sub">Revenu</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div className="secondary-actions">
+                            <button
+                                className="btn btn-outline btn-compact"
+                                onClick={() => setShowModal(true)}
+                                title="Gérer les catégories de dépenses"
+                            >
+                                <Settings size={18} />
+                                Catégories
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* === 5. OUTILS D'IMPORT === */}
-            <section className="tools-section">
-                <BilanFinancier />
-                <ImportTicket />
-            </section>
+            {/* === CONTENU DES ONGLETS === */}
+            <div className="tab-content">
+                {/* ONGLET 1: TABLEAU DE BORD */}
+                {activeTab === 'dashboard' && (
+                    <div className="tab-panel">
+                        {/* Bilan financier principal */}
+                        <section className="dashboard-section">
+                            <div className={`bilan-card ${getSoldeStatus()}`} ref={bilanRef}>
+                                <div className="bilan-header">
+                                    <h2 className="bilan-title">
+                                        Bilan de {new Date(selectedYear, selectedMonth).toLocaleString('fr-FR', {
+                                        month: 'long',
+                                        year: 'numeric'
+                                    })}
+                                    </h2>
+                                    <button
+                                        className="btn btn-outline"
+                                        onClick={downloadBilanPDF}
+                                    >
+                                        <Download size={18} />
+                                        Télécharger PDF
+                                    </button>
+                                </div>
 
-            {/* === 6. GRAPHIQUES DE RÉPARTITION === */}
-            {showGraph && (
-                <section className="analytics-section">
-                    <div className="section-header">
-                        <h2 className="section-title">
-                            <BarChartBig size={24} />
-                            Analyse des dépenses
-                        </h2>
-                    </div>
-                    <div className="chart-grid">
-                        <div className="chart-card">
-                            <h3 className="chart-title">Répartition par catégorie</h3>
-                            <AllSpend depenses={depensesFiltres} />
-                        </div>
-                    </div>
-                </section>
-            )}
+                                <div className="bilan-grid">
+                                    <div className="stat-card revenue">
+                                        <div className="stat-icon">
+                                            <TrendingUp />
+                                        </div>
+                                        <div className="stat-content">
+                                            <span className="stat-label">Revenus</span>
+                                            <span className="stat-value">{totalRevenus.toFixed(2)} €</span>
+                                        </div>
+                                    </div>
 
-            {/* === 7. TABLEAU DES DÉPENSES (FILTRÉES) === */}
-            {showDepenseTable && (
-                <section className="data-section">
-                    <div className="table-section">
-                        <div className="table-header">
-                            <div>
+                                    <div className="stat-card expense">
+                                        <div className="stat-icon">
+                                            <TrendingDown />
+                                        </div>
+                                        <div className="stat-content">
+                                            <span className="stat-label">Dépenses</span>
+                                            <span className="stat-value">{totalDepenses.toFixed(2)} €</span>
+                                        </div>
+                                    </div>
+
+                                    <div className={`stat-card balance ${getSoldeStatus()}`}>
+                                        <div className="stat-icon">
+                                            <Wallet />
+                                        </div>
+                                        <div className="stat-content">
+                                            <span className="stat-label">Solde</span>
+                                            <span className="stat-value">{solde.toFixed(2)} €</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="stat-card savings">
+                                        <div className="stat-icon">
+                                            <PiggyBank />
+                                        </div>
+                                        <div className="stat-content">
+                                            <span className="stat-label">Taux d'épargne</span>
+                                            <span className="stat-value">{tauxEpargne.toFixed(1)}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Conseil financier */}
+                                <div className={`financial-advice ${advice.type}`}>
+                                    {advice.icon}
+                                    <span>{advice.text}</span>
+                                </div>
+
+                                {/* Cochon épargne amélioré */}
+                                <div className="piggy-section">
+                                    <div className="piggy-container">
+                                        <div
+                                            className="piggy-wrapper"
+                                            style={{
+                                                transform: `scale(${totalRevenus > 0 ? Math.max(Math.min(solde / totalRevenus, 1.2), 0.3) : 0.3})`
+                                            }}
+                                        >
+                                            <img
+                                                src="/assets/pigs/pig_1.png"
+                                                alt="Cochon épargne"
+                                                className="piggy-image"
+                                            />
+                                        </div>
+                                        <div className="piggy-stats">
+                                            <p className="piggy-text">
+                                                Vous avez économisé <strong>{solde.toFixed(2)} €</strong>
+                                            </p>
+                                            <p className="piggy-percentage">
+                                                {tauxEpargne.toFixed(1)}% de vos revenus
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                )}
+
+                {/* ONGLET 2: DÉPENSES DÉTAILLÉES */}
+                {activeTab === 'expenses' && (
+                    <div className="tab-panel">
+                        <section className="data-section">
+                            <div className="table-section">
+                                <div className="table-header">
+                                    <div>
+                                        <h2 className="section-title">
+                                            <Table size={24} />
+                                            Dépenses du mois ({displayedDepenses.length} sur {sortedFilteredDepenses.length})
+                                        </h2>
+                                        <p className="section-subtitle">
+                                            Affichage des dépenses les plus récentes du mois sélectionné
+                                        </p>
+                                    </div>
+                                    <div className="table-actions">
+                                        <button
+                                            className={`btn btn-outline ${showFilters ? 'active' : ''}`}
+                                            onClick={() => setShowFilters(!showFilters)}
+                                        >
+                                            <Filter size={18} />
+                                            Filtres
+                                        </button>
+                                        <button
+                                            className="btn btn-outline"
+                                            onClick={clearFilters}
+                                        >
+                                            <RefreshCw size={18} />
+                                            Réinitialiser
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Options d'affichage */}
+                                <div className="display-controls">
+                                    <div className="control-group">
+                                        <label>Nombre d'éléments :</label>
+                                        <select
+                                            value={maxDepensesDisplay}
+                                            onChange={(e) => setMaxDepensesDisplay(parseInt(e.target.value))}
+                                            className="control-select"
+                                        >
+                                            <option value={25}>25 dépenses</option>
+                                            <option value={50}>50 dépenses</option>
+                                            <option value={100}>100 dépenses</option>
+                                            <option value={1000}>1000 dépenses</option>
+                                        </select>
+                                    </div>
+                                    {hasMoreDepenses && !showAllDepenses && (
+                                        <button
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => setShowAllDepenses(true)}
+                                        >
+                                            <ChevronDown size={16} />
+                                            Voir toutes ({sortedFilteredDepenses.length})
+                                        </button>
+                                    )}
+                                    {showAllDepenses && (
+                                        <button
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => setShowAllDepenses(false)}
+                                        >
+                                            <ChevronUp size={16} />
+                                            Voir moins
+                                        </button>
+                                    )}
+                                </div>
+
+                                {showFilters && (
+                                    <div className="filters-panel">
+                                        <div className="filters-grid">
+                                            <div className="filter-item">
+                                                <label>ID</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Filtrer par ID"
+                                                    value={filterId}
+                                                    onChange={(e) => setFilterId(e.target.value)}
+                                                    className="filter-input"
+                                                />
+                                            </div>
+                                            <div className="filter-item">
+                                                <label>Montant</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Filtrer par montant"
+                                                    value={filterMontant}
+                                                    onChange={(e) => setFilterMontant(e.target.value)}
+                                                    className="filter-input"
+                                                />
+                                            </div>
+                                            <div className="filter-item">
+                                                <label>Description</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Filtrer par description"
+                                                    value={filterDescription}
+                                                    onChange={(e) => setFilterDescription(e.target.value)}
+                                                    className="filter-input"
+                                                />
+                                            </div>
+                                            <div className="filter-item">
+                                                <label>Catégorie</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Filtrer par catégorie"
+                                                    value={filterCategorie}
+                                                    onChange={(e) => setFilterCategorie(e.target.value)}
+                                                    className="filter-input"
+                                                />
+                                            </div>
+                                            <div className="filter-item">
+                                                <label>Date</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Filtrer par date"
+                                                    value={filterDate}
+                                                    onChange={(e) => setFilterDate(e.target.value)}
+                                                    className="filter-input"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="table-container">
+                                    <table className="modern-table">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Montant</th>
+                                            <th>Description</th>
+                                            <th>Catégorie</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {displayedDepenses.map(dep => (
+                                            <tr key={dep.id}>
+                                                <td>
+                                                    <span className="table-id">#{dep.id}</span>
+                                                </td>
+                                                <td>
+                                                    <span className="amount">{dep.montant} €</span>
+                                                </td>
+                                                <td className="description">{dep.description}</td>
+                                                <td>
+                                                    <div className="category-cell">
+                                                        {dep?.iconName && (
+                                                            <i className={dep.iconName} style={{marginRight: '8px'}}></i>
+                                                        )}
+                                                        {dep.categorie}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span className="date">
+                                                        {new Date(dep.dateTransaction).toLocaleDateString('fr-FR')}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-danger btn-sm"
+                                                        onClick={() => handleDelete(dep.id)}
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+
+                                    {displayedDepenses.length === 0 && (
+                                        <div className="empty-state">
+                                            <Layers size={48} />
+                                            <h3>Aucune dépense trouvée</h3>
+                                            <p>Aucune dépense ne correspond à vos critères de filtrage pour ce mois.</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                )}
+
+                {/* ONGLET 3: ANALYSES & GRAPHIQUES */}
+                {activeTab === 'analytics' && (
+                    <div className="tab-panel">
+                        <section className="analytics-section">
+                            <div className="section-header">
                                 <h2 className="section-title">
-                                    <Table size={24} />
-                                    Dépenses du mois ({displayedDepenses.length} sur {sortedFilteredDepenses.length})
+                                    <BarChartBig size={24} />
+                                    Analyses & Graphiques
                                 </h2>
                                 <p className="section-subtitle">
-                                    Affichage des dépenses les plus récentes du mois sélectionné
+                                    Visualisations détaillées de vos finances
                                 </p>
                             </div>
-                            <div className="table-actions">
-                                <button
-                                    className={`btn btn-outline ${showFilters ? 'active' : ''}`}
-                                    onClick={() => setShowFilters(!showFilters)}
-                                >
-                                    <Filter size={18} />
-                                    Filtres
-                                </button>
-                                <button
-                                    className="btn btn-outline"
-                                    onClick={clearFilters}
-                                >
-                                    <RefreshCw size={18} />
-                                    Réinitialiser
-                                </button>
-                            </div>
-                        </div>
 
-                        {/* Options d'affichage */}
-                        <div className="display-controls">
-                            <div className="control-group">
-                                <label>Nombre d'éléments :</label>
-                                <select
-                                    value={maxDepensesDisplay}
-                                    onChange={(e) => setMaxDepensesDisplay(parseInt(e.target.value))}
-                                    className="control-select"
-                                >
-                                    <option value={25}>25 dépenses</option>
-                                    <option value={50}>50 dépenses</option>
-                                    <option value={100}>100 dépenses</option>
-                                </select>
+                            {/* Évolution mensuelle */}
+                            <div className="chart-card featured-chart">
+                                <h3 className="chart-title">
+                                    <TrendingUp size={20} />
+                                    Évolution mensuelle
+                                </h3>
+                                <MonthlyReportChart />
                             </div>
-                            {hasMoreDepenses && !showAllDepenses && (
-                                <button
-                                    className="btn btn-secondary btn-sm"
-                                    onClick={() => setShowAllDepenses(true)}
-                                >
-                                    <ChevronDown size={16} />
-                                    Voir toutes ({sortedFilteredDepenses.length})
-                                </button>
-                            )}
-                            {showAllDepenses && (
-                                <button
-                                    className="btn btn-secondary btn-sm"
-                                    onClick={() => setShowAllDepenses(false)}
-                                >
-                                    <ChevronUp size={16} />
-                                    Voir moins
-                                </button>
-                            )}
-                        </div>
 
-                        {showFilters && (
-                            <div className="filters-panel">
-                                <div className="filters-grid">
-                                    <div className="filter-item">
-                                        <label>ID</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Filtrer par ID"
-                                            value={filterId}
-                                            onChange={(e) => setFilterId(e.target.value)}
-                                            className="filter-input"
-                                        />
-                                    </div>
-                                    <div className="filter-item">
-                                        <label>Montant</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Filtrer par montant"
-                                            value={filterMontant}
-                                            onChange={(e) => setFilterMontant(e.target.value)}
-                                            className="filter-input"
-                                        />
-                                    </div>
-                                    <div className="filter-item">
-                                        <label>Description</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Filtrer par description"
-                                            value={filterDescription}
-                                            onChange={(e) => setFilterDescription(e.target.value)}
-                                            className="filter-input"
-                                        />
-                                    </div>
-                                    <div className="filter-item">
-                                        <label>Catégorie</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Filtrer par catégorie"
-                                            value={filterCategorie}
-                                            onChange={(e) => setFilterCategorie(e.target.value)}
-                                            className="filter-input"
-                                        />
-                                    </div>
-                                    <div className="filter-item">
-                                        <label>Date</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Filtrer par date"
-                                            value={filterDate}
-                                            onChange={(e) => setFilterDate(e.target.value)}
-                                            className="filter-input"
-                                        />
-                                    </div>
+                            {/* Répartition par catégorie */}
+                            <div className="chart-grid">
+                                <div className="chart-card">
+                                    <h3 className="chart-title">Répartition par catégorie</h3>
+                                    <AllSpend depenses={depensesFiltres} />
                                 </div>
                             </div>
-                        )}
-
-                        <div className="table-container">
-                            <table className="modern-table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Montant</th>
-                                    <th>Description</th>
-                                    <th>Catégorie</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {displayedDepenses.map(dep => (
-                                    <tr key={dep.id}>
-                                        <td>
-                                            <span className="table-id">#{dep.id}</span>
-                                        </td>
-                                        <td>
-                                            <span className="amount">{dep.montant} €</span>
-                                        </td>
-                                        <td className="description">{dep.description}</td>
-                                        <td>
-                                            <div className="category-cell">
-                                                {dep?.iconName && (
-                                                    <i className={dep.iconName} style={{marginRight: '8px'}}></i>
-                                                )}
-                                                {dep.categorie}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span className="date">
-                                                {new Date(dep.dateTransaction).toLocaleDateString('fr-FR')}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <button
-                                                className="btn btn-danger btn-sm"
-                                                onClick={() => handleDelete(dep.id)}
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-
-                            {displayedDepenses.length === 0 && (
-                                <div className="empty-state">
-                                    <Layers size={48} />
-                                    <h3>Aucune dépense trouvée</h3>
-                                    <p>Aucune dépense ne correspond à vos critères de filtrage pour ce mois.</p>
-                                </div>
-                            )}
-                        </div>
+                        </section>
                     </div>
-                </section>
-            )}
+                )}
+
+                {/* ONGLET 4: OUTILS & IMPORT */}
+                {activeTab === 'tools' && (
+                    <div className="tab-panel">
+                        <section className="tools-section">
+                            <div className="section-header">
+                                <h2 className="section-title">
+                                    <FilePlus size={24} />
+                                    Outils & Import
+                                </h2>
+                                <p className="section-subtitle">
+                                    Importez et gérez vos données financières
+                                </p>
+                            </div>
+                            <div className="tools-grid">
+                                <BilanFinancier />
+                                <ImportTicket />
+                            </div>
+                        </section>
+                    </div>
+                )}
+
+                {/* ONGLET 5: HISTORIQUE DES BUDGETS */}
+                {activeTab === 'history' && (
+                    <div className="tab-panel">
+                        <section className="history-section">
+                            <div className="section-header">
+                                <h2 className="section-title">
+                                    <Calendar size={24} />
+                                    Historique des budgets
+                                </h2>
+                                <p className="section-subtitle">
+                                    Consultez vos budgets précédents et naviguez dans l'historique
+                                </p>
+                            </div>
+
+                            {/* 6 derniers budgets */}
+                            <div className="recent-budgets-section">
+                                <div className="subsection-header">
+                                    <h3 className="subsection-title">
+                                        <Eye size={20} />
+                                        6 derniers budgets
+                                    </h3>
+                                    <button
+                                        className="btn btn-outline"
+                                        onClick={() => setShowBudgetHistory(!showBudgetHistory)}
+                                    >
+                                        {showBudgetHistory ? (
+                                            <>
+                                                <EyeOff size={18} />
+                                                Masquer la recherche
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Eye size={18} />
+                                                Rechercher d'autres budgets
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+
+                                <div className="budgets-grid">
+                                    {recentBudgets.map((budget, index) => (
+                                        <div
+                                            key={`${budget.year}-${budget.month}`}
+                                            className={`budget-card ${budget.solde < 0 ? 'negative' : 'positive'} ${budget.isCurrentMonth ? 'current' : ''}`}
+                                            onClick={() => {
+                                                setSelectedMonth(budget.month);
+                                                setSelectedYear(budget.year);
+                                                setActiveTab('dashboard');
+                                            }}
+                                        >
+                                            <div className="budget-card-header">
+                                                <h4 className="budget-month">
+                                                    {budget.monthName} {budget.year}
+                                                </h4>
+                                                <div className="budget-stats-mini">
+                                                    <span className="stat-mini">{budget.depensesCount} dépenses</span>
+                                                    <span className="stat-mini">{budget.revenusCount} revenus</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="budget-amounts">
+                                                <div className="amount-row revenue">
+                                                    <span className="amount-label">Revenus</span>
+                                                    <span className="amount-value">+{budget.totalRevenus.toFixed(2)}€</span>
+                                                </div>
+                                                <div className="amount-row expense">
+                                                    <span className="amount-label">Dépenses</span>
+                                                    <span className="amount-value">-{budget.totalDepenses.toFixed(2)}€</span>
+                                                </div>
+                                                <div className={`amount-row balance ${budget.solde >= 0 ? 'positive' : 'negative'}`}>
+                                                    <span className="amount-label">Solde</span>
+                                                    <span className="amount-value">{budget.solde.toFixed(2)}€</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="budget-card-footer">
+                                                <button className="view-budget-btn">
+                                                    <Eye size={16} />
+                                                    Consulter
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Recherche dans l'historique */}
+                            {showBudgetHistory && (
+                                <div className="budget-search-section">
+                                    <div className="search-header">
+                                        <h3 className="subsection-title">
+                                            <Filter size={20} />
+                                            Rechercher dans l'historique
+                                        </h3>
+                                    </div>
+
+                                    <div className="search-controls">
+                                        <div className="search-filters">
+                                            <div className="filter-group">
+                                                <label>Rechercher par mois</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Ex: janvier, février..."
+                                                    value={budgetSearchTerm}
+                                                    onChange={(e) => setBudgetSearchTerm(e.target.value)}
+                                                    className="search-input"
+                                                />
+                                            </div>
+                                            <div className="filter-group">
+                                                <label>Année</label>
+                                                <select
+                                                    value={budgetSearchYear}
+                                                    onChange={(e) => setBudgetSearchYear(e.target.value)}
+                                                    className="search-select"
+                                                >
+                                                    <option value="">Toutes les années</option>
+                                                    {[...new Set(budgetHistory.map(b => b.year))].sort((a, b) => b - a).map(year => (
+                                                        <option key={year} value={year}>{year}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <button
+                                                className="btn btn-outline"
+                                                onClick={() => {
+                                                    setBudgetSearchTerm('');
+                                                    setBudgetSearchYear('');
+                                                }}
+                                            >
+                                                <RefreshCw size={18} />
+                                                Réinitialiser
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="search-results">
+                                        <div className="results-header">
+                                            <h4>Résultats ({filteredBudgetHistory.length})</h4>
+                                        </div>
+                                        <div className="results-table-container">
+                                            <table className="budgets-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Période</th>
+                                                        <th>Revenus</th>
+                                                        <th>Dépenses</th>
+                                                        <th>Solde</th>
+                                                        <th>Opérations</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {filteredBudgetHistory.map((budget) => (
+                                                        <tr key={`${budget.year}-${budget.month}`} className={budget.isCurrentMonth ? 'current-row' : ''}>
+                                                            <td>
+                                                                <div className="period-cell">
+                                                                    <span className="month-name">{budget.monthName}</span>
+                                                                    <span className="year">{budget.year}</span>
+                                                                    {budget.isCurrentMonth && <span className="current-badge">Actuel</span>}
+                                                                </div>
+                                                            </td>
+                                                            <td className="amount revenue">+{budget.totalRevenus.toFixed(2)}€</td>
+                                                            <td className="amount expense">-{budget.totalDepenses.toFixed(2)}€</td>
+                                                            <td className={`amount balance ${budget.solde >= 0 ? 'positive' : 'negative'}`}>
+                                                                {budget.solde.toFixed(2)}€
+                                                            </td>
+                                                            <td>
+                                                                <div className="operations-cell">
+                                                                    <span className="op-count revenue-count">{budget.revenusCount} revenus</span>
+                                                                    <span className="op-count expense-count">{budget.depensesCount} dépenses</span>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <button
+                                                                    className="btn btn-primary btn-sm"
+                                                                    onClick={() => {
+                                                                        setSelectedMonth(budget.month);
+                                                                        setSelectedYear(budget.year);
+                                                                        setActiveTab('dashboard');
+                                                                    }}
+                                                                >
+                                                                    <Eye size={14} />
+                                                                    Consulter
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        {filteredBudgetHistory.length === 0 && (
+                                            <div className="empty-state">
+                                                <Calendar size={48} />
+                                                <h3>Aucun budget trouvé</h3>
+                                                <p>Aucun budget ne correspond à vos critères de recherche.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </section>
+                    </div>
+                )}
+            </div>
 
             {/* === MODALES === */}
             {showModal && (
