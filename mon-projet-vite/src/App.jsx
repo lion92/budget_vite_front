@@ -14,6 +14,7 @@ import DashPrediction from "./pages/components/DashPrediction.jsx";
 import NotFound from "./pages/components/NotFound.jsx";
 import ResetPasswordForm from "./pages/components/ResetPasswordForm.jsx";
 import DashGraphBudget from "./pages/components/DashgraphBudget.jsx";
+import DashTickets from "./pages/components/DashTickets.jsx";
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                     <Route path="/enveloppe" element={<DashEnveloppe/>}/>
                     <Route path="/prediction" element={<DashPrediction/>}/>
                     <Route path="/agenda" element={<DashBoardAgenda/>}/>
+                    <Route path="/tickets" element={<DashTickets/>}/>
                     <Route path="/reset-password" element={<ResetPasswordForm />} />
                     <Route path="/graph" element={<DashGraphBudget/>} />
                     <Route path="*" element={<NotFound/>}/> {/* Remplace Route "catch-all" */}
