@@ -34,49 +34,60 @@ const Inscription = () => {
     };
 
     const validateForm = () => {
+        console.log('🔍 [Inscription] Validation du formulaire...');
         let valid = true;
         
-        if (!nom.trim()) { 
-            setNomError("Le nom est obligatoire"); 
-            valid = false; 
+        if (!nom.trim()) {
+            console.log('❌ [Inscription] Nom manquant');
+            setNomError("Le nom est obligatoire");
+            valid = false;
         } else {
             setNomError("");
         }
         
-        if (!prenom.trim()) { 
-            setPrenomError("Le prénom est obligatoire"); 
-            valid = false; 
+        if (!prenom.trim()) {
+            console.log('❌ [Inscription] Prénom manquant');
+            setPrenomError("Le prénom est obligatoire");
+            valid = false;
         } else {
             setPrenomError("");
         }
         
         if (!validateEmail(email)) {
+            console.log('❌ [Inscription] Email invalide:', email);
             valid = false;
         }
         
         if (password.length < 3) {
+            console.log('❌ [Inscription] Mot de passe trop court (longueur:', password.length, ')');
             setPasswordError("Le mot de passe doit comporter au moins 3 caractères");
             valid = false;
         } else {
             setPasswordError("");
         }
-        
+
+        console.log('🔍 [Inscription] Résultat de la validation:', valid ? 'Valide' : 'Invalide');
         return valid;
     };
 
     const fetchInscription = useCallback(async (e) => {
         e.preventDefault();
+        console.log('📝 [Inscription] Début du processus d\'inscription pour:', email);
         setIsSuccess(false);
         setInscriptionMessage("");
 
         if (!validateForm()) {
+            console.log('❌ [Inscription] Formulaire invalide - arrêt du processus');
             showNotification("error", "Veuillez corriger les erreurs dans le formulaire");
             return;
         }
 
+        console.log('🔄 [Inscription] Démarrage de l\'inscription...');
         setIsLoading(true);
 
         try {
+            console.log('📡 [Inscription] Envoi de la requête d\'inscription à:', `${lien.url}connection/signup`);
+            console.log('📄 [Inscription] Données envoyées:', { nom: nom.trim(), prenom: prenom.trim(), email, password: '***' });
             const response = await fetch(`${lien.url}connection/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -84,33 +95,38 @@ const Inscription = () => {
             });
 
             const data = await response.json().catch(() => ({}));
+            console.log('📝 [Inscription] Réponse reçue du serveur:', data);
             
             if (response.ok) {
+                console.log('✅ [Inscription] Inscription réussie!');
                 setIsSuccess(true);
                 setInscriptionMessage("Inscription réussie ! Vérifiez votre email pour activer votre compte.");
                 showNotification("success", "Inscription réussie ! Vérifiez vos emails.");
                 
                 // Reset form
-                setNom(""); 
-                setPrenom(""); 
-                setEmail(""); 
+                console.log('🧹 [Inscription] Nettoyage du formulaire après inscription réussie');
+                setNom("");
+                setPrenom("");
+                setEmail("");
                 setPassword("");
                 setNomError("");
                 setPrenomError("");
                 setEmailError("");
                 setPasswordError("");
             } else {
+                console.log('❌ [Inscription] Échec de l\'inscription - Statut:', response.status, '- Message:', data.message);
                 setIsSuccess(false);
                 const errorMsg = data.message || "Une erreur est survenue. Veuillez réessayer.";
                 setInscriptionMessage(errorMsg);
                 showNotification("error", errorMsg);
             }
         } catch (error) {
-            console.error("Erreur inscription :", error);
+            console.log('❌ [Inscription] Erreur lors de l\'inscription:', error);
             const errorMsg = "Erreur de connexion au serveur.";
             setInscriptionMessage(errorMsg);
             showNotification("error", errorMsg);
         } finally {
+            console.log('🏁 [Inscription] Fin du processus d\'inscription');
             setIsLoading(false);
         }
     }, [nom, prenom, email, password]);

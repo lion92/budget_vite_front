@@ -57,13 +57,16 @@ const Connection = () => {
     };
 
     const fetchUserToken = useCallback(async () => {
+        console.log('🔍 [Connection] Vérification du token utilisateur...');
         const jwt = localStorage.getItem('jwt');
         if (!jwt || jwt === "null" || jwt === "undefined") {
+            console.log('❌ [Connection] Aucun token JWT trouvé dans localStorage');
             setMessageLog("Aucun token trouvé, veuillez vous connecter");
             return;
         }
 
         try {
+            console.log('📡 [Connection] Envoi de la requête de vérification du token à:', lien.url + 'connection/user');
             const response = await fetch(lien.url+"connection/user", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -71,6 +74,7 @@ const Connection = () => {
             });
 
             if (!response.ok) {
+                console.log('❌ [Connection] Erreur serveur lors de la vérification du token:', response.status);
                 setMessageLog(`Erreur du serveur: ${response.status}`);
                 showNotification("error", `Erreur du serveur: ${response.status}`);
                 return;
@@ -87,15 +91,18 @@ const Connection = () => {
             }
 
             if (!isNaN(data?.id)) {
+                console.log('✅ [Connection] Token valide - Utilisateur connecté avec ID:', data.id);
                 localStorage.setItem("utilisateur", data.id);
                 setMessageLog("Code Bon");
                 setProbleme("connecte");
                 showNotification("success", "Connexion réussie");
             } else {
+                console.log('❌ [Connection] Token invalide - ID utilisateur non reçu');
                 setMessageLog("Déconnecté - Token invalide");
                 showNotification("warning", "Session expirée - Veuillez vous reconnecter");
             }
-        } catch {
+        } catch (error) {
+            console.log('❌ [Connection] Erreur lors de la vérification du token:', error);
             setMessageLog("Erreur de connexion au serveur");
             showNotification("error", "Erreur de connexion au serveur");
         }
@@ -103,16 +110,22 @@ const Connection = () => {
 
     const fetchConnection = useCallback(async (e) => {
         e.preventDefault();
+        console.log('🔐 [Connection] Tentative de connexion pour l\'email:', email);
         setPasswordError("");
 
-        if (!ValidateEmail(email)) return;
+        if (!ValidateEmail(email)) {
+            console.log('❌ [Connection] Email invalide:', email);
+            return;
+        }
         if (password.length < 3) {
+            console.log('❌ [Connection] Mot de passe trop court (longueur:', password.length, ')');
             setPasswordError("Mot de passe trop court");
             showNotification("error", "Mot de passe trop court");
             return;
         }
 
         try {
+            console.log('📡 [Connection] Envoi de la requête de connexion à:', lien.url + 'connection/login');
             const response = await fetch(lien.url+'connection/login', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -120,6 +133,7 @@ const Connection = () => {
             });
 
             if (!response.ok) {
+                console.log('❌ [Connection] Erreur serveur lors de la connexion:', response.status);
                 setMessageLog(`Erreur serveur: ${response.status}`);
                 showNotification("error", `Erreur serveur: ${response.status}`);
                 return;
@@ -136,18 +150,22 @@ const Connection = () => {
             }
 
             if (data.message && !data.success) {
+                console.log('❌ [Connection] Échec de connexion:', data.message);
                 setMessageLog(data.message);
                 showNotification(data.message.includes("email") ? "warning" : "error", data.message);
                 return;
             }
 
             if (!data.jwt) {
+                console.log('❌ [Connection] JWT manquant dans la réponse du serveur');
                 setMessageLog("JWT manquant dans la réponse");
                 showNotification("error", "JWT manquant dans la réponse");
                 return;
             }
 
             if (!isNaN(data?.id)) {
+                console.log('✅ [Connection] Connexion réussie! ID utilisateur:', data.id);
+                console.log('💾 [Connection] Sauvegarde du JWT et de l\'ID utilisateur dans localStorage');
                 localStorage.setItem("utilisateur", data.id);
                 localStorage.setItem("jwt", data.jwt);
                 setMessageLog("Connexion réussie");
@@ -155,10 +173,12 @@ const Connection = () => {
                 showNotification("success", "Connexion réussie");
                 window.location.reload();
             } else {
+                console.log('❌ [Connection] Identifiants incorrects - ID utilisateur invalide');
                 setMessageLog("Identifiants incorrects");
                 showNotification("error", "Identifiants incorrects");
             }
-        } catch {
+        } catch (error) {
+            console.log('❌ [Connection] Erreur lors de la connexion:', error);
             setMessageLog("Erreur de connexion");
             showNotification("error", "Erreur de connexion au serveur");
         }
@@ -166,10 +186,15 @@ const Connection = () => {
 
     const fetchForgotPassword = async (e) => {
         e.preventDefault();
+        console.log('🔐 [Connection] Demande de réinitialisation de mot de passe pour:', forgotEmail);
 
-        if (!ValidateEmail(forgotEmail)) return;
+        if (!ValidateEmail(forgotEmail)) {
+            console.log('❌ [Connection] Email invalide pour réinitialisation:', forgotEmail);
+            return;
+        }
 
         try {
+            console.log('📡 [Connection] Envoi de la demande de réinitialisation à:', lien.url + 'connection/forgot-password');
             const response = await fetch(lien.url + 'connection/forgot-password', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -177,22 +202,26 @@ const Connection = () => {
             });
 
             if (!response.ok) {
+                console.log('❌ [Connection] Erreur serveur lors de la réinitialisation:', response.status);
                 setForgotMessage(`Erreur serveur: ${response.status}`);
                 showNotification("error", `Erreur serveur: ${response.status}`);
                 return;
             }
 
             // On ne dépend plus de data.message
+            console.log('✅ [Connection] Demande de réinitialisation envoyée avec succès');
             setForgotMessage("Vérifie tes mails");
             showNotification("info", "Vérifie tes mails");
 
-        } catch {
+        } catch (error) {
+            console.log('❌ [Connection] Erreur lors de l\'envoi de la demande de réinitialisation:', error);
             setForgotMessage("Erreur lors de l'envoi de la demande");
             showNotification("error", "Erreur lors de l'envoi de la demande");
         }
     };
 
     const handleLogout = () => {
+        console.log('🚪 [Connection] Déconnexion de l\'utilisateur');
         localStorage.removeItem("jwt");
         localStorage.removeItem("utilisateur");
         setProbleme("non connecte");
