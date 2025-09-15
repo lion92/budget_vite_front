@@ -14,7 +14,7 @@ import BilanFinancier from "./BilanFinancier";
 import ImportTicket from "./ImportTicket";
 import {
     FilePlus, Table, BarChartBig, Download, Filter, RefreshCw,
-    TrendingUp, TrendingDown, Wallet, Calendar, X, Plus, Trash2,
+    TrendingUp, TrendingDown, Wallet, Calendar, X, Plus, Trash2, Edit,
     Eye, EyeOff, Settings, PiggyBank, Target, AlertCircle, ChevronDown,
     ChevronUp, Layers
 } from 'lucide-react';
@@ -103,6 +103,12 @@ export default function Budget() {
     const handleDelete = async (id) => {
         if (!window.confirm("Supprimer cette dépense ?")) return;
         await deleteDepense(id, notify);
+    };
+
+    const handleEdit = (id) => {
+        // TODO: Implémenter la modification
+        console.log("Modifier dépense ID:", id);
+        notify("Fonctionnalité de modification à venir", "info");
     };
 
     // Calculs financiers
@@ -644,12 +650,22 @@ export default function Budget() {
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <button
-                                                        className="btn btn-danger btn-sm"
-                                                        onClick={() => handleDelete(dep.id)}
-                                                    >
-                                                        <Trash2 size={14} />
-                                                    </button>
+                                                    <div className="action-buttons">
+                                                        <button
+                                                            className="btn btn-primary btn-sm action-btn"
+                                                            onClick={() => handleEdit(dep.id)}
+                                                            title="Modifier cette dépense"
+                                                        >
+                                                            <Edit size={16} />
+                                                        </button>
+                                                        <button
+                                                            className="btn btn-danger btn-sm action-btn"
+                                                            onClick={() => handleDelete(dep.id)}
+                                                            title="Supprimer cette dépense"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}

@@ -337,6 +337,242 @@ body {
     min-height: 32px;
 }
 
+/* Amélioration des boutons dans les tableaux */
+.modern-table .btn-sm {
+    padding: var(--space-sm);
+    min-height: 36px;
+    min-width: 36px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modern-table .btn-danger {
+    background: var(--gradient-danger);
+    color: var(--text-inverse);
+    border: none;
+}
+
+.modern-table .btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(245, 101, 101, 0.3);
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+}
+
+.modern-table .btn-danger:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(245, 101, 101, 0.2);
+}
+
+/* Amélioration générale des boutons secondaires */
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Boutons outline améliorés */
+.btn-outline {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: var(--text-inverse);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.btn-outline.active {
+    background: var(--primary);
+    color: var(--text-inverse);
+    border-color: var(--primary);
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+/* Améliorations spécifiques pour les boutons de filtrage */
+.table-actions {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.table-actions .btn-outline {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: var(--space-md) var(--space-lg);
+    min-height: 42px;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.15);
+    transition: all 0.3s ease;
+}
+
+.table-actions .btn-outline:hover {
+    background: var(--primary);
+    color: var(--text-inverse);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+}
+
+.table-actions .btn-outline.active {
+    background: var(--primary);
+    color: var(--text-inverse);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.5);
+    transform: translateY(-1px);
+}
+
+.table-actions .btn-outline.active:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 6px 14px rgba(102, 126, 234, 0.6);
+}
+
+/* Amélioration du panneau de filtres */
+.filters-panel {
+    background: var(--bg-secondary);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin-top: var(--space-lg);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+}
+
+.filter-item label {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+    display: block;
+    font-size: 0.9rem;
+}
+
+.filter-input {
+    width: 100%;
+    padding: var(--space-md);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-input::placeholder {
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+/* Améliorations des contrôles d'affichage */
+.display-controls {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.control-group label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.control-select {
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 140px;
+}
+
+.control-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.control-select:hover {
+    border-color: var(--primary);
+    background: var(--bg-secondary);
+}
+
+/* Amélioration des boutons "Voir plus/moins" */
+.display-controls .btn-secondary {
+    background: var(--primary);
+    color: var(--text-inverse);
+    border: 2px solid var(--primary);
+    font-weight: 600;
+    padding: var(--space-sm) var(--space-lg);
+    white-space: nowrap;
+}
+
+.display-controls .btn-secondary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
 /* Boutons améliorés pour les actions principales */
 .btn-lg {
     padding: var(--space-lg) var(--space-xl);
@@ -674,6 +910,11 @@ body {
     margin-bottom: var(--space-xl);
     flex-wrap: wrap;
     gap: var(--space-lg);
+    background: var(--bg-secondary);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .table-actions {
@@ -737,6 +978,127 @@ body {
 
 .modern-table tbody tr:hover {
     background: var(--bg-secondary);
+}
+
+/* === COLONNE ACTIONS REFAITE === */
+.modern-table th:last-child,
+.modern-table td:last-child {
+    text-align: center;
+    width: 140px;
+    padding: var(--space-md);
+    background: var(--bg-primary);
+}
+
+.modern-table th:last-child {
+    background: var(--bg-tertiary);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* === CONTENEUR BOUTONS D'ACTIONS === */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+}
+
+/* === BOUTONS D'ACTIONS REFAITS === */
+.modern-table .action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: bold;
+    text-decoration: none;
+    position: relative;
+}
+
+/* === BOUTON MODIFIER === */
+.modern-table .action-btn.btn-primary {
+    background-color: #4299e1;
+    color: white;
+    border-color: #3182ce;
+}
+
+.modern-table .action-btn.btn-primary:hover {
+    background-color: #3182ce;
+    border-color: #2b77b3;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+}
+
+.modern-table .action-btn.btn-primary svg {
+    color: white;
+    width: 18px;
+    height: 18px;
+}
+
+/* === BOUTON SUPPRIMER === */
+.modern-table .action-btn.btn-danger {
+    background-color: #e53e3e;
+    color: white;
+    border-color: #c53030;
+}
+
+.modern-table .action-btn.btn-danger:hover {
+    background-color: #c53030;
+    border-color: #9c2626;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(229, 62, 62, 0.3);
+}
+
+.modern-table .action-btn.btn-danger svg {
+    color: white;
+    width: 18px;
+    height: 18px;
+}
+
+/* === ÉTATS FOCUS ET ACTIVE === */
+.modern-table .action-btn:focus {
+    outline: 3px solid rgba(66, 153, 225, 0.5);
+    outline-offset: 2px;
+}
+
+.modern-table .action-btn:active {
+    transform: scale(0.95);
+}
+
+/* === SURVOL DES LIGNES === */
+.modern-table tbody tr:hover .action-btn.btn-primary {
+    background-color: #4299e1;
+    border-color: #3182ce;
+}
+
+.modern-table tbody tr:hover .action-btn.btn-danger {
+    background-color: #e53e3e;
+    border-color: #c53030;
+}
+
+/* === TOOLTIPS SIMPLES === */
+.modern-table .action-btn[title]:hover::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2d3748;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
 }
 
 .table-id {
@@ -1894,4 +2256,189 @@ mark,
     flex: 1;
     justify-content: center;
     min-width: max-content;
+}
+
+/* === BOUTON TABLEAU === */
+.btn-table {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    background: var(--gradient-primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn-table:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+}
+
+.btn-table:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.toolbar .btn-table {
+    flex: 1;
+    justify-content: center;
+    min-width: max-content;
+}
+
+/* === MODAL TABLEAU DES DÉPENSES === */
+.expense-table-modal {
+    width: 95vw;
+    max-width: 1400px;
+    height: 90vh;
+    max-height: 90vh;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-2xl);
+}
+
+.expense-table-modal .modal-header {
+    padding: var(--space-xl) var(--space-2xl);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.expense-table-modal .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.expense-table-modal .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: var(--space-sm);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.expense-table-modal .close-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.expense-table-wrapper {
+    flex: 1;
+    overflow: auto;
+    padding: 0;
+}
+
+.expense-table-wrapper .expense-table-container {
+    padding: var(--space-lg);
+    background: var(--bg-primary);
+    min-height: unset;
+}
+
+/* === MODE SOMBRE === */
+[data-theme="dark"] {
+    --bg-primary: #161b22;
+    --bg-secondary: #0d1117;
+    --bg-tertiary: #21262d;
+    --bg-app: #0d1117;
+    --text-primary: #f0f6fc;
+    --text-secondary: #c9d1d9;
+    --text-tertiary: #8b949e;
+    --text-inverse: #ffffff;
+    --border: #30363d;
+    --border-light: #21262d;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .expense-table-modal {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .expense-table-modal .modal-header {
+        padding: var(--space-lg);
+    }
+
+    .expense-table-modal .modal-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .expense-table-wrapper .expense-table-container {
+        padding: var(--space-sm);
+    }
+
+    .toolbar {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .toolbar button {
+        width: 100%;
+    }
+
+    /* === RESPONSIVE BOUTONS D'ACTIONS === */
+    .action-buttons {
+        flex-direction: row;
+        gap: 6px;
+    }
+
+    .modern-table .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+    }
+
+    .modern-table .action-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .modern-table th:last-child,
+    .modern-table td:last-child {
+        width: 100px;
+        padding: var(--space-sm);
+    }
+
+    .modern-table th:last-child {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Masquer les tooltips sur mobile */
+    .modern-table .action-btn[title]:hover::before {
+        display: none;
+    }
 }
