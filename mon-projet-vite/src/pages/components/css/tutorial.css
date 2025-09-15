@@ -1,0 +1,362 @@
+/* Tutorial System Styles */
+
+/* Menu des tutoriels */
+.tutorial-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.tutorial-menu {
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.tutorial-menu-header {
+    position: relative;
+    padding: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+}
+
+.tutorial-menu-header h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.tutorial-menu-header p {
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.tutorial-list {
+    padding: 32px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.tutorial-card {
+    margin-bottom: 16px;
+    padding: 24px;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.tutorial-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tutorial-card.completed {
+    border-color: #48bb78;
+    background: linear-gradient(135deg, #48bb7810, #38a16920);
+}
+
+.tutorial-card-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.tutorial-status {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.tutorial-info {
+    flex: 1;
+}
+
+.tutorial-info h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.tutorial-info p {
+    margin: 0 0 12px;
+    font-size: 14px;
+    color: #718096;
+    line-height: 1.5;
+}
+
+.tutorial-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: #a0aec0;
+}
+
+.completed-badge {
+    background: #48bb78;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.tutorial-action {
+    flex-shrink: 0;
+}
+
+.tutorial-menu-footer {
+    padding: 24px 32px;
+    border-top: 1px solid #e2e8f0;
+    background: #f7fafc;
+}
+
+.progress-overview {
+    text-align: center;
+}
+
+.progress-overview span {
+    font-size: 14px;
+    color: #4a5568;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.global-progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.global-progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Overlay pendant le tutoriel */
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    pointer-events: none;
+}
+
+/* Popup du tutoriel */
+.tutorial-popup {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    min-width: 350px;
+    max-width: 400px;
+    animation: tutorialPopIn 0.3s ease;
+}
+
+@keyframes tutorialPopIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.tutorial-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 0;
+}
+
+.step-counter {
+    font-size: 14px;
+    color: #718096;
+    font-weight: 500;
+}
+
+.skip-button {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    color: #718096;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.skip-button:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+}
+
+.tutorial-popup-content {
+    padding: 20px;
+}
+
+.tutorial-popup-content h3 {
+    margin: 0 0 12px;
+    font-size: 18px;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.tutorial-popup-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.tutorial-popup-footer {
+    padding: 0 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.step-indicators {
+    display: flex;
+    gap: 6px;
+}
+
+.step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    transition: background-color 0.2s ease;
+}
+
+.step-dot.active {
+    background: #667eea;
+}
+
+.tutorial-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Highlight de l'élément ciblé */
+.tutorial-highlight {
+    position: relative;
+    z-index: 9997;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.4);
+    border-radius: 8px;
+    background: rgba(102, 126, 234, 0.05) !important;
+    animation: tutorialPulse 2s infinite;
+}
+
+@keyframes tutorialPulse {
+    0% {
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.4);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tutorial-menu-overlay {
+        padding: 10px;
+    }
+
+    .tutorial-menu {
+        border-radius: 16px;
+    }
+
+    .tutorial-menu-header {
+        padding: 24px;
+    }
+
+    .tutorial-menu-header h2 {
+        font-size: 24px;
+    }
+
+    .tutorial-list {
+        padding: 20px;
+    }
+
+    .tutorial-card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .tutorial-info {
+        text-align: center;
+    }
+
+    .tutorial-popup {
+        min-width: 300px;
+        max-width: calc(100vw - 40px);
+        margin: 0 20px;
+    }
+
+    .tutorial-popup-footer {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .tutorial-actions {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .tutorial-actions button {
+        flex: 1;
+    }
+}
