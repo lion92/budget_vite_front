@@ -1,0 +1,299 @@
+/* Modern Button Component */
+.modern-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: none;
+  border-radius: var(--border-radius-xl);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.025em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  user-select: none;
+  min-height: 48px;
+  box-shadow: var(--shadow-md);
+
+  /* État par défaut */
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+}
+
+/* Variants */
+.modern-btn--primary {
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  color: var(--text-inverse);
+}
+
+.modern-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.modern-btn--secondary {
+  background: var(--surface);
+  color: var(--primary-700);
+  border: 2px solid var(--primary-600);
+  box-shadow: inset 0 0 0 1px var(--primary-600);
+}
+
+.modern-btn--secondary:hover:not(:disabled) {
+  background: var(--primary-50);
+  color: var(--primary-800);
+  border-color: var(--primary-700);
+}
+
+.modern-btn--success {
+  background: linear-gradient(135deg, var(--success), var(--success-dark));
+  color: var(--text-inverse);
+}
+
+.modern-btn--success:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--success-dark), #065f46);
+}
+
+.modern-btn--danger {
+  background: linear-gradient(135deg, var(--error), var(--error-dark));
+  color: var(--text-inverse);
+}
+
+.modern-btn--danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--error-dark), #991b1b);
+}
+
+.modern-btn--warning {
+  background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+  color: var(--text-inverse);
+}
+
+.modern-btn--warning:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--warning-dark), #92400e);
+}
+
+.modern-btn--info {
+  background: linear-gradient(135deg, var(--info), var(--info-dark));
+  color: var(--text-inverse);
+}
+
+.modern-btn--info:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--info-dark), #1e40af);
+}
+
+.modern-btn--outline {
+  background: transparent;
+  color: var(--primary-700);
+  border: 2px solid var(--primary-600);
+  box-shadow: none;
+}
+
+.modern-btn--outline:hover:not(:disabled) {
+  background: var(--primary-600);
+  color: var(--text-inverse);
+}
+
+.modern-btn--ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  box-shadow: none;
+}
+
+.modern-btn--ghost:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+/* Sizes */
+.modern-btn--small {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  min-height: 36px;
+}
+
+.modern-btn--medium {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-md);
+  min-height: 48px;
+}
+
+.modern-btn--large {
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  font-size: var(--font-size-lg);
+  min-height: 56px;
+}
+
+/* États */
+.modern-btn--loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.modern-btn--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.modern-btn--full-width {
+  width: 100%;
+}
+
+/* Icônes */
+.modern-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.modern-btn__icon--left {
+  margin-right: var(--spacing-sm);
+}
+
+.modern-btn__icon--right {
+  margin-left: var(--spacing-sm);
+}
+
+/* Texte */
+.modern-btn__text {
+  display: flex;
+  align-items: center;
+  font-weight: inherit;
+}
+
+/* Spinner de chargement */
+.modern-btn__spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+}
+
+.modern-btn__spinner-svg {
+  width: 100%;
+  height: 100%;
+  animation: spin 1s linear infinite;
+}
+
+.modern-btn__spinner-svg circle {
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 0 31.416;
+  }
+  50% {
+    stroke-dasharray: 15.708 15.708;
+  }
+  100% {
+    stroke-dasharray: 31.416 0;
+  }
+}
+
+.modern-btn--loading .modern-btn__text,
+.modern-btn--loading .modern-btn__icon {
+  opacity: 0;
+}
+
+/* Effet ripple */
+.modern-btn__ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+}
+
+.modern-btn:active:not(:disabled) .modern-btn__ripple {
+  width: 300px;
+  height: 300px;
+}
+
+/* Focus state */
+.modern-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-lg), 0 0 0 3px rgba(var(--primary-600), 0.3);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .modern-btn {
+    min-height: 44px;
+    font-size: var(--font-size-md);
+  }
+
+  .modern-btn--small {
+    min-height: 40px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .modern-btn--large {
+    min-height: 52px;
+    padding: var(--spacing-lg) var(--spacing-xl);
+  }
+}
+
+/* Préférences de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .modern-btn {
+    transition: none;
+  }
+
+  .modern-btn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .modern-btn__spinner-svg,
+  .modern-btn__spinner-svg circle {
+    animation: none;
+  }
+}
+
+/* Mode sombre */
+[data-theme="dark"] .modern-btn--secondary,
+.dark-mode .modern-btn--secondary {
+  background: var(--surface);
+  color: var(--primary-300);
+  border-color: var(--primary-400);
+}
+
+[data-theme="dark"] .modern-btn--secondary:hover:not(:disabled),
+.dark-mode .modern-btn--secondary:hover:not(:disabled) {
+  background: var(--primary-900);
+  color: var(--primary-200);
+}
+
+[data-theme="dark"] .modern-btn--ghost,
+.dark-mode .modern-btn--ghost {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .modern-btn--ghost:hover:not(:disabled),
+.dark-mode .modern-btn--ghost:hover:not(:disabled) {
+  background: var(--surface-hover);
+}

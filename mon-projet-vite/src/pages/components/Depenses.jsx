@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import useBudgetStore from "../../useBudgetStore";
 import DatePicker from "react-datepicker";
-import { FilePlus, Upload } from "lucide-react";
+import { FilePlus, Upload, Table } from "lucide-react";
 import "./css/budget_style.css";
 import { useNotify } from "./Notification";
 import { ImportData } from "./ImportData";
+import ExpenseTable from "./ExpenseTable";
 
 export function Depenses() {
     const [depensesForm, setDepensesForm] = useState([{ description: "", montant: 0, categorie: "", date: new Date() }]);
@@ -12,6 +13,7 @@ export function Depenses() {
     const [recurrenceMonths, setRecurrenceMonths] = useState(1);
     const [showDepenseForm, setShowDepenseForm] = useState(false);
     const [showImportModal, setShowImportModal] = useState(false);
+    const [showExpenseTable, setShowExpenseTable] = useState(false);
     const notify = useNotify();
     const bilanRef = useRef();
 
@@ -89,6 +91,9 @@ export function Depenses() {
                 <button onClick={() => setShowImportModal(true)} className="btn-import">
                     <Upload /> Importer des données
                 </button>
+                <button onClick={() => setShowExpenseTable(true)} className="btn-table">
+                    <Table /> Voir le tableau des dépenses
+                </button>
             </div>
 
             {showDepenseForm && (
@@ -164,6 +169,22 @@ export function Depenses() {
 
             {showImportModal && (
                 <ImportData onClose={() => setShowImportModal(false)} />
+            )}
+
+            {showExpenseTable && (
+                <div className="modal-overlay">
+                    <div className="modal-content expense-table-modal">
+                        <div className="modal-header">
+                            <h2>Tableau des dépenses détaillées</h2>
+                            <button onClick={() => setShowExpenseTable(false)} className="close-btn">
+                                ✕
+                            </button>
+                        </div>
+                        <div className="expense-table-wrapper">
+                            <ExpenseTable />
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );

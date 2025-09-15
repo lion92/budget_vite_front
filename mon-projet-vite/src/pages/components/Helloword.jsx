@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './css/accueil.css'
 import BaniereLetchi from "./BaniereLetchi";
+import { Button, Card, FeatureCard, toast } from './ui';
 
 
 const Helloword = () => {
@@ -92,24 +93,33 @@ const Helloword = () => {
 
                     {/* Boutons d'action améliorés */}
                     <div className="action-buttons">
-                        <a 
-                            className="about-link primary-btn" 
-                            href="https://projet.krissclotilde.com/" 
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <Button
+                            variant="primary"
+                            size="large"
+                            icon={<span>👤</span>}
+                            onClick={() => {
+                                toast.info('Redirection vers le site du créateur...', {
+                                    description: 'Vous allez être redirigé vers le portfolio de Kriss CLOTILDE'
+                                });
+                                setTimeout(() => {
+                                    window.open('https://projet.krissclotilde.com/', '_blank', 'noopener,noreferrer');
+                                }, 1000);
+                            }}
                         >
-                            <span className="btn-icon">👤</span>
-                            <span>Découvrir le créateur</span>
-                            <span className="btn-shine"></span>
-                        </a>
-                        
-                        <button 
-                            className="demo-btn secondary-btn"
-                            onClick={() => document.querySelector('.video-wrapper').scrollIntoView({ behavior: 'smooth' })}
+                            Découvrir le créateur
+                        </Button>
+
+                        <Button
+                            variant="secondary"
+                            size="large"
+                            icon={<span>🎥</span>}
+                            onClick={() => {
+                                toast.success('Défilement vers la vidéo de démonstration');
+                                document.querySelector('.video-wrapper')?.scrollIntoView({ behavior: 'smooth' });
+                            }}
                         >
-                            <span className="btn-icon">🎥</span>
-                            <span>Voir la démonstration</span>
-                        </button>
+                            Voir la démonstration
+                        </Button>
                     </div>
 
 
@@ -135,14 +145,66 @@ const Helloword = () => {
                         </div>
                     </div>
 
-                    {/* Témoignages rapides */}
-                    <div className="testimonials-preview">
-                        <div className="testimonial-item">
-                            <div className="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                            <p>"Interface intuitive et design moderne !"</p>
-                            <cite>- Marie D.</cite>
-                        </div>
+                    {/* Fonctionnalités avec nouvelles cartes */}
+                    <div className="features-section" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                        gap: 'var(--spacing-lg)',
+                        marginTop: 'var(--spacing-2xl)',
+                        marginBottom: 'var(--spacing-2xl)'
+                    }}>
+                        {features.map((feature, index) => (
+                            <FeatureCard
+                                key={index}
+                                icon={<span style={{ fontSize: '2rem' }}>{feature.icon}</span>}
+                                title={feature.title}
+                                description={feature.description}
+                                action={
+                                    <Button
+                                        variant="ghost"
+                                        size="small"
+                                        onClick={() => {
+                                            toast.success(`Fonctionnalité: ${feature.title}`, {
+                                                description: feature.description
+                                            });
+                                        }}
+                                    >
+                                        En savoir plus
+                                    </Button>
+                                }
+                                hoverable
+                                onClick={() => {
+                                    toast.info(`Découvrir: ${feature.title}`);
+                                }}
+                            />
+                        ))}
                     </div>
+
+                    {/* Témoignages rapides */}
+                    <Card
+                        variant="primary"
+                        className="testimonials-preview"
+                        style={{
+                            textAlign: 'center',
+                            marginTop: 'var(--spacing-xl)'
+                        }}
+                    >
+                        <div className="testimonial-item">
+                            <div className="testimonial-stars" style={{
+                                fontSize: '1.5rem',
+                                marginBottom: 'var(--spacing-md)'
+                            }}>⭐⭐⭐⭐⭐</div>
+                            <p style={{
+                                fontSize: 'var(--font-size-lg)',
+                                fontStyle: 'italic',
+                                marginBottom: 'var(--spacing-sm)'
+                            }}>"Interface intuitive et design moderne !"</p>
+                            <cite style={{
+                                fontSize: 'var(--font-size-sm)',
+                                color: 'var(--text-muted)'
+                            }}>- Marie D.</cite>
+                        </div>
+                    </Card>
                 </div>
 
                 {/* Scroll indicator */}

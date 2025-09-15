@@ -1,0 +1,434 @@
+/* Modern Input Component */
+.modern-input-wrapper {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.modern-input__label,
+.modern-textarea__label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+.modern-input__required,
+.modern-textarea__required {
+  color: var(--error);
+  margin-left: 2px;
+}
+
+.modern-input__field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.modern-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  font-size: var(--font-size-md);
+  font-family: var(--font-family-sans);
+  background: var(--background);
+  color: var(--text-primary);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  min-height: 48px;
+}
+
+/* Size variants */
+.modern-input-wrapper--small .modern-input {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  min-height: 40px;
+}
+
+.modern-input-wrapper--medium .modern-input {
+  padding: var(--spacing-md);
+  font-size: var(--font-size-md);
+  min-height: 48px;
+}
+
+.modern-input-wrapper--large .modern-input {
+  padding: var(--spacing-lg);
+  font-size: var(--font-size-lg);
+  min-height: 56px;
+}
+
+/* Avec icônes */
+.modern-input--with-icon.modern-input--icon-left {
+  padding-left: 48px;
+}
+
+.modern-input--with-icon.modern-input--icon-right {
+  padding-right: 48px;
+}
+
+.modern-input__icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.modern-input__icon--left {
+  left: var(--spacing-md);
+}
+
+.modern-input__icon--right {
+  right: var(--spacing-md);
+}
+
+/* Bouton toggle mot de passe */
+.modern-input__password-toggle {
+  position: absolute;
+  right: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modern-input__password-toggle:hover {
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+/* États du wrapper */
+.modern-input-wrapper--focused .modern-input__label {
+  color: var(--primary-600);
+}
+
+.modern-input-wrapper--focused .modern-input {
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 3px rgba(var(--primary-600), 0.1);
+}
+
+.modern-input-wrapper--focused .modern-input__icon {
+  color: var(--primary-600);
+}
+
+.modern-input-wrapper--error .modern-input__label {
+  color: var(--error);
+}
+
+.modern-input-wrapper--error .modern-input {
+  border-color: var(--error);
+  background: rgba(var(--error), 0.05);
+}
+
+.modern-input-wrapper--error .modern-input:focus {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(var(--error), 0.1);
+}
+
+.modern-input-wrapper--success .modern-input__label {
+  color: var(--success);
+}
+
+.modern-input-wrapper--success .modern-input {
+  border-color: var(--success);
+  background: rgba(var(--success), 0.05);
+}
+
+.modern-input-wrapper--success .modern-input:focus {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(var(--success), 0.1);
+}
+
+.modern-input-wrapper--disabled .modern-input__label {
+  color: var(--text-disabled);
+}
+
+.modern-input-wrapper--disabled .modern-input {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Placeholder */
+.modern-input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* Hover state */
+.modern-input:hover:not(:disabled) {
+  border-color: var(--primary-400);
+}
+
+/* Feedback */
+.modern-input__feedback,
+.modern-textarea__feedback {
+  margin-top: var(--spacing-xs);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  min-height: 20px;
+}
+
+.modern-input__error,
+.modern-textarea__error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--error);
+}
+
+.modern-input__success,
+.modern-textarea__success {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--success);
+}
+
+.modern-input__helper,
+.modern-textarea__helper {
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Compteur de caractères */
+.modern-input__counter,
+.modern-textarea__counter {
+  position: absolute;
+  bottom: -24px;
+  right: 0;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.modern-input__counter--warning,
+.modern-textarea__counter--warning {
+  color: var(--warning);
+  font-weight: var(--font-weight-medium);
+}
+
+/* TextArea Styles */
+.modern-textarea-wrapper {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.modern-textarea__field-wrapper {
+  position: relative;
+}
+
+.modern-textarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border);
+  border-radius: var(--border-radius-lg);
+  font-size: var(--font-size-md);
+  font-family: var(--font-family-sans);
+  background: var(--background);
+  color: var(--text-primary);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  resize: vertical;
+  min-height: 120px;
+}
+
+.modern-textarea:hover:not(:disabled) {
+  border-color: var(--primary-400);
+}
+
+.modern-textarea:focus {
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 3px rgba(var(--primary-600), 0.1);
+}
+
+.modern-textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* États du textarea wrapper */
+.modern-textarea-wrapper--focused .modern-textarea__label {
+  color: var(--primary-600);
+}
+
+.modern-textarea-wrapper--error .modern-textarea__label {
+  color: var(--error);
+}
+
+.modern-textarea-wrapper--error .modern-textarea {
+  border-color: var(--error);
+  background: rgba(var(--error), 0.05);
+}
+
+.modern-textarea-wrapper--error .modern-textarea:focus {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(var(--error), 0.1);
+}
+
+.modern-textarea-wrapper--success .modern-textarea__label {
+  color: var(--success);
+}
+
+.modern-textarea-wrapper--success .modern-textarea {
+  border-color: var(--success);
+  background: rgba(var(--success), 0.05);
+}
+
+.modern-textarea-wrapper--success .modern-textarea:focus {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(var(--success), 0.1);
+}
+
+.modern-textarea-wrapper--disabled .modern-textarea__label {
+  color: var(--text-disabled);
+}
+
+.modern-textarea-wrapper--disabled .modern-textarea {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+  resize: none;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .modern-input {
+    font-size: 16px; /* Évite le zoom sur iOS */
+  }
+
+  .modern-textarea {
+    font-size: 16px; /* Évite le zoom sur iOS */
+  }
+}
+
+/* Mode sombre - styles spéciaux pour les inputs */
+[data-theme="dark"] .modern-input,
+[data-theme="dark"] .modern-textarea,
+.dark-mode .modern-input,
+.dark-mode .modern-textarea {
+  background: var(--input-bg-dark) !important;
+  color: var(--input-text-dark) !important;
+  border-color: var(--input-border-dark) !important;
+}
+
+[data-theme="dark"] .modern-input::placeholder,
+[data-theme="dark"] .modern-textarea::placeholder,
+.dark-mode .modern-input::placeholder,
+.dark-mode .modern-textarea::placeholder {
+  color: var(--input-placeholder-dark) !important;
+}
+
+[data-theme="dark"] .modern-input:focus,
+[data-theme="dark"] .modern-textarea:focus,
+.dark-mode .modern-input:focus,
+.dark-mode .modern-textarea:focus {
+  background: var(--input-bg-dark) !important;
+  color: var(--input-text-dark) !important;
+  border-color: var(--primary-500) !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2) !important;
+}
+
+[data-theme="dark"] .modern-input-wrapper--error .modern-input,
+[data-theme="dark"] .modern-textarea-wrapper--error .modern-textarea,
+.dark-mode .modern-input-wrapper--error .modern-input,
+.dark-mode .modern-textarea-wrapper--error .modern-textarea {
+  background: var(--input-bg-dark) !important;
+  color: var(--input-text-dark) !important;
+}
+
+[data-theme="dark"] .modern-input-wrapper--success .modern-input,
+[data-theme="dark"] .modern-textarea-wrapper--success .modern-textarea,
+.dark-mode .modern-input-wrapper--success .modern-input,
+.dark-mode .modern-textarea-wrapper--success .modern-textarea {
+  background: var(--input-bg-dark) !important;
+  color: var(--input-text-dark) !important;
+}
+
+/* Labels et textes d'aide en mode sombre */
+[data-theme="dark"] .modern-input__label,
+[data-theme="dark"] .modern-textarea__label,
+.dark-mode .modern-input__label,
+.dark-mode .modern-textarea__label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .modern-input__helper,
+[data-theme="dark"] .modern-textarea__helper,
+.dark-mode .modern-input__helper,
+.dark-mode .modern-textarea__helper {
+  color: var(--text-muted);
+}
+
+/* Préférences de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .modern-input,
+  .modern-textarea,
+  .modern-input__icon,
+  .modern-input__password-toggle,
+  .modern-input__label,
+  .modern-textarea__label {
+    transition: none;
+  }
+}
+
+/* Variantes de design */
+.modern-input-wrapper--outline .modern-input {
+  background: transparent;
+  border: 2px solid var(--primary-300);
+}
+
+.modern-input-wrapper--filled .modern-input {
+  background: var(--surface);
+  border: 2px solid transparent;
+  border-bottom: 2px solid var(--border);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+.modern-input-wrapper--minimal .modern-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border);
+  border-radius: 0;
+  padding: var(--spacing-md) 0;
+}
+
+/* Animation de focus */
+@keyframes input-focus {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.modern-input:focus,
+.modern-textarea:focus {
+  animation: input-focus 0.3s ease-out;
+}
