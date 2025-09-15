@@ -15,6 +15,8 @@ import ChatBotAction from "./ChatBotAction.jsx";
 import DarkModeToggleSimple from "./DarkModeToggleSimple.jsx";
 import ThemeDebug from "./ThemeDebug.jsx";
 import AccessibilityTester from "./AccessibilityTester.jsx";
+import DesktopQuickMenu from "./DesktopQuickMenu.jsx";
+import "./css/enhanced-mobile-menu.css";
 
 export default function MenuComponent(props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -244,36 +246,36 @@ export default function MenuComponent(props) {
         },
         chatBubbleBtn: {
             position: "fixed",
-            bottom: isMobile ? 90 : 30,
+            bottom: isMobile ? 95 : 30,
             right: isMobile ? 20 : 30,
-            width: isMobile ? 55 : 65,
-            height: isMobile ? 55 : 65,
+            width: isMobile ? 60 : 65,
+            height: isMobile ? 60 : 65,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, var(--primary-500), var(--primary-600))",
+            background: "linear-gradient(135deg, #10b981, #059669)",
             color: "white",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            fontSize: isMobile ? 22 : 26,
+            fontSize: isMobile ? 24 : 26,
             cursor: "pointer",
-            zIndex: 1000,
-            boxShadow: "0 8px 25px rgba(139, 92, 246, 0.4)",
+            zIndex: 1020,
+            boxShadow: "0 8px 25px rgba(16, 185, 129, 0.4)",
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             border: "2px solid rgba(255, 255, 255, 0.2)",
         },
         chatBubbleBtnHover: {
             transform: "scale(1.1) translateY(-3px)",
-            boxShadow: "0 12px 35px rgba(139, 92, 246, 0.5)",
+            boxShadow: "0 12px 35px rgba(16, 185, 129, 0.5)",
         },
         chatContainer: {
             position: "fixed",
-            bottom: isMobile ? 160 : 110,
+            bottom: isMobile ? 170 : 110,
             right: isMobile ? 15 : 30,
             left: isMobile ? 15 : "auto",
             width: isMobile ? "auto" : "350px",
-            maxHeight: isMobile ? "400px" : "500px",
+            maxHeight: isMobile ? "350px" : "500px",
             background: "rgba(255, 255, 255, 0.95)",
-            border: "1px solid rgba(139, 92, 246, 0.2)",
+            border: "1px solid rgba(16, 185, 129, 0.2)",
             borderRadius: 20,
             boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15)",
             zIndex: 999,
@@ -444,75 +446,111 @@ export default function MenuComponent(props) {
                 </div>
             )}
 
-            {/* Navigation mobile en bas */}
+            {/* Navigation mobile améliorée en bas */}
             {isMobile && (
-                <div style={{
-                    position: 'fixed',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: 70,
-                    background: 'rgba(255, 255, 255, 0.95)',
-                    backdropFilter: 'blur(20px)',
-                    borderTop: '1px solid rgba(139, 92, 246, 0.2)',
-                    display: 'flex',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    zIndex: 1030,
-                    boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.1)',
-                }}>
+                <div
+                    className="mobile-nav-bottom"
+                    style={{
+                        position: 'fixed',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: 80,
+                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
+                        backdropFilter: 'blur(25px)',
+                        borderTop: '2px solid rgba(139, 92, 246, 0.15)',
+                        display: 'flex',
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        zIndex: 1030,
+                        boxShadow: '0 -8px 32px rgba(139, 92, 246, 0.15), 0 -2px 8px rgba(0, 0, 0, 0.08)',
+                        padding: '0 8px',
+                        animation: 'mobileNavSlideUp 0.4s ease-out',
+                    }}
+                >
                     {navLinks.slice(0, 4).map((link, index) => (
-                        <NavLink 
+                        <NavLink
                             key={index}
                             to={link.path}
+                            className="mobile-nav-item mobile-nav-touch-area"
                             style={({ isActive }) => ({
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                padding: '8px 12px',
-                                borderRadius: 12,
+                                padding: '10px 8px',
+                                borderRadius: 16,
                                 textDecoration: 'none',
-                                color: isActive ? '#8b5cf6' : '#666',
-                                background: isActive ? 'rgba(139, 92, 246, 0.1)' : 'transparent',
-                                transform: isActive ? 'translateY(-2px)' : 'none',
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                minWidth: 60,
+                                color: isActive ? '#8b5cf6' : '#64748b',
+                                background: isActive ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1))' : 'transparent',
+                                transform: isActive ? 'translateY(-3px) scale(1.05)' : 'none',
+                                transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                minWidth: 65,
                                 flex: 1,
+                                maxWidth: 80,
+                                boxShadow: isActive ? '0 8px 25px rgba(139, 92, 246, 0.25)' : 'none',
+                                border: isActive ? '1px solid rgba(139, 92, 246, 0.2)' : '1px solid transparent',
                             })}
                             onClick={handleLinkClick}
                         >
-                            <div style={{ fontSize: 20, marginBottom: 2 }}>{link.icon}</div>
-                            <span style={{ fontSize: 10, fontWeight: '600', textAlign: 'center', lineHeight: 1 }}>
-                                {link.label.length > 8 ? link.label.substring(0, 8) + '...' : link.label}
+                            <div
+                                className="mobile-nav-icon"
+                                style={{
+                                    fontSize: 24,
+                                    marginBottom: 4,
+                                }}
+                            >
+                                {link.icon}
+                            </div>
+                            <span className="mobile-nav-label">
+                                {link.label.length > 7 ? link.label.substring(0, 7) + '...' : link.label}
                             </span>
                         </NavLink>
                     ))}
-                    <button 
+                    <button
+                        className="mobile-nav-item mobile-nav-touch-area"
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            padding: '8px 12px',
-                            borderRadius: 12,
-                            border: 'none',
-                            background: afficher ? 'rgba(139, 92, 246, 0.1)' : 'transparent',
-                            color: '#8b5cf6',
+                            padding: '10px 8px',
+                            borderRadius: 16,
+                            border: afficher ? '1px solid rgba(139, 92, 246, 0.2)' : '1px solid transparent',
+                            background: afficher ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1))' : 'transparent',
+                            color: afficher ? '#8b5cf6' : '#64748b',
                             cursor: 'pointer',
-                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                            minWidth: 60,
+                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            minWidth: 65,
                             flex: 1,
-                            transform: afficher ? 'translateY(-2px)' : 'none',
+                            maxWidth: 80,
+                            transform: afficher ? 'translateY(-3px) scale(1.05)' : 'none',
+                            boxShadow: afficher ? '0 8px 25px rgba(139, 92, 246, 0.25)' : 'none',
                         }}
                         onClick={handlemenu}
                     >
-                        <CiMenuBurger style={{ fontSize: 20, marginBottom: 2 }} />
-                        <span style={{ fontSize: 10, fontWeight: '600', textAlign: 'center', lineHeight: 1 }}>
-                            Menu
+                        <CiMenuBurger
+                            className="mobile-nav-icon"
+                            style={{
+                                fontSize: 24,
+                                marginBottom: 4,
+                                transform: afficher ? 'rotate(90deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.3s ease'
+                            }}
+                        />
+                        <span className="mobile-nav-label">
+                            {afficher ? 'Fermer' : 'Menu'}
                         </span>
                     </button>
                 </div>
+            )}
+
+            {/* Menu rapide desktop */}
+            {!isMobile && (
+                <DesktopQuickMenu
+                    isAuthenticated={isAuthenticated}
+                    onToggleMain={handlemenu}
+                />
             )}
 
             {/* Debug et tests - temporaires pour développement */}

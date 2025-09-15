@@ -1,0 +1,488 @@
+/* OnboardingWizard Styles */
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.onboarding-overlay.visible {
+    opacity: 1;
+}
+
+.onboarding-container {
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: all 0.3s ease;
+}
+
+.onboarding-overlay.visible .onboarding-container {
+    transform: scale(1);
+}
+
+.onboarding-header {
+    position: relative;
+    padding: 24px 24px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.progress-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: white;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.step-indicator {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.skip-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.skip-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.onboarding-content {
+    padding: 32px 24px;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+}
+
+.onboarding-content h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    text-align: center;
+}
+
+.step-subtitle {
+    margin: 0 0 32px;
+    font-size: 16px;
+    color: #718096;
+    text-align: center;
+}
+
+.step-content {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Étape de bienvenue */
+.welcome-step {
+    text-align: center;
+}
+
+.welcome-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+}
+
+.welcome-step h2 {
+    margin: 0 0 16px;
+    font-size: 24px;
+    color: #2d3748;
+}
+
+.welcome-step p {
+    margin: 0 0 24px;
+    font-size: 16px;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+    text-align: left;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.benefits-list li {
+    padding: 8px 0;
+    font-size: 16px;
+    color: #4a5568;
+}
+
+/* Étape profil */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 16px;
+}
+
+.form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    color: #2d3748;
+    background: white;
+    transition: border-color 0.2s ease;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.situation-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+}
+
+.situation-card {
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.situation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.situation-card.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea10, #764ba210);
+}
+
+.situation-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.situation-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* Étape revenus */
+.income-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.income-input-group input {
+    flex: 1;
+    padding-right: 50px;
+}
+
+.currency {
+    position: absolute;
+    right: 16px;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 18px;
+}
+
+.help-text {
+    margin-top: 8px;
+    display: block;
+    font-size: 14px;
+    color: #718096;
+}
+
+.income-breakdown {
+    margin-top: 24px;
+    padding: 20px;
+}
+
+.income-breakdown h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: #2d3748;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+.breakdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Étape objectifs */
+.goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.goal-card {
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.goal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.goal-card.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea10, #764ba210);
+}
+
+.goal-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.goal-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.4;
+}
+
+/* Étape expérience */
+.experience-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.experience-card {
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.experience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.experience-card.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea10, #764ba210);
+}
+
+.experience-icon {
+    font-size: 40px;
+    flex-shrink: 0;
+}
+
+.experience-content h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: #2d3748;
+}
+
+.experience-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #718096;
+}
+
+/* Étape finale */
+.completion-step {
+    text-align: center;
+}
+
+.completion-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+}
+
+.completion-step h2 {
+    margin: 0 0 16px;
+    font-size: 28px;
+    color: #2d3748;
+}
+
+.completion-step p {
+    margin: 0 0 32px;
+    font-size: 18px;
+    color: #4a5568;
+}
+
+.summary-card {
+    text-align: left;
+    margin-bottom: 32px;
+    padding: 24px;
+}
+
+.summary-card h3 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    color: #2d3748;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item span:first-child {
+    color: #4a5568;
+}
+
+.summary-item span:last-child {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.next-steps {
+    text-align: left;
+    margin-bottom: 32px;
+}
+
+.next-steps h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: #2d3748;
+}
+
+.next-steps ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.next-steps li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Actions des étapes */
+.step-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.step-actions button:only-child {
+    margin-left: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .onboarding-container {
+        width: 95%;
+        margin: 20px;
+        max-height: calc(100vh - 40px);
+    }
+
+    .onboarding-content {
+        padding: 24px 20px;
+    }
+
+    .onboarding-content h1 {
+        font-size: 24px;
+    }
+
+    .situation-cards,
+    .goals-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .experience-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .step-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .step-actions button {
+        width: 100%;
+    }
+}

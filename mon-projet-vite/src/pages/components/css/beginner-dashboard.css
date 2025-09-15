@@ -1,0 +1,708 @@
+/* Beginner Dashboard Styles */
+
+.beginner-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+/* Welcome Banner */
+.welcome-banner {
+    margin-bottom: 24px;
+    padding: 24px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+}
+
+.banner-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.banner-icon {
+    font-size: 48px;
+    flex-shrink: 0;
+}
+
+.banner-text {
+    flex: 1;
+}
+
+.banner-text h3 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.banner-text p {
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+.banner-action {
+    flex-shrink: 0;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    gap: 24px;
+}
+
+.header-content h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.header-content p {
+    margin: 0;
+    font-size: 18px;
+    color: #718096;
+}
+
+/* Tip Card */
+.tip-card {
+    position: relative;
+    max-width: 350px;
+    padding: 20px;
+    background: linear-gradient(135deg, #fef5e7, #fed7cc);
+    border: 2px solid #ed8936;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(237, 137, 54, 0.2);
+    animation: tipSlideIn 0.5s ease;
+}
+
+@keyframes tipSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.tip-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #744210;
+    transition: color 0.2s ease;
+}
+
+.tip-close:hover {
+    color: #2d3748;
+}
+
+.tip-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.tip-content h4 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #744210;
+}
+
+.tip-content p {
+    margin: 0 0 16px;
+    font-size: 14px;
+    color: #744210;
+    line-height: 1.5;
+}
+
+/* Dashboard Navigation */
+.dashboard-nav {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.nav-button {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: #718096;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-button:hover {
+    background: #f7fafc;
+    color: #4a5568;
+}
+
+.nav-button.active {
+    background: #667eea;
+    color: white;
+    font-weight: 600;
+}
+
+/* Overview View */
+.overview-view {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.overview-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-content h4 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #718096;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.stat-subtitle {
+    font-size: 12px;
+    color: #a0aec0;
+}
+
+.overview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Budget Progress Card */
+.budget-progress-card {
+    padding: 24px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.budget-progress-card h3 {
+    margin: 0 0 20px;
+    font-size: 20px;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.budget-visual {
+    margin-bottom: 20px;
+}
+
+.budget-bar {
+    width: 100%;
+    height: 24px;
+    background: #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.budget-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    border-radius: 12px;
+    transition: width 0.5s ease;
+    position: relative;
+}
+
+.budget-fill.over-budget {
+    background: linear-gradient(90deg, #e53e3e, #c53030);
+}
+
+.budget-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #718096;
+    margin-bottom: 12px;
+}
+
+.budget-status {
+    text-align: center;
+    font-weight: 500;
+}
+
+.over-budget-text {
+    color: #e53e3e;
+}
+
+.on-budget-text {
+    color: #48bb78;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Overview Grid */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.top-categories,
+.recent-expenses {
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.top-categories h3,
+.recent-expenses h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.categories-list,
+.expenses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.category-item,
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f7fafc;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.category-item:hover,
+.expense-item:hover {
+    background: #edf2f7;
+}
+
+.category-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-rank {
+    background: #667eea;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-name,
+.expense-description {
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.category-amount,
+.expense-amount {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.expense-amount {
+    color: #e53e3e;
+}
+
+.expense-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.expense-date {
+    font-size: 12px;
+    color: #718096;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 20px;
+    color: #718096;
+}
+
+.empty-state p {
+    margin: 0 0 16px;
+    font-style: italic;
+}
+
+/* Expenses View */
+.expenses-view,
+.budget-view,
+.goals-view {
+    animation: viewSlideIn 0.3s ease;
+}
+
+@keyframes viewSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.expenses-view .card,
+.budget-view .card {
+    padding: 24px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.expenses-view h3,
+.budget-view h3 {
+    margin: 0 0 24px;
+    font-size: 24px;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.expenses-summary {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f7fafc;
+    border-radius: 12px;
+}
+
+.expenses-summary p {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+.expenses-summary p:last-child {
+    margin-bottom: 0;
+}
+
+/* Simple Expense Chart */
+.simple-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.chart-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chart-bar {
+    width: 100%;
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.chart-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.chart-labels span:first-child {
+    color: #2d3748;
+    font-weight: 500;
+}
+
+.chart-labels span:last-child {
+    color: #718096;
+}
+
+/* Budget View */
+.budget-overview {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #f7fafc;
+    border-radius: 12px;
+}
+
+.budget-total {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    text-align: center;
+}
+
+.budget-total span {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.budget-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.budget-item {
+    padding: 16px;
+    background: #f7fafc;
+    border-radius: 12px;
+}
+
+.budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.budget-category {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.budget-amounts {
+    font-size: 14px;
+    color: #718096;
+}
+
+.budget-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-fill.good {
+    background: linear-gradient(90deg, #48bb78, #38a169);
+}
+
+.progress-fill.warning {
+    background: linear-gradient(90deg, #ed8936, #dd6b20);
+}
+
+.progress-fill.over-budget {
+    background: linear-gradient(90deg, #e53e3e, #c53030);
+}
+
+.progress-percentage {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4a5568;
+    min-width: 40px;
+    text-align: right;
+}
+
+.budget-status {
+    text-align: right;
+    font-size: 12px;
+}
+
+.status.good {
+    color: #48bb78;
+}
+
+.status.over {
+    color: #e53e3e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .beginner-dashboard {
+        padding: 16px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .header-content h1 {
+        font-size: 24px;
+    }
+
+    .header-content p {
+        font-size: 16px;
+    }
+
+    .banner-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .overview-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+        flex-direction: column;
+    }
+
+    .budget-total {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .dashboard-nav {
+        overflow-x: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .dashboard-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-button {
+        min-width: 120px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .beginner-dashboard {
+        background: #1a202c;
+        color: #e2e8f0;
+    }
+
+    .stat-card,
+    .budget-progress-card,
+    .top-categories,
+    .recent-expenses,
+    .expenses-view .card,
+    .budget-view .card {
+        background: #2d3748;
+        color: #e2e8f0;
+    }
+
+    .dashboard-nav {
+        background: #2d3748;
+    }
+
+    .nav-button {
+        color: #a0aec0;
+    }
+
+    .nav-button:hover {
+        background: #4a5568;
+        color: #e2e8f0;
+    }
+
+    .category-item,
+    .expense-item {
+        background: #2d3748;
+    }
+
+    .category-item:hover,
+    .expense-item:hover {
+        background: #4a5568;
+    }
+
+    .budget-overview,
+    .budget-item,
+    .expenses-summary {
+        background: #2d3748;
+    }
+}
