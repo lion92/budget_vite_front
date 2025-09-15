@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import useBudgetStore from "../../useBudgetStore";
 import DatePicker from "react-datepicker";
-import { FilePlus } from "lucide-react";
+import { FilePlus, Upload } from "lucide-react";
 import "./css/budget_style.css";
 import { useNotify } from "./Notification";
+import { ImportData } from "./ImportData";
 
 export function Depenses() {
     const [depensesForm, setDepensesForm] = useState([{ description: "", montant: 0, categorie: "", date: new Date() }]);
     const [isRecurrent, setIsRecurrent] = useState(false);
     const [recurrenceMonths, setRecurrenceMonths] = useState(1);
     const [showDepenseForm, setShowDepenseForm] = useState(false);
+    const [showImportModal, setShowImportModal] = useState(false);
     const notify = useNotify();
     const bilanRef = useRef();
 
@@ -84,6 +86,9 @@ export function Depenses() {
                 <button onClick={() => setShowDepenseForm(true)}>
                     <FilePlus /> Ajouter des dépenses
                 </button>
+                <button onClick={() => setShowImportModal(true)} className="btn-import">
+                    <Upload /> Importer des données
+                </button>
             </div>
 
             {showDepenseForm && (
@@ -155,6 +160,10 @@ export function Depenses() {
                         </form>
                     </div>
                 </div>
+            )}
+
+            {showImportModal && (
+                <ImportData onClose={() => setShowImportModal(false)} />
             )}
         </>
     );
