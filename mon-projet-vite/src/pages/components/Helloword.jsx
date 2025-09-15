@@ -8,6 +8,7 @@ const Helloword = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [currentFeature, setCurrentFeature] = useState(0);
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+    const [videoError, setVideoError] = useState(false);
 
     const features = [
         { 
@@ -43,6 +44,14 @@ const Helloword = () => {
 
     const handleVideoLoad = () => {
         setIsVideoLoaded(true);
+        setVideoError(false);
+    };
+
+    const handleVideoError = (e) => {
+        console.error('Erreur de chargement vidéo:', e);
+        setVideoError(true);
+        setIsVideoLoaded(false);
+        toast.error('Impossible de charger la vidéo. Veuillez réessayer plus tard.');
     };
 
     return (
@@ -126,18 +135,46 @@ const Helloword = () => {
                     {/* Wrapper vidéo amélioré */}
                     <div className="video-section">
                         <h2 className="video-title">Découvrez Budget Manager en action</h2>
-                        <div className={`video-wrapper ${isVideoLoaded ? 'loaded' : 'loading'}`}>
-                            {!isVideoLoaded && (
+                        <div className={`video-wrapper ${isVideoLoaded ? 'loaded' : videoError ? 'error' : 'loading'}`}>
+                            {!isVideoLoaded && !videoError && (
                                 <div className="video-skeleton">
                                     <div className="skeleton-play-btn">▶️</div>
                                     <div className="skeleton-text">Chargement de la vidéo...</div>
                                 </div>
                             )}
+                            {videoError && (
+                                <div className="video-error">
+                                    <div className="error-icon">⚠️</div>
+                                    <div className="error-text">Impossible de charger la vidéo</div>
+                                    <button
+                                        className="retry-btn"
+                                        onClick={() => {
+                                            setVideoError(false);
+                                            setIsVideoLoaded(false);
+                                            // Force iframe reload by changing src
+                                            const iframe = document.querySelector('.video-wrapper iframe');
+                                            if (iframe) {
+                                                const currentSrc = iframe.src;
+                                                iframe.src = '';
+                                                setTimeout(() => iframe.src = currentSrc, 100);
+                                            }
+                                        }}
+                                    >
+                                        Réessayer
+                                    </button>
+                                </div>
+                            )}
                             <iframe
-                                    src="https://www.youtube.com/embed/9tD9YjPbvWI?si=QD8w4Ch03S2PwE1Q"
-                                    title="YouTube video player" frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                                src="https://www.youtube.com/embed/9tD9YjPbvWI?si=QD8w4Ch03S2PwE1Q&rel=0&modestbranding=1&showinfo=0&enablejsapi=1"
+                                title="Démonstration Budget Manager"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allowFullScreen
+                                loading="lazy"
+                                onLoad={handleVideoLoad}
+                                onError={handleVideoError}
+                            ></iframe>
                         </div>
                     </div>
 

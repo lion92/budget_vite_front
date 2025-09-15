@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(findstr:*)",
+      "Bash(curl:*)",
+      "Bash(npm run dev:*)",
+      "Read(//c/Users/kriss/IdeaProjects/budget_vite_js/**)",
+      "Read(//c/Users/kriss/IdeaProjects/**)",
+      "Bash(npm install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
