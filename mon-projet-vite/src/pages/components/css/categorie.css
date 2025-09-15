@@ -486,6 +486,7 @@
     padding: 2rem;
     height: 100%;
     overflow-y: auto;
+    padding-bottom: 3rem;
     /* Scrollbar améliorée pour la section principale */
     scrollbar-width: thin;
     scrollbar-color: var(--primary-400, #a78bfa) var(--surface, #f9fafb);
@@ -615,9 +616,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
-    max-height: 60vh;
+    max-height: calc(100vh - 300px);
     overflow-y: auto;
     padding-right: 0.5rem;
+    padding-bottom: 2rem;
     /* Scrollbar améliorée pour une meilleure visibilité */
     scrollbar-width: thin;
     scrollbar-color: var(--primary-400, #a78bfa) var(--surface, #f9fafb);

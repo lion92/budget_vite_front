@@ -199,9 +199,9 @@ body {
 }
 
 /* === BARRE D'ACTIONS RÉORGANISÉE === */
-.actions-toolbar {
+.actions-toolbar, .toolbar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--space-xl);
     background: var(--bg-primary);
     border-radius: var(--radius-xl);
@@ -209,6 +209,10 @@ body {
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border);
     margin-bottom: var(--space-xl);
+}
+
+.actions-toolbar {
+    flex-direction: column;
 }
 
 /* Actions rapides */
@@ -1854,4 +1858,40 @@ mark,
     .budget-card {
         padding: var(--space-lg);
     }
+}
+
+/* === BOUTON IMPORT === */
+.btn-import {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    background: var(--gradient-success);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn-import:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
+}
+
+.btn-import:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.toolbar .btn-import {
+    flex: 1;
+    justify-content: center;
+    min-width: max-content;
 }
