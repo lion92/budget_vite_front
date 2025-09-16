@@ -1799,17 +1799,63 @@ mark,
 /* Responsive pour les onglets */
 @media (max-width: 768px) {
     .tab-btn {
-        min-width: 140px;
-        padding: var(--space-md) var(--space-lg);
-        font-size: 0.85rem;
+        min-width: 60px;
+        max-width: 70px;
+        padding: var(--space-md) var(--space-xs);
+        font-size: 0.75rem;
+        flex-direction: column;
+        gap: var(--space-xs);
+        min-height: 48px; /* Zone de touch recommandée */
+        border-radius: var(--radius-md);
     }
 
     .tab-btn svg {
-        display: none;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
     }
 
     .tab-navigation {
-        justify-content: flex-start;
+        justify-content: space-between;
+        gap: var(--space-xs);
+        padding: var(--space-xs);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: var(--radius-lg);
+    }
+
+    /* Masquer le texte sur mobile, garder seulement les icônes */
+    .tab-btn span {
+        display: none;
+    }
+
+    /* Améliorer l'état actif sur mobile */
+    .tab-btn.active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Améliorer le feedback tactile */
+    .tab-btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Mobile très petit (iPhone SE et similaires) */
+@media (max-width: 375px) {
+    .tab-btn {
+        min-width: 50px;
+        max-width: 60px;
+        padding: var(--space-sm) var(--space-xs);
+    }
+
+    .tab-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .tab-navigation {
+        padding: 6px;
+        gap: 4px;
     }
 }
 

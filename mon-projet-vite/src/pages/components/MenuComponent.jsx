@@ -17,6 +17,7 @@ import ThemeDebug from "./ThemeDebug.jsx";
 import AccessibilityTester from "./AccessibilityTester.jsx";
 import DesktopQuickMenu from "./DesktopQuickMenu.jsx";
 import "./css/enhanced-mobile-menu.css";
+import "./css/mobile-optimizations.css";
 
 export default function MenuComponent(props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -468,7 +469,7 @@ export default function MenuComponent(props) {
                         animation: 'mobileNavSlideUp 0.4s ease-out',
                     }}
                 >
-                    {navLinks.slice(0, 4).map((link, index) => (
+                    {navLinks.slice(0, 3).map((link, index) => (
                         <NavLink
                             key={index}
                             to={link.path}
@@ -507,6 +508,39 @@ export default function MenuComponent(props) {
                             </span>
                         </NavLink>
                     ))}
+                    <button
+                        className="mobile-nav-item mobile-nav-touch-area"
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '10px 8px',
+                            borderRadius: 16,
+                            border: '1px solid transparent',
+                            background: 'transparent',
+                            color: '#64748b',
+                            cursor: 'pointer',
+                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            minWidth: 65,
+                            flex: 1,
+                            maxWidth: 80,
+                        }}
+                        onClick={handlemenu}
+                    >
+                        <div
+                            className="mobile-nav-icon"
+                            style={{
+                                fontSize: 24,
+                                marginBottom: 4,
+                            }}
+                        >
+                            ⋯
+                        </div>
+                        <span className="mobile-nav-label">
+                            Plus
+                        </span>
+                    </button>
                     <button
                         className="mobile-nav-item mobile-nav-touch-area"
                         style={{
