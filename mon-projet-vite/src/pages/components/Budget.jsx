@@ -313,37 +313,42 @@ export default function Budget() {
                         <button
                             className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
                             onClick={() => setActiveTab('dashboard')}
+                            title="Tableau de bord"
                         >
                             <Wallet size={18} />
-                            Tableau de bord
+                            <span>Tableau de bord</span>
                         </button>
                         <button
                             className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`}
                             onClick={() => setActiveTab('expenses')}
+                            title="Dépenses détaillées"
                         >
                             <Table size={18} />
-                            Dépenses détaillées
+                            <span>Dépenses détaillées</span>
                         </button>
                         <button
                             className={`tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
                             onClick={() => setActiveTab('analytics')}
+                            title="Analyses & Graphiques"
                         >
                             <BarChartBig size={18} />
-                            Analyses & Graphiques
+                            <span>Analyses & Graphiques</span>
                         </button>
                         <button
                             className={`tab-btn ${activeTab === 'tools' ? 'active' : ''}`}
                             onClick={() => setActiveTab('tools')}
+                            title="Outils & Import"
                         >
                             <FilePlus size={18} />
-                            Outils & Import
+                            <span>Outils & Import</span>
                         </button>
                         <button
                             className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`}
                             onClick={() => setActiveTab('history')}
+                            title="Historique"
                         >
                             <Calendar size={18} />
-                            Historique
+                            <span>Historique</span>
                         </button>
                     </div>
 
