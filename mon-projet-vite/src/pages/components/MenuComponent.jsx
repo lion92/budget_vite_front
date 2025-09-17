@@ -52,6 +52,7 @@ export default function MenuComponent(props) {
         if (isMobile) {
             setShowMobileOverlay(newState);
             // Empêcher le scroll du body quand le menu est ouvert sur mobile
+            // mais permettre le scroll dans la sidebar
             document.body.style.overflow = newState ? 'hidden' : 'auto';
         }
     };
@@ -86,6 +87,7 @@ export default function MenuComponent(props) {
             backdropFilter: "blur(10px)",
             paddingTop: 20,
             minHeight: "100vh",
+            paddingBottom: isMobile ? "100px" : "20px", // Espace pour la nav mobile
             transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
             boxShadow: isMobile ? "8px 0 32px rgba(139, 92, 246, 0.3)" : "4px 0 20px rgba(139, 92, 246, 0.15)",
             borderRight: "1px solid rgba(255, 255, 255, 0.1)",
@@ -93,7 +95,7 @@ export default function MenuComponent(props) {
             top: isMobile ? 0 : "auto",
             left: isMobile ? 0 : "auto",
             zIndex: isMobile ? 1050 : "auto",
-            overflow: "hidden",
+            overflow: "auto", // Permettre le scroll si nécessaire
         },
         sidebarHidden: {
             transform: isMobile ? "translateX(-100%)" : "translateX(-280px)",
@@ -104,7 +106,7 @@ export default function MenuComponent(props) {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            bottom: 80, // Éviter la navigation mobile en bas
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             backdropFilter: "blur(4px)",
             zIndex: 1040,
@@ -232,7 +234,7 @@ export default function MenuComponent(props) {
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)",
             position: "relative",
-            zIndex: 1060,
+            zIndex: 1070, // Plus élevé que la sidebar
         },
         toggleBtnHover: {
             transform: "translateY(-2px)",
@@ -314,11 +316,12 @@ export default function MenuComponent(props) {
         { path: "/categorie", label: "Catégorie", icon: <BiSolidCategory /> },
         { path: "/form", label: "Tâche", icon: <GoTasklist /> },
         { path: "/budget", label: "Budget", icon: <CiMoneyBill /> },
-        { path: "/allspend", label: "Dépenses par mois", icon: <CiMoneyBill /> },
-        { path: "/allspendFilters", label: "Dépenses filtrées", icon: <CiMoneyBill /> },
+        { path: "/allSpend", label: "Dépenses par mois", icon: <CiMoneyBill /> },
+        { path: "/allSpendFilters", label: "Dépenses filtrées", icon: <CiMoneyBill /> },
         { path: "/prediction", label: "Prédiction", icon: <CiMoneyBill /> },
         { path: "/agenda", label: "Agenda", icon: <CiMoneyBill /> },
         { path: "/enveloppe", label: "Enveloppe", icon: <CiMoneyBill /> },
+        { path: "/tickets", label: "Tickets", icon: <CiMoneyBill /> },
         { path: "/graph", label: "Graphique budget", icon: <CiMoneyBill /> },
     ];
 
@@ -463,7 +466,7 @@ export default function MenuComponent(props) {
                         display: 'flex',
                         justifyContent: 'space-around',
                         alignItems: 'center',
-                        zIndex: 1030,
+                        zIndex: 1035, // Plus élevé pour être au-dessus de l'overlay mais sous la sidebar
                         boxShadow: '0 -8px 32px rgba(139, 92, 246, 0.15), 0 -2px 8px rgba(0, 0, 0, 0.08)',
                         padding: '0 8px',
                         animation: 'mobileNavSlideUp 0.4s ease-out',
