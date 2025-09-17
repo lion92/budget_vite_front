@@ -18,13 +18,16 @@ import AccessibilityTester from "./AccessibilityTester.jsx";
 import DesktopQuickMenu from "./DesktopQuickMenu.jsx";
 import "./css/enhanced-mobile-menu.css";
 import "./css/mobile-optimizations.css";
+import "./css/modern-menu.css";
 
 export default function MenuComponent(props) {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [afficher, setAfficher] = useState(window.innerWidth >= 768);
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("jwt"));
     const [showChatBot, setShowChatBot] = useState(false);
-    const [showMobileOverlay, setShowMobileOverlay] = useState(false); // Nouvel état pour l'overlay mobile
+    const [showMobileOverlay, setShowMobileOverlay] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('utilisateur') || '{}'));
 
     useEffect(() => {
         const handleResize = () => {
@@ -311,19 +314,31 @@ export default function MenuComponent(props) {
         { path: "/inscription", label: "Inscription", icon: <MdOutlineAppRegistration /> },
     ];
 
+    const navigationSections = {
+        main: [
+            { path: "/", label: "Tableau de bord", icon: <SiWelcometothejungle />, badge: null },
+            { path: "/budget", label: "Budget", icon: <CiMoneyBill />, badge: null },
+            { path: "/categorie", label: "Catégories", icon: <BiSolidCategory />, badge: null },
+        ],
+        finance: [
+            { path: "/allSpend", label: "Dépenses mensuelles", icon: <CiMoneyBill />, badge: null },
+            { path: "/allSpendFilters", label: "Analyse des dépenses", icon: <CiMoneyBill />, badge: null },
+            { path: "/prediction", label: "Prévisions", icon: <CiMoneyBill />, badge: "Nouveau" },
+            { path: "/enveloppe", label: "Enveloppes", icon: <CiMoneyBill />, badge: null },
+            { path: "/comptabilite", label: "Espace Comptable", icon: <CiMoneyBill />, badge: null },
+        ],
+        tools: [
+            { path: "/form", label: "Tâches", icon: <GoTasklist />, badge: null },
+            { path: "/agenda", label: "Agenda", icon: <CiMoneyBill />, badge: null },
+            { path: "/tickets", label: "Support", icon: <CiMoneyBill />, badge: null },
+            { path: "/graph", label: "Graphiques", icon: <CiMoneyBill />, badge: null },
+        ]
+    };
+
     const privateLinks = [
-        { path: "/", label: "Bienvenue", icon: <SiWelcometothejungle /> },
-        { path: "/categorie", label: "Catégorie", icon: <BiSolidCategory /> },
-        { path: "/form", label: "Tâche", icon: <GoTasklist /> },
-        { path: "/budget", label: "Budget", icon: <CiMoneyBill /> },
-        { path: "/allSpend", label: "Dépenses par mois", icon: <CiMoneyBill /> },
-        { path: "/allSpendFilters", label: "Dépenses filtrées", icon: <CiMoneyBill /> },
-        { path: "/prediction", label: "Prédiction", icon: <CiMoneyBill /> },
-        { path: "/agenda", label: "Agenda", icon: <CiMoneyBill /> },
-        { path: "/enveloppe", label: "Enveloppe", icon: <CiMoneyBill /> },
-        { path: "/tickets", label: "Tickets", icon: <CiMoneyBill /> },
-        { path: "/graph", label: "Graphique budget", icon: <CiMoneyBill /> },
-        { path: "/comptabilite", label: "📊 Espace Comptable", icon: <CiMoneyBill /> },
+        ...navigationSections.main,
+        ...navigationSections.finance,
+        ...navigationSections.tools
     ];
 
     const navLinks = isAuthenticated ? privateLinks : publicLinks;
@@ -339,98 +354,197 @@ export default function MenuComponent(props) {
     }, []);
 
     return (
-        <div style={styles.container}>
+        <div className={`modern-menu-container ${isDarkMode ? 'dark-mode' : ''}`}>
             <div style={styles.notification}><Notifications /></div>
 
             {/* Overlay mobile */}
             {isMobile && showMobileOverlay && (
-                <div 
-                    style={styles.mobileOverlay} 
+                <div
+                    className={`modern-overlay ${showMobileOverlay ? 'show' : ''}`}
                     onClick={handleOverlayClick}
                 />
             )}
 
-            {afficher && (
-                <div style={{...styles.sidebar, ...(afficher ? {} : styles.sidebarHidden)}}>
-                    <div style={styles.sidebarOverlay} />
-                    <div style={styles.logoContainer}>
-                        <div style={styles.logoName}>Budget Manager</div>
-                        <div style={styles.logoSubtext}>Gestion Financière</div>
-                        <div style={{ marginTop: '20px' }}>
-                            <DarkModeToggleSimple />
+            {/* Sidebar moderne */}
+            <aside className={`modern-sidebar ${afficher ? 'open' : ''}`}>
+                {/* Header du sidebar */}
+                <div className="modern-sidebar-header">
+                    <div className="modern-logo">
+                        <div className="modern-logo-icon">
+                            💰
+                        </div>
+                        <div className="modern-logo-text">
+                            <h1 className="modern-logo-title">Budget Manager</h1>
+                            <p className="modern-logo-subtitle">Gestion Financière</p>
                         </div>
                     </div>
-                    <ul style={styles.navList}>
-                        {navLinks.map((link, index) => (
-                            <NavLink 
-                                to={link.path} 
-                                key={index} 
-                                onClick={handleLinkClick}
-                                style={styles.navLink}
-                            >
-                                <li 
-                                    style={{
-                                        ...styles.navItem,
-                                        ...(hoveredItem === index ? styles.navItemHover : {})
-                                    }}
-                                    onMouseEnter={() => setHoveredItem(index)}
-                                    onMouseLeave={() => setHoveredItem(null)}
-                                >
-                                    <span style={styles.navItemIcon}>{link.icon}</span>
-                                    <span>{link.label}</span>
-                                </li>
-                            </NavLink>
-                        ))}
-                    </ul>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <DarkModeToggleSimple />
+                    </div>
                 </div>
-            )}
 
-            <section style={{...styles.content, ...styles.contentWithSidebar}}>
-                <CookieConsent/>
-                <div style={styles.header}>
-                    <h1 style={styles.headerTitle}>{props.title}</h1>
-                    {isMobile && (
-                        <button 
-                            style={{
-                                ...styles.toggleBtn,
-                                ...(hoveredButton === 'toggle' ? styles.toggleBtnHover : {})
-                            }}
-                            onClick={handlemenu}
-                            onMouseEnter={() => setHoveredButton('toggle')}
-                            onMouseLeave={() => setHoveredButton(null)}
-                        >
-                            <CiMenuBurger/>
-                        </button>
-                    )}
-                </div>
-                {isAuthenticated && (
-                    <div className="container">
-                        {localStorage.getItem("jwt") ?
-                            <div style={styles.logoutSection}>
-                                <button
-                                    style={{
-                                        ...styles.logoutBtn,
-                                        ...(hoveredButton === 'logout' ? styles.logoutBtnHover : {})
-                                    }}
-                                    onClick={() => {
-                                        localStorage.removeItem("jwt");
-                                        localStorage.removeItem("utilisateur");
-                                        window.location.reload();
-                                    }}
-                                    onMouseEnter={() => setHoveredButton('logout')}
-                                    onMouseLeave={() => setHoveredButton(null)}
-                                >
-                                    🚪 Déconnexion
-                                </button>
+                {/* Navigation */}
+                <nav className="modern-nav">
+                    {isAuthenticated ? (
+                        <>
+                            <div className="modern-nav-section">
+                                <h3 className="modern-nav-title">Principal</h3>
+                                <ul className="modern-nav-list">
+                                    {navigationSections.main.map((link, index) => (
+                                        <li key={index} className="modern-nav-item">
+                                            <NavLink
+                                                to={link.path}
+                                                className={({isActive}) =>
+                                                    `modern-nav-link ${isActive ? 'active' : ''}`
+                                                }
+                                                onClick={handleLinkClick}
+                                            >
+                                                <div className="modern-nav-icon">{link.icon}</div>
+                                                <span className="modern-nav-text">{link.label}</span>
+                                                {link.badge && <span className="modern-nav-badge">{link.badge}</span>}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                            : ""}
-                        <BaniereLetchi/>
-                        <Depenses/>
-                        <Revenues/>
+
+                            <div className="modern-nav-section">
+                                <h3 className="modern-nav-title">Finances</h3>
+                                <ul className="modern-nav-list">
+                                    {navigationSections.finance.map((link, index) => (
+                                        <li key={index} className="modern-nav-item">
+                                            <NavLink
+                                                to={link.path}
+                                                className={({isActive}) =>
+                                                    `modern-nav-link ${isActive ? 'active' : ''}`
+                                                }
+                                                onClick={handleLinkClick}
+                                            >
+                                                <div className="modern-nav-icon">{link.icon}</div>
+                                                <span className="modern-nav-text">{link.label}</span>
+                                                {link.badge && <span className="modern-nav-badge">{link.badge}</span>}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="modern-nav-section">
+                                <h3 className="modern-nav-title">Outils</h3>
+                                <ul className="modern-nav-list">
+                                    {navigationSections.tools.map((link, index) => (
+                                        <li key={index} className="modern-nav-item">
+                                            <NavLink
+                                                to={link.path}
+                                                className={({isActive}) =>
+                                                    `modern-nav-link ${isActive ? 'active' : ''}`
+                                                }
+                                                onClick={handleLinkClick}
+                                            >
+                                                <div className="modern-nav-icon">{link.icon}</div>
+                                                <span className="modern-nav-text">{link.label}</span>
+                                                {link.badge && <span className="modern-nav-badge">{link.badge}</span>}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="modern-nav-section">
+                            <h3 className="modern-nav-title">Connexion</h3>
+                            <ul className="modern-nav-list">
+                                {publicLinks.map((link, index) => (
+                                    <li key={index} className="modern-nav-item">
+                                        <NavLink
+                                            to={link.path}
+                                            className={({isActive}) =>
+                                                `modern-nav-link ${isActive ? 'active' : ''}`
+                                            }
+                                            onClick={handleLinkClick}
+                                        >
+                                            <div className="modern-nav-icon">{link.icon}</div>
+                                            <span className="modern-nav-text">{link.label}</span>
+                                        </NavLink>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </nav>
+
+                {/* Footer du sidebar */}
+                {isAuthenticated && (
+                    <div className="modern-sidebar-footer">
+                        <div className="modern-user-profile">
+                            <div className="modern-user-avatar">
+                                {currentUser.prenom ? currentUser.prenom.charAt(0).toUpperCase() : '?'}
+                            </div>
+                            <div className="modern-user-info">
+                                <p className="modern-user-name">
+                                    {currentUser.prenom && currentUser.nom
+                                        ? `${currentUser.prenom} ${currentUser.nom}`
+                                        : 'Utilisateur'
+                                    }
+                                </p>
+                                <p className="modern-user-role">Gestionnaire</p>
+                            </div>
+                        </div>
+                        <button
+                            className="modern-logout-btn"
+                            onClick={() => {
+                                localStorage.removeItem("jwt");
+                                localStorage.removeItem("utilisateur");
+                                window.location.reload();
+                            }}
+                        >
+                            <span>🚪</span>
+                            Déconnexion
+                        </button>
                     </div>
                 )}
-                {props.contenue}
-            </section>
+            </aside>
+
+            {/* Contenu principal moderne */}
+            <main className="modern-content">
+                <CookieConsent/>
+
+                {/* Header moderne */}
+                <header className="modern-header">
+                    <div className="modern-header-left">
+                        <h1 className="modern-header-title">{props.title || 'Budget Manager'}</h1>
+                        {props.breadcrumb && (
+                            <div className="modern-header-breadcrumb">
+                                {props.breadcrumb}
+                            </div>
+                        )}
+                    </div>
+                    <div className="modern-header-right">
+                        {isMobile && (
+                            <button
+                                className="modern-header-btn"
+                                onClick={handlemenu}
+                                aria-label="Ouvrir le menu"
+                            >
+                                <CiMenuBurger/>
+                                Menu
+                            </button>
+                        )}
+                    </div>
+                </header>
+
+                {/* Contenu de la page */}
+                <div className="modern-main">
+                    {isAuthenticated && (
+                        <div className="container">
+                            <BaniereLetchi/>
+                            <Depenses/>
+                            <Revenues/>
+                        </div>
+                    )}
+                    {props.contenue}
+                </div>
+            </main>
 
             {/* Bulle flottante pour ouvrir le chat */}
             <div 
@@ -451,136 +565,36 @@ export default function MenuComponent(props) {
                 </div>
             )}
 
-            {/* Navigation mobile améliorée en bas */}
+            {/* Navigation mobile moderne */}
             {isMobile && (
-                <div
-                    className="mobile-nav-bottom"
-                    style={{
-                        position: 'fixed',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: 80,
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
-                        backdropFilter: 'blur(25px)',
-                        borderTop: '2px solid rgba(139, 92, 246, 0.15)',
-                        display: 'flex',
-                        justifyContent: 'space-around',
-                        alignItems: 'center',
-                        zIndex: 1035, // Plus élevé pour être au-dessus de l'overlay mais sous la sidebar
-                        boxShadow: '0 -8px 32px rgba(139, 92, 246, 0.15), 0 -2px 8px rgba(0, 0, 0, 0.08)',
-                        padding: '0 8px',
-                        animation: 'mobileNavSlideUp 0.4s ease-out',
-                    }}
-                >
+                <nav className="modern-mobile-nav">
                     {navLinks.slice(0, 3).map((link, index) => (
                         <NavLink
                             key={index}
                             to={link.path}
-                            className="mobile-nav-item mobile-nav-touch-area"
-                            style={({ isActive }) => ({
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                padding: '10px 8px',
-                                borderRadius: 16,
-                                textDecoration: 'none',
-                                color: isActive ? '#8b5cf6' : '#64748b',
-                                background: isActive ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1))' : 'transparent',
-                                transform: isActive ? 'translateY(-3px) scale(1.05)' : 'none',
-                                transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                                minWidth: 65,
-                                flex: 1,
-                                maxWidth: 80,
-                                boxShadow: isActive ? '0 8px 25px rgba(139, 92, 246, 0.25)' : 'none',
-                                border: isActive ? '1px solid rgba(139, 92, 246, 0.2)' : '1px solid transparent',
-                            })}
+                            className={({isActive}) =>
+                                `modern-mobile-nav-item ${isActive ? 'active' : ''}`
+                            }
                             onClick={handleLinkClick}
                         >
-                            <div
-                                className="mobile-nav-icon"
-                                style={{
-                                    fontSize: 24,
-                                    marginBottom: 4,
-                                }}
-                            >
-                                {link.icon}
-                            </div>
-                            <span className="mobile-nav-label">
-                                {link.label.length > 7 ? link.label.substring(0, 7) + '...' : link.label}
-                            </span>
+                            <div className="modern-mobile-nav-icon">{link.icon}</div>
+                            <span>{link.label.length > 8 ? link.label.substring(0, 8) + '...' : link.label}</span>
                         </NavLink>
                     ))}
                     <button
-                        className="mobile-nav-item mobile-nav-touch-area"
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '10px 8px',
-                            borderRadius: 16,
-                            border: '1px solid transparent',
-                            background: 'transparent',
-                            color: '#64748b',
-                            cursor: 'pointer',
-                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                            minWidth: 65,
-                            flex: 1,
-                            maxWidth: 80,
-                        }}
+                        className={`modern-mobile-nav-item ${afficher ? 'active' : ''}`}
                         onClick={handlemenu}
+                        aria-label={afficher ? 'Fermer le menu' : 'Ouvrir le menu'}
                     >
-                        <div
-                            className="mobile-nav-icon"
-                            style={{
-                                fontSize: 24,
-                                marginBottom: 4,
-                            }}
-                        >
-                            ⋯
-                        </div>
-                        <span className="mobile-nav-label">
-                            Plus
-                        </span>
-                    </button>
-                    <button
-                        className="mobile-nav-item mobile-nav-touch-area"
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '10px 8px',
-                            borderRadius: 16,
-                            border: afficher ? '1px solid rgba(139, 92, 246, 0.2)' : '1px solid transparent',
-                            background: afficher ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1))' : 'transparent',
-                            color: afficher ? '#8b5cf6' : '#64748b',
-                            cursor: 'pointer',
-                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                            minWidth: 65,
-                            flex: 1,
-                            maxWidth: 80,
-                            transform: afficher ? 'translateY(-3px) scale(1.05)' : 'none',
-                            boxShadow: afficher ? '0 8px 25px rgba(139, 92, 246, 0.25)' : 'none',
-                        }}
-                        onClick={handlemenu}
-                    >
-                        <CiMenuBurger
-                            className="mobile-nav-icon"
-                            style={{
-                                fontSize: 24,
-                                marginBottom: 4,
+                        <div className="modern-mobile-nav-icon">
+                            <CiMenuBurger style={{
                                 transform: afficher ? 'rotate(90deg)' : 'rotate(0deg)',
                                 transition: 'transform 0.3s ease'
-                            }}
-                        />
-                        <span className="mobile-nav-label">
-                            {afficher ? 'Fermer' : 'Menu'}
-                        </span>
+                            }}/>
+                        </div>
+                        <span>{afficher ? 'Fermer' : 'Menu'}</span>
                     </button>
-                </div>
+                </nav>
             )}
 
             {/* Menu rapide desktop */}

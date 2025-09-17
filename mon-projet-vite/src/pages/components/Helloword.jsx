@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './css/accueil.css'
 import BaniereLetchi from "./BaniereLetchi";
+import ModernDashboard from './ModernDashboard';
 import { Button, Card, FeatureCard, toast } from './ui';
 
 
@@ -56,6 +57,7 @@ const Helloword = () => {
 
     return (
         <>
+            <ModernDashboard />
             <div className={`welcome-container ${isVisible ? 'animate-in' : ''}`}>
                 {/* Particules flottantes animées */}
                 <div className="floating-particles">

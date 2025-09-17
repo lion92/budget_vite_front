@@ -1,0 +1,858 @@
+/* enhanced-expense-table.css - Styles pour le tableau des dépenses amélioré */
+
+/* ====== VARIABLES ====== */
+:root {
+    --table-primary: #667eea;
+    --table-secondary: #f8fafc;
+    --table-success: #16a34a;
+    --table-danger: #dc2626;
+    --table-warning: #d97706;
+    --table-info: #0284c7;
+    --table-border: #e2e8f0;
+    --table-text: #334155;
+    --table-text-muted: #64748b;
+    --table-bg: #ffffff;
+    --table-bg-alt: #f1f5f9;
+    --table-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --table-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --table-radius: 0.75rem;
+    --table-transition: all 0.2s ease;
+}
+
+/* Mode sombre */
+[data-theme="dark"] .enhanced-expense-table,
+.dark-mode .enhanced-expense-table {
+    --table-secondary: #1e293b;
+    --table-border: #475569;
+    --table-text: #e2e8f0;
+    --table-text-muted: #94a3b8;
+    --table-bg: #0f172a;
+    --table-bg-alt: #1e293b;
+}
+
+/* ====== CONTENEUR PRINCIPAL ====== */
+.enhanced-expense-table {
+    background: var(--table-bg);
+    border-radius: var(--table-radius);
+    overflow: hidden;
+    box-shadow: var(--table-shadow);
+    margin: 1rem 0;
+}
+
+/* ====== ÉTATS DE CHARGEMENT ET VIDE ====== */
+.enhanced-expense-loading,
+.enhanced-expense-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--table-text-muted);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--table-border);
+    border-top: 4px solid var(--table-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.empty-state {
+    max-width: 400px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: var(--table-text);
+    margin-bottom: 0.5rem;
+}
+
+/* ====== HEADER ====== */
+.expense-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem;
+    background: var(--table-bg);
+    border-bottom: 1px solid var(--table-border);
+}
+
+.header-info {
+    flex: 1;
+}
+
+.table-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--table-text);
+    margin: 0 0 1.5rem 0;
+}
+
+.expense-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: var(--table-secondary);
+    padding: 1rem 1.25rem;
+    border-radius: var(--table-radius);
+    border: 1px solid var(--table-border);
+    min-width: 120px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--table-text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--table-text);
+}
+
+.stat-value.total {
+    color: var(--table-primary);
+}
+
+.stat-value.count {
+    color: var(--table-info);
+}
+
+.stat-value.avg {
+    color: var(--table-success);
+}
+
+.header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+/* ====== TOGGLE DE VUE ====== */
+.view-toggle {
+    display: flex;
+    background: var(--table-secondary);
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    border: 1px solid var(--table-border);
+}
+
+.view-btn {
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    border-radius: 0.25rem;
+    color: var(--table-text-muted);
+    cursor: pointer;
+    transition: var(--table-transition);
+    font-weight: 500;
+}
+
+.view-btn.active {
+    background: var(--table-primary);
+    color: white;
+}
+
+.view-btn:hover:not(.active) {
+    background: var(--table-bg);
+    color: var(--table-text);
+}
+
+/* ====== BOUTONS D'EXPORT ====== */
+.export-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--table-border);
+    border-radius: 0.5rem;
+    background: var(--table-bg);
+    color: var(--table-text);
+    cursor: pointer;
+    transition: var(--table-transition);
+    font-weight: 500;
+}
+
+.export-btn.excel:hover {
+    background: var(--table-success);
+    color: white;
+    border-color: var(--table-success);
+}
+
+.export-btn.pdf:hover {
+    background: var(--table-danger);
+    color: white;
+    border-color: var(--table-danger);
+}
+
+/* ====== BARRE DE SÉLECTION ====== */
+.selection-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(102, 126, 234, 0.1);
+    border-bottom: 1px solid var(--table-primary);
+    color: var(--table-primary);
+}
+
+.selection-info {
+    font-weight: 500;
+}
+
+.selection-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.bulk-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    background: var(--table-bg);
+    cursor: pointer;
+    transition: var(--table-transition);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.bulk-btn.edit {
+    color: var(--table-info);
+    border-color: var(--table-info);
+}
+
+.bulk-btn.edit:hover {
+    background: var(--table-info);
+    color: white;
+}
+
+.bulk-btn.delete {
+    color: var(--table-danger);
+    border-color: var(--table-danger);
+}
+
+.bulk-btn.delete:hover {
+    background: var(--table-danger);
+    color: white;
+}
+
+.bulk-btn.clear {
+    color: var(--table-text-muted);
+    border-color: var(--table-border);
+}
+
+.bulk-btn.clear:hover {
+    background: var(--table-text-muted);
+    color: white;
+}
+
+/* ====== CONTENU PRINCIPAL ====== */
+.expense-content {
+    min-height: 400px;
+}
+
+/* ====== VUE TABLEAU ====== */
+.table-container {
+    overflow-x: auto;
+}
+
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--table-bg);
+}
+
+.expense-table th,
+.expense-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--table-border);
+}
+
+.expense-table th {
+    background: var(--table-secondary);
+    font-weight: 600;
+    color: var(--table-text);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.expense-table tbody tr {
+    transition: var(--table-transition);
+}
+
+.expense-table tbody tr:hover {
+    background: var(--table-bg-alt);
+}
+
+.expense-table tbody tr.editing {
+    background: rgba(102, 126, 234, 0.05);
+    border-left: 4px solid var(--table-primary);
+}
+
+.expense-table tbody tr.selected {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+/* ====== COLONNES SPÉCIFIQUES ====== */
+.select-col {
+    width: 50px;
+    text-align: center;
+}
+
+.id-col {
+    width: 80px;
+    font-family: 'Courier New', monospace;
+    color: var(--table-text-muted);
+}
+
+.amount-col {
+    width: 120px;
+    text-align: right;
+}
+
+.amount {
+    font-weight: 600;
+    color: var(--table-primary);
+}
+
+.description-col {
+    max-width: 200px;
+}
+
+.description {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.category-col {
+    width: 150px;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid;
+}
+
+.date-col {
+    width: 120px;
+}
+
+.date {
+    color: var(--table-text-muted);
+}
+
+.actions-col {
+    width: 120px;
+}
+
+/* ====== ACTIONS ====== */
+.default-actions,
+.edit-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--table-border);
+    border-radius: 0.5rem;
+    background: var(--table-bg);
+    cursor: pointer;
+    transition: var(--table-transition);
+}
+
+.action-btn.edit:hover {
+    background: var(--table-info);
+    color: white;
+    border-color: var(--table-info);
+}
+
+.action-btn.delete:hover {
+    background: var(--table-danger);
+    color: white;
+    border-color: var(--table-danger);
+}
+
+.action-btn.save:hover {
+    background: var(--table-success);
+    color: white;
+    border-color: var(--table-success);
+}
+
+.action-btn.cancel:hover {
+    background: var(--table-text-muted);
+    color: white;
+    border-color: var(--table-text-muted);
+}
+
+/* ====== CHAMPS D'ÉDITION ====== */
+.edit-input,
+.edit-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--table-border);
+    border-radius: 0.25rem;
+    background: var(--table-bg);
+    color: var(--table-text);
+    font-size: 0.875rem;
+}
+
+.edit-input:focus,
+.edit-select:focus {
+    outline: none;
+    border-color: var(--table-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ====== VUE CARTES ====== */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.expense-card {
+    background: var(--table-bg);
+    border: 1px solid var(--table-border);
+    border-radius: var(--table-radius);
+    padding: 1.5rem;
+    transition: var(--table-transition);
+    box-shadow: var(--table-shadow);
+}
+
+.expense-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--table-shadow-lg);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-id {
+    font-family: 'Courier New', monospace;
+    color: var(--table-text-muted);
+    font-size: 0.875rem;
+}
+
+.card-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--table-primary);
+}
+
+.card-body {
+    margin-bottom: 1rem;
+}
+
+.card-description {
+    font-weight: 500;
+    color: var(--table-text);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.card-category {
+    margin-bottom: 0.75rem;
+}
+
+.card-date {
+    color: var(--table-text-muted);
+    font-size: 0.875rem;
+}
+
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.card-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--table-border);
+    border-radius: 0.5rem;
+    background: var(--table-bg);
+    cursor: pointer;
+    transition: var(--table-transition);
+}
+
+.card-btn.edit:hover {
+    background: var(--table-info);
+    color: white;
+    border-color: var(--table-info);
+}
+
+.card-btn.delete:hover {
+    background: var(--table-danger);
+    color: white;
+    border-color: var(--table-danger);
+}
+
+/* ====== PAGINATION ====== */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: var(--table-secondary);
+    border-top: 1px solid var(--table-border);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pagination-info {
+    color: var(--table-text-muted);
+    font-size: 0.875rem;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--table-bg);
+    border: 1px solid var(--table-border);
+    border-radius: 0.5rem;
+    color: var(--table-text);
+    cursor: pointer;
+    transition: var(--table-transition);
+    font-weight: 500;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--table-primary);
+    color: white;
+    border-color: var(--table-primary);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.page-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--table-bg);
+    border: 1px solid var(--table-border);
+    border-radius: 0.5rem;
+    color: var(--table-text);
+    cursor: pointer;
+    transition: var(--table-transition);
+    font-weight: 500;
+}
+
+.page-btn:hover {
+    background: var(--table-primary);
+    color: white;
+    border-color: var(--table-primary);
+}
+
+.page-btn.active {
+    background: var(--table-primary);
+    color: white;
+    border-color: var(--table-primary);
+}
+
+.page-size-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--table-text-muted);
+    font-size: 0.875rem;
+}
+
+.page-size-selector select {
+    padding: 0.5rem;
+    border: 1px solid var(--table-border);
+    border-radius: 0.5rem;
+    background: var(--table-bg);
+    color: var(--table-text);
+}
+
+/* ====== MODAL DE CONFIRMATION ====== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.delete-confirm-modal {
+    background: var(--table-bg);
+    border-radius: var(--table-radius);
+    padding: 2rem;
+    max-width: 400px;
+    margin: 1rem;
+    box-shadow: var(--table-shadow-lg);
+}
+
+.delete-confirm-modal h3 {
+    color: var(--table-text);
+    margin: 0 0 1rem 0;
+}
+
+.delete-confirm-modal p {
+    color: var(--table-text-muted);
+    margin: 0 0 1.5rem 0;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.confirm-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--table-transition);
+}
+
+.confirm-btn.delete {
+    background: var(--table-danger);
+    color: white;
+}
+
+.confirm-btn.delete:hover {
+    background: #b91c1c;
+}
+
+.confirm-btn.cancel {
+    background: var(--table-secondary);
+    color: var(--table-text);
+    border: 1px solid var(--table-border);
+}
+
+.confirm-btn.cancel:hover {
+    background: var(--table-text-muted);
+    color: white;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 1024px) {
+    .expense-header {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .header-actions {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .expense-stats {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .enhanced-expense-table {
+        margin: 0.5rem 0;
+        border-radius: 0.5rem;
+    }
+
+    .expense-header {
+        padding: 1.5rem;
+    }
+
+    .table-title {
+        font-size: 1.5rem;
+    }
+
+    .expense-stats {
+        gap: 1rem;
+    }
+
+    .stat-card {
+        min-width: 100px;
+        padding: 0.75rem 1rem;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .export-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-container {
+        font-size: 0.875rem;
+    }
+
+    .expense-table th,
+    .expense-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .pagination-container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .pagination-controls {
+        order: 1;
+    }
+
+    .pagination-info {
+        order: 2;
+    }
+
+    .page-size-selector {
+        order: 3;
+    }
+}
+
+@media (max-width: 480px) {
+    .expense-header {
+        padding: 1rem;
+    }
+
+    .expense-stats {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .view-toggle {
+        width: 100%;
+    }
+
+    .view-btn {
+        flex: 1;
+    }
+
+    .page-numbers {
+        display: none;
+    }
+
+    .pagination-controls {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .selection-bar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .selection-actions {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ====== ANIMATIONS ====== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.expense-card,
+.expense-table tbody tr {
+    animation: fadeIn 0.3s ease;
+}
+
+/* ====== PRINT STYLES ====== */
+@media print {
+    .enhanced-expense-table {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+
+    .header-actions,
+    .selection-bar,
+    .pagination-container,
+    .action-btn,
+    .card-btn {
+        display: none !important;
+    }
+
+    .expense-table {
+        font-size: 0.8rem;
+    }
+
+    .cards-view {
+        display: none !important;
+    }
+}

@@ -58,9 +58,9 @@ const Inscription = () => {
             valid = false;
         }
         
-        if (password.length < 3) {
+        if (password.length < 12) {
             console.log('❌ [Inscription] Mot de passe trop court (longueur:', password.length, ')');
-            setPasswordError("Le mot de passe doit comporter au moins 3 caractères");
+            setPasswordError("Le mot de passe doit comporter au moins 12 caractères");
             valid = false;
         } else {
             setPasswordError("");
@@ -131,7 +131,7 @@ const Inscription = () => {
         }
     }, [nom, prenom, email, password]);
 
-    const isFormValid = nom.trim() && prenom.trim() && email && password.length >= 3 && !emailError;
+    const isFormValid = nom.trim() && prenom.trim() && email && password.length >= 12 && !emailError;
 
     return (
         <div>
@@ -183,12 +183,12 @@ const Inscription = () => {
 
                     <input 
                         type="password" 
-                        placeholder="🔒 Mot de passe (min. 3 caractères)" 
+                        placeholder="🔒 Mot de passe (min. 12 caractères)" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        minLength={3}
-                        className={passwordError ? "input-error" : password.length >= 3 ? "input-success" : ""}
+                        minLength={12}
+                        className={passwordError ? "input-error" : password.length >= 12 ? "input-success" : ""}
                     />
                     {passwordError && <p className="error">{passwordError}</p>}
 

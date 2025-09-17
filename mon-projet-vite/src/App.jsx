@@ -16,6 +16,7 @@ import ResetPasswordForm from "./pages/components/ResetPasswordForm.jsx";
 import DashGraphBudget from "./pages/components/DashgraphBudget.jsx";
 import DashTickets from "./pages/components/DashTickets.jsx";
 import DashComptabilite from "./pages/components/DashComptabilite.jsx";
+import Demo from "./pages/Demo.jsx";
 
 function App() {
     return (
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/comptabilite" element={<DashComptabilite/>}/>
                     <Route path="/reset-password" element={<ResetPasswordForm />} />
                     <Route path="/graph" element={<DashGraphBudget/>} />
+                    <Route path="/demo" element={<Demo />} />
                     <Route path="*" element={<NotFound/>}/> {/* Remplace Route "catch-all" */}
             </Routes>
         </BrowserRouter>

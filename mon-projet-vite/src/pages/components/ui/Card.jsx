@@ -133,4 +133,5 @@ export const FeatureCard = ({
   </Card>
 );
 
+export { Card };
 export default Card;
