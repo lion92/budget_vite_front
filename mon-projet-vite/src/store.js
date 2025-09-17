@@ -1,7 +1,7 @@
 import {create} from "zustand";
 import lien from "./pages/components/lien";
 
-export const useAppStore = create(async (set) => {
+export const useAppStore = create(async () => {
 
 
     const fetchAPICat = async () => {

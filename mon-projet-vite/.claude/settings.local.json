@@ -10,7 +10,15 @@
       "Bash(dir:*)",
       "Bash(docker-compose up:*)",
       "Bash(docker-compose:*)",
-      "Bash(docker exec:*)"
+      "Bash(docker exec:*)",
+      "WebSearch",
+      "WebFetch(domain:react-icons.github.io)",
+      "WebFetch(domain:icons.getbootstrap.com)",
+      "Bash(tasklist)",
+      "Bash(taskkill:*)",
+      "Bash(TASKKILL /F /IM node.exe)",
+      "Bash(netstat:*)",
+      "Bash(npm run lint)"
     ],
     "deny": [],
     "ask": []

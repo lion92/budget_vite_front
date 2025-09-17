@@ -162,7 +162,7 @@ export const useTicketStore = create(
                         // Mettre à jour les stats si elles existent
                         const stats = get().ticketStats;
                         if (stats) {
-                            set(state => ({
+                            set(() => ({
                                 ticketStats: {
                                     ...stats,
                                     totalTickets: stats.totalTickets - 1,
@@ -324,7 +324,7 @@ export const useTicketActions = () => {
             clearResult: state.clearResult,
             reset: state.reset,
         }),
-        (prev, next) => {
+        () => {
             // Les fonctions ne changent jamais dans Zustand
             return true;
         }
