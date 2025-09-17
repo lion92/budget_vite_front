@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './Input.css';
 
 const Input = ({
@@ -116,7 +116,7 @@ const Input = ({
           </button>
         )}
 
-        {icon && iconPosition === 'right' && !type === 'password' && (
+        {icon && iconPosition === 'right' && type !== 'password' && (
           <div className="modern-input__icon modern-input__icon--right">
             {icon}
           </div>

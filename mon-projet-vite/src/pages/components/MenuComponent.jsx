@@ -34,7 +34,7 @@ export default function MenuComponent(props) {
         };
 
         const handleStorageChange = () => {
-            setIsAuthenticated(!!localStorage.getItem("token"));
+            setIsAuthenticated(!!localStorage.getItem("jwt"));
         };
 
         window.addEventListener("resize", handleResize);
@@ -323,6 +323,7 @@ export default function MenuComponent(props) {
         { path: "/enveloppe", label: "Enveloppe", icon: <CiMoneyBill /> },
         { path: "/tickets", label: "Tickets", icon: <CiMoneyBill /> },
         { path: "/graph", label: "Graphique budget", icon: <CiMoneyBill /> },
+        { path: "/comptabilite", label: "📊 Espace Comptable", icon: <CiMoneyBill /> },
     ];
 
     const navLinks = isAuthenticated ? privateLinks : publicLinks;

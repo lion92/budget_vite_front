@@ -5,7 +5,7 @@ import { BiCategory } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 import lien from "./lien";
 
-function AjoutBudget(props) {
+function AjoutBudget() {
     const [listDesDepense, setListDesDepense] = useState([]);
     const [catAll, setCatAll] = useState([]);
     const [montant, setMontant] = useState(0);
