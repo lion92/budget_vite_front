@@ -10,6 +10,9 @@ import {
     BarChart3, Activity
 } from 'lucide-react';
 import useBudgetStore from "../../useBudgetStore";
+import ExpensePredictionChart from './ExpensePredictionChart';
+import DailySpendingChart from './DailySpendingChart';
+import YearlyComparisonChart from './YearlyComparisonChart';
 import './css/graphBudget.css';
 
 const GraphBudget = () => {
@@ -45,13 +48,13 @@ const GraphBudget = () => {
         };
 
         initializeData();
-    }, [fetchDepenses, fetchCategories, fetchRevenus]);
+    }, []);
 
     // Couleurs pour les graphiques - optimisées pour l'accessibilité
-    const colors = [
+    const colors = useMemo(() => [
         '#667eea', '#16a34a', '#dc2626', '#d97706', '#0284c7',
         '#7c3aed', '#059669', '#ea580c', '#0ea5e9', '#7c2d12'
-    ];
+    ], []);
 
     // Fonction utilitaire pour valider et convertir les montants
     const safeAmount = useCallback((value) => {
@@ -274,7 +277,7 @@ const GraphBudget = () => {
             objectifEpargne,
             analyseTemporelle
         };
-    }, [depenses, revenus, categories, selectedPeriod, selectedYear, selectedMonth, isLoading, safeAmount, getCategoryName]);
+    }, [depenses, revenus, categories, selectedPeriod, selectedYear, selectedMonth, isLoading, safeAmount, getCategoryName, colors]);
 
     // Tooltip personnalisé amélioré
     const CustomTooltip = ({ active, payload, label }) => {
@@ -623,6 +626,26 @@ const GraphBudget = () => {
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
+
+                {/* Nouveaux graphiques */}
+                <ExpensePredictionChart
+                    depenses={depenses}
+                    selectedYear={selectedYear}
+                    selectedMonth={selectedMonth}
+                    selectedPeriod={selectedPeriod}
+                />
+
+                <DailySpendingChart
+                    depenses={depenses}
+                    selectedYear={selectedYear}
+                    selectedMonth={selectedMonth}
+                    selectedPeriod={selectedPeriod}
+                />
+
+                <YearlyComparisonChart
+                    depenses={depenses}
+                    revenus={revenus}
+                />
 
                 {/* Analyse détaillée */}
                 <div className="chart-card medium">

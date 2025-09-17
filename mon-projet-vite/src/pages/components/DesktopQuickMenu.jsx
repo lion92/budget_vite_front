@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { CiMenuBurger, CiHome, CiMoneyBill } from 'react-icons/ci';
 import { BiSolidCategory } from 'react-icons/bi';
-import { GoTasklist } from 'react-icons/go';
-import { MdDashboard } from 'react-icons/md';
 
 const DesktopQuickMenu = ({ isAuthenticated, onToggleMain }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const quickLinks = isAuthenticated ? [
         { path: "/", label: "Accueil", icon: <CiHome />, color: "#3b82f6" },
-        { path: "/dashboard", label: "Dashboard", icon: <MdDashboard />, color: "#8b5cf6" },
         { path: "/budget", label: "Budget", icon: <CiMoneyBill />, color: "#10b981" },
         { path: "/categorie", label: "Catégories", icon: <BiSolidCategory />, color: "#f59e0b" },
     ] : [];

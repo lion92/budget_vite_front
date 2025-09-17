@@ -6,7 +6,11 @@
       "Bash(npm run dev:*)",
       "Read(//c/Users/kriss/IdeaProjects/budget_vite_js/**)",
       "Read(//c/Users/kriss/IdeaProjects/**)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(dir:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker exec:*)"
     ],
     "deny": [],
     "ask": []

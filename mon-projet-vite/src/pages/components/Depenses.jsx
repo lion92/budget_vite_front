@@ -6,6 +6,7 @@ import "./css/budget_style.css";
 import { useNotify } from "./Notification";
 import { ImportData } from "./ImportData";
 import ExpenseTable from "./ExpenseTable";
+import EnhancedExpenseTable from "./EnhancedExpenseTable";
 
 export function Depenses() {
     const [depensesForm, setDepensesForm] = useState([{ description: "", montant: 0, categorie: "", date: new Date() }]);
@@ -35,7 +36,7 @@ export function Depenses() {
             await fetchRevenus();
         };
         fetchAllData();
-    }, []);
+    }, [fetchDepenses, fetchCategories, fetchRevenus]);
 
     const updateDepenseField = useCallback((index, field, value) => {
         setDepensesForm(prev => {
@@ -173,15 +174,15 @@ export function Depenses() {
 
             {showExpenseTable && (
                 <div className="modal-overlay">
-                    <div className="modal-content expense-table-modal">
+                    <div className="modal-content expense-table-modal enhanced-modal">
                         <div className="modal-header">
-                            <h2>Tableau des dépenses détaillées</h2>
+                            <h2>Gestion avancée des dépenses</h2>
                             <button onClick={() => setShowExpenseTable(false)} className="close-btn">
                                 ✕
                             </button>
                         </div>
                         <div className="expense-table-wrapper">
-                            <ExpenseTable />
+                            <EnhancedExpenseTable />
                         </div>
                     </div>
                 </div>
