@@ -1,0 +1,74 @@
+# Dockerfile.frontend - Optimisé pour React/Vite
+
+# ================================
+# Stage 1: Build
+# ================================
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copier les fichiers de dépendances en premier pour optimiser le cache Docker
+COPY package*.json ./
+
+# Installer les dépendances avec cache optimisé
+RUN npm ci --legacy-peer-deps --only=production && npm cache clean --force
+
+# Copier le code source
+COPY . .
+
+# Construire l'application pour la production
+RUN npm run build
+
+# ================================
+# Stage 2: Production (Nginx)
+# ================================
+FROM nginx:alpine AS production
+
+# Installer curl pour les health checks
+RUN apk add --no-cache curl
+
+# Copier la configuration Nginx personnalisée
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copier les fichiers buildés depuis le stage builder
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Ajouter un script de santé
+RUN echo '#!/bin/sh\ncurl -f http://localhost:80/ || exit 1' > /health-check.sh && \
+    chmod +x /health-check.sh
+
+# Exposer le port 80
+EXPOSE 80
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD /health-check.sh
+
+# Démarrer Nginx
+CMD ["nginx", "-g", "daemon off;"]
+
+# ================================
+# Stage 3: Development
+# ================================
+FROM node:18-alpine AS development
+
+WORKDIR /app
+
+# Copier les fichiers de package
+COPY package*.json ./
+
+# Installer toutes les dépendances (dev + prod)
+RUN npm install --legacy-peer-deps
+
+# Copier le code source
+COPY . .
+
+# Exposer le port de développement
+EXPOSE 3000
+
+# Variables d'environnement pour le développement
+ENV NODE_ENV=development
+ENV VITE_API_URL=http://localhost:3010
+
+# Commande de développement avec hot reload
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]

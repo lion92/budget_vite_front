@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    container_name: budget-vite-frontend
+    ports:
+      - "3014:3014"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    networks:
+      - budget-network
+
+networks:
+  budget-network:
+    driver: bridge
