@@ -1,0 +1,275 @@
+/* ============================================
+   SYSTÈME DE DESIGN UNIFIÉ
+   ============================================ */
+
+/* Import de tous les modules du système de design */
+@import './form.css';
+@import './mobile-optimizations.css';
+@import './enhanced-cards.css';
+@import './advanced-design.css';
+@import './ux-enhancements.css';
+@import './utilities.css';
+@import './design-improvements.css';
+
+/* ============================================
+   ORCHESTRATION DU SYSTÈME DE DESIGN
+   ============================================ */
+
+/* === PRIORITÉS CSS === */
+/* Les classes utilitaires ont la priorité la plus élevée */
+.form-content,
+.filters-section,
+.table-container,
+.mobile-card {
+    /* Application cohérente du système de design */
+    border: var(--space-px) solid var(--gray-200) !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: var(--shadow-sm) !important;
+    background: white !important;
+    padding: var(--space-6) !important;
+    margin-bottom: var(--space-6) !important;
+}
+
+/* === HARMONISATION DES COMPOSANTS === */
+.btn,
+.mobile-btn,
+.enhanced-action-btn,
+.table-action-btn {
+    /* Style unifié pour tous les boutons */
+    font-family: inherit !important;
+    font-size: var(--text-sm) !important;
+    font-weight: var(--font-medium) !important;
+    border-radius: var(--radius-md) !important;
+    padding: var(--space-3) var(--space-6) !important;
+    min-height: 44px !important;
+    transition: all var(--transition-normal) !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--space-2) !important;
+    text-decoration: none !important;
+    border: none !important;
+}
+
+.input-field,
+.textarea-field,
+.search-input,
+.filter-select,
+.mobile-form-input {
+    /* Style unifié pour tous les inputs */
+    font-family: inherit !important;
+    font-size: var(--text-base) !important;
+    border: var(--space-px) solid var(--gray-300) !important;
+    border-radius: var(--radius-md) !important;
+    padding: var(--space-3) var(--space-4) !important;
+    background: white !important;
+    color: var(--gray-900) !important;
+    transition: all var(--transition-normal) !important;
+    width: 100% !important;
+}
+
+.input-field:focus,
+.textarea-field:focus,
+.search-input:focus,
+.filter-select:focus,
+.mobile-form-input:focus {
+    outline: none !important;
+    border-color: var(--primary-500) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+    transform: none !important;
+}
+
+/* === TYPOGRAPHIE COHÉRENTE === */
+h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: var(--font-semibold);
+    color: var(--gray-900);
+    line-height: 1.25;
+    margin: 0;
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-base); }
+h6 { font-size: var(--text-sm); }
+
+p {
+    font-size: var(--text-base);
+    line-height: 1.5;
+    color: var(--gray-700);
+    margin: 0;
+}
+
+/* === ÉTATS INTERACTIFS UNIFIÉS === */
+.btn:hover,
+.mobile-btn:hover,
+.enhanced-action-btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.btn:active,
+.mobile-btn:active,
+.enhanced-action-btn:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+.btn:disabled,
+.mobile-btn:disabled,
+.enhanced-action-btn:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* === COULEURS DE BOUTONS STANDARDISÉES === */
+.btn-create,
+.mobile-btn-primary {
+    background: var(--primary-500) !important;
+    color: white !important;
+}
+
+.btn-create:hover,
+.mobile-btn-primary:hover {
+    background: var(--primary-600) !important;
+}
+
+.btn-update {
+    background: #f59e0b !important;
+    color: white !important;
+}
+
+.btn-update:hover {
+    background: #d97706 !important;
+}
+
+.btn-cancel,
+.mobile-btn-secondary {
+    background: var(--gray-100) !important;
+    color: var(--gray-700) !important;
+    border: var(--space-px) solid var(--gray-300) !important;
+}
+
+.btn-cancel:hover,
+.mobile-btn-secondary:hover {
+    background: var(--gray-200) !important;
+    border-color: var(--gray-400) !important;
+}
+
+/* === TABLEAUX UNIFORMISÉS === */
+.modern-table {
+    border: var(--space-px) solid var(--gray-200) !important;
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden !important;
+}
+
+.modern-table th {
+    background: var(--gray-50) !important;
+    font-weight: var(--font-semibold) !important;
+    font-size: var(--text-sm) !important;
+    color: var(--gray-700) !important;
+    padding: var(--space-4) var(--space-3) !important;
+    border-bottom: var(--space-px) solid var(--gray-200) !important;
+}
+
+.modern-table td {
+    font-size: var(--text-sm) !important;
+    color: var(--gray-900) !important;
+    padding: var(--space-4) var(--space-3) !important;
+    border-bottom: var(--space-px) solid var(--gray-100) !important;
+}
+
+/* === RESPONSIVE BEHAVIOR === */
+@media (max-width: 768px) {
+    .form-content,
+    .filters-section,
+    .table-container,
+    .mobile-card {
+        padding: var(--space-4) !important;
+        margin-bottom: var(--space-4) !important;
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .btn,
+    .mobile-btn {
+        width: 100% !important;
+        margin: var(--space-1) 0 !important;
+    }
+
+    .button-group {
+        flex-direction: column !important;
+        gap: var(--space-2) !important;
+    }
+}
+
+/* === FOCUS STATES POUR L'ACCESSIBILITÉ === */
+*:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+}
+
+/* === ANIMATIONS GLOBALES === */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-content,
+.filters-section,
+.table-container,
+.mobile-card {
+    animation: fadeInUp 300ms ease-out;
+}
+
+/* === DARK MODE SUPPORT === */
+@media (prefers-color-scheme: dark) {
+    .form-content,
+    .filters-section,
+    .table-container,
+    .mobile-card {
+        background: var(--gray-800) !important;
+        border-color: var(--gray-600) !important;
+        color: var(--gray-100) !important;
+    }
+
+    .input-field,
+    .textarea-field,
+    .search-input,
+    .filter-select,
+    .mobile-form-input {
+        background: var(--gray-700) !important;
+        border-color: var(--gray-600) !important;
+        color: var(--gray-100) !important;
+    }
+
+    .modern-table th {
+        background: var(--gray-700) !important;
+        color: var(--gray-200) !important;
+    }
+}
+
+/* === PRINT STYLES === */
+@media print {
+    .form-content,
+    .filters-section,
+    .table-container {
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+    }
+
+    .btn,
+    .mobile-btn,
+    .enhanced-action-btn {
+        display: none !important;
+    }
+}

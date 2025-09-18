@@ -1,0 +1,32 @@
+/* src/pages/components/css/demo.css */
+
+.demo-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.demo-table-card {
+    overflow-x: auto;
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.modern-table th,
+.modern-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modern-table th {
+    font-weight: 600;
+    background-color: var(--background-alt);
+}
+
+.modern-table tbody tr:hover {
+    background-color: var(--background-alt);
+}

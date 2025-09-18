@@ -1,0 +1,179 @@
+/* Design Improvements - Corrections des défauts identifiés */
+
+/* Amélioration de l'espacement global */
+.form-wrapper {
+    gap: 1.25rem;
+}
+
+/* Réduction des ombres excessives */
+.mobile-card,
+.enhanced-task-card,
+.form-content,
+.filters-section,
+.table-container {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Amélioration de la lisibilité des textes */
+.enhanced-card-title,
+.mobile-card-title,
+.table-title {
+    font-weight: 600 !important;
+    font-size: 1.25rem !important;
+    line-height: 1.4 !important;
+}
+
+/* Boutons plus cohérents */
+.btn,
+.mobile-btn,
+.enhanced-action-btn {
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    border-radius: 8px !important;
+}
+
+/* Réduction des animations trop prononcées */
+.btn:hover,
+.mobile-btn:hover,
+.enhanced-action-btn:hover {
+    transform: translateY(-1px) !important;
+}
+
+.btn:active,
+.mobile-btn:active,
+.enhanced-action-btn:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Couleurs plus douces pour les éléments actifs */
+.editing-row,
+.mobile-nav-item-enhanced.active {
+    background: rgba(99, 102, 241, 0.05) !important;
+}
+
+/* Espacement amélioré pour les formulaires */
+.input-group,
+.mobile-form-group {
+    margin-bottom: 1.25rem !important;
+}
+
+/* Padding plus cohérent */
+.form-content,
+.filters-section,
+.mobile-card {
+    padding: 1.25rem !important;
+}
+
+/* Amélioration de la hiérarchie visuelle */
+.filters-title,
+.table-title,
+.mobile-card-title {
+    color: #1f2937 !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Bordures plus subtiles */
+.input-field,
+.textarea-field,
+.mobile-form-input,
+.search-input,
+.filter-select {
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+}
+
+.input-field:focus,
+.textarea-field:focus,
+.mobile-form-input:focus,
+.search-input:focus,
+.filter-select:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08) !important;
+}
+
+/* Amélioration des statistiques */
+.stats-section {
+    padding: 1rem !important;
+    background: rgba(99, 102, 241, 0.03) !important;
+    border: 1px solid rgba(99, 102, 241, 0.08) !important;
+}
+
+/* Tableaux plus lisibles */
+.modern-table th {
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+}
+
+.modern-table td {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 1rem 0.75rem !important;
+    }
+
+    .mobile-card,
+    .form-content,
+    .filters-section {
+        margin: 0.5rem 0 !important;
+        padding: 1rem !important;
+    }
+
+    .mobile-btn,
+    .btn {
+        min-height: 44px !important;
+        padding: 0.75rem 1rem !important;
+    }
+}
+
+/* Corrections spécifiques pour les cards */
+.enhanced-content-section {
+    padding: 1rem !important;
+    margin: 1rem !important;
+    border-radius: 8px !important;
+}
+
+.enhanced-actions-section {
+    padding: 1rem !important;
+    background: #f8fafc !important;
+}
+
+/* Amélioration des focus states */
+.btn:focus,
+.mobile-btn:focus,
+.enhanced-action-btn:focus {
+    outline: 2px solid rgba(99, 102, 241, 0.5) !important;
+    outline-offset: 2px !important;
+}
+
+/* Typographie plus cohérente */
+body {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
+
+/* Amélioration des contrastes */
+.text-secondary,
+.mobile-text-secondary,
+.stats-label {
+    color: #6b7280 !important;
+}
+
+/* Réduction des gradients trop agressifs */
+.id-label,
+.mobile-card-icon,
+.enhanced-title-icon {
+    background: #6366f1 !important;
+    background-image: none !important;
+}
+
+/* Amélioration de l'accessibilité */
+.table-action-btn,
+.enhanced-action-btn {
+    min-width: 80px !important;
+    text-align: center !important;
+}
