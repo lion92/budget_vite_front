@@ -3,7 +3,7 @@ import Item from "./Item.jsx";
 import lien from './lien'
 import {Link} from "react-router-dom";
 import {useNotify} from "./Notification";
-import './css/form.css'
+import './css/design-system.css'
 
 export default function Form(props) {
     let [titre, setValue] = useState("");
@@ -559,23 +559,42 @@ export default function Form(props) {
                                             }}
                                         >
                                             <td data-label="Titre">
-                                                <div style={{
-                                                    fontWeight: '600',
-                                                    color: editingItem === item.id ? '#667eea' : '#374151'
+                                                <div className="task-title-mobile" style={{
+                                                    fontWeight: '800',
+                                                    fontSize: '1.3rem',
+                                                    color: editingItem === item.id ? '#8b5cf6' : '#000000',
+                                                    lineHeight: '1.3',
+                                                    marginBottom: '0.5rem',
+                                                    textShadow: '0 1px 2px rgba(0,0,0,0.1)'
                                                 }}>
-                                                    {item.title || 'Sans titre'}
+                                                    📝 {item.title || 'Sans titre'}
                                                 </div>
                                             </td>
                                             <td data-label="Description">
-                                                <div title={item.description} style={{
-                                                    color: '#6b7280',
-                                                    lineHeight: '1.4'
+                                                <div className="task-description-mobile" title={item.description} style={{
+                                                    color: '#1a202c',
+                                                    lineHeight: '1.4',
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: '600',
+                                                    maxWidth: '100%'
                                                 }}>
-                                                    {truncateText(item.description, 60) || 'Aucune description'}
+                                                    {item.description ? (
+                                                        <span style={{ color: '#1a202c' }}>
+                                                            📄 {truncateText(item.description, 100)}
+                                                        </span>
+                                                    ) : (
+                                                        <span style={{ color: '#6b7280', fontStyle: 'italic', fontSize: '1rem' }}>
+                                                            💭 Aucune description fournie
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </td>
-                                            <td data-label="Date" className="table-date">
-                                                {formatDate(item.createdAt)}
+                                            <td data-label="Date" className="table-date" style={{
+                                                fontSize: '1rem',
+                                                fontWeight: '500',
+                                                color: '#374151'
+                                            }}>
+                                                📅 {formatDate(item.createdAt)}
                                             </td>
                                             <td data-label="Actions" className="table-actions">
                                                 <button

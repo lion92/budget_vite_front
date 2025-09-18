@@ -1,17 +1,17 @@
 /* Variables CSS pour cohérence du design */
 :root {
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    --secondary-gradient: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+    --success-gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --danger-gradient: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
 
-    --primary-color: #667eea;
-    --primary-dark: #5a67d8;
-    --secondary-color: #f093fb;
-    --success-color: #4facfe;
-    --warning-color: #43e97b;
-    --danger-color: #fa709a;
+    --primary-color: #4f46e5;
+    --primary-dark: #4338ca;
+    --secondary-color: #6b7280;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
 
     --text-primary: #2d3748;
     --text-secondary: #718096;
@@ -42,18 +42,18 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    line-height: 1.6;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    line-height: 1.5;
     color: var(--text-primary);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     min-height: 100vh;
 }
 
 /* Container principal */
 .form-container {
     min-height: 100vh;
-    padding: 2rem 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1.5rem 1rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
 .form-wrapper {
@@ -68,10 +68,9 @@ body {
 .form-content {
     background: var(--bg-primary);
     border-radius: var(--radius-xl);
-    padding: 2rem;
-    box-shadow: var(--shadow-xl);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     position: relative;
     overflow: hidden;
 }
@@ -148,8 +147,8 @@ body {
 .input-field:focus, .textarea-field:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    transform: none;
 }
 
 .textarea-field {
@@ -205,8 +204,8 @@ body {
 }
 
 .btn-create:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 
 .btn-update {
@@ -216,8 +215,8 @@ body {
 }
 
 .btn-update:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
 }
 
 .btn-cancel {
@@ -227,18 +226,17 @@ body {
 }
 
 .btn-cancel:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
 }
 
 /* Section des filtres */
 .filters-section {
     background: var(--bg-primary);
     border-radius: var(--radius-xl);
-    padding: 2rem;
-    box-shadow: var(--shadow-xl);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .filters-header {
@@ -336,7 +334,7 @@ body {
 .search-input:focus, .filter-select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .filter-select {
@@ -349,9 +347,9 @@ body {
     gap: 2rem;
     flex-wrap: wrap;
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(99, 102, 241, 0.08) 100%);
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(79, 70, 229, 0.15);
 }
 
 .stats-item {
@@ -389,9 +387,8 @@ body {
     background: var(--bg-primary);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: var(--shadow-xl);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .table-wrapper {
@@ -468,12 +465,12 @@ body {
 }
 
 .modern-table tbody tr:hover {
-    background: rgba(102, 126, 234, 0.05);
-    transform: scale(1.01);
+    background: rgba(79, 70, 229, 0.03);
+    transform: none;
 }
 
 .editing-row {
-    background: rgba(102, 126, 234, 0.1) !important;
+    background: rgba(79, 70, 229, 0.08) !important;
     border-left: 4px solid var(--primary-color);
 }
 
@@ -521,7 +518,7 @@ body {
     padding: 3rem;
     color: var(--text-secondary);
     font-style: italic;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.03) 0%, rgba(99, 102, 241, 0.03) 100%);
 }
 
 /* Pagination */
@@ -640,7 +637,7 @@ body {
     .form-container {
         padding: 1rem;
         min-height: 100vh;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     }
 
     .form-wrapper {
@@ -648,9 +645,72 @@ body {
     }
 
     .form-content, .filters-section, .table-container {
-        padding: 1rem;
+        padding: 1.5rem;
         margin: 0 0.5rem;
         border-radius: var(--radius-md);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Amélioration MAJEURE de la lisibilité mobile pour le tableau */
+    .modern-table td[data-label="Titre"] {
+        font-size: 1.4rem !important;
+        font-weight: 800 !important;
+        line-height: 1.3 !important;
+        padding-top: 3rem !important;
+        padding-bottom: 0.75rem !important;
+        padding-left: 1rem !important;
+        color: #000000 !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        min-height: 80px !important;
+    }
+
+    .modern-table td[data-label="Description"] {
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        line-height: 1.4 !important;
+        padding-top: 3rem !important;
+        padding-bottom: 1.25rem !important;
+        padding-left: 1rem !important;
+        color: #1a202c !important;
+        min-height: 80px !important;
+    }
+
+    .modern-table td[data-label="Date"] {
+        padding-top: 3rem !important;
+        padding-left: 1rem !important;
+        min-height: 70px !important;
+    }
+
+    .modern-table td[data-label="Actions"] {
+        padding-top: 3rem !important;
+        padding-left: 1rem !important;
+    }
+
+    .mobile-table-card-title {
+        font-size: 1.25rem !important;
+        font-weight: 800 !important;
+        color: #1a202c !important;
+        line-height: 1.3 !important;
+        margin-bottom: 1rem !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-table-card-content {
+        background: #fafafa;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .mobile-table-card-row {
+        margin-bottom: 1rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .mobile-table-card-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
     }
 
     /* Formulaires mobiles optimisés */
@@ -669,7 +729,7 @@ body {
 
     .input-field:focus, .textarea-field:focus {
         border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
         transform: none; /* Supprime le déplacement qui peut gêner sur mobile */
     }
 
@@ -710,16 +770,17 @@ body {
     }
 
     .table-title {
-        font-size: 1.25rem;
+        font-size: 1.4rem;
+        font-weight: 800;
     }
 
     .modern-table {
-        font-size: 0.875rem;
+        font-size: 1rem;
     }
 
     .modern-table th,
     .modern-table td {
-        padding: 0.75rem 0.5rem;
+        padding: 1.25rem 0.75rem;
     }
 
     .table-action-btn {
@@ -838,6 +899,41 @@ body {
         font-size: 0.8rem;
     }
 
+    /* Amélioration DRASTIQUE pour les titres et descriptions sur très petits écrans */
+    .modern-table td[data-label="Titre"] {
+        font-size: 1.3rem !important;
+        font-weight: 800 !important;
+        line-height: 1.3 !important;
+        padding-top: 3rem !important;
+        padding-bottom: 0.75rem !important;
+        padding-left: 1rem !important;
+        color: #000000 !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        min-height: 80px !important;
+    }
+
+    .modern-table td[data-label="Description"] {
+        font-size: 1.05rem !important;
+        font-weight: 600 !important;
+        line-height: 1.4 !important;
+        padding-top: 3rem !important;
+        padding-bottom: 1.25rem !important;
+        padding-left: 1rem !important;
+        color: #1a202c !important;
+        min-height: 80px !important;
+    }
+
+    .modern-table td[data-label="Date"] {
+        padding-top: 3rem !important;
+        padding-left: 1rem !important;
+        min-height: 70px !important;
+    }
+
+    .modern-table td[data-label="Actions"] {
+        padding-top: 3rem !important;
+        padding-left: 1rem !important;
+    }
+
     /* Table en mode carte pour très petits écrans */
     .modern-table,
     .modern-table thead,
@@ -856,11 +952,11 @@ body {
 
     .modern-table tr {
         border: 2px solid var(--bg-tertiary);
-        border-radius: var(--radius-md);
-        margin-bottom: 1rem;
-        padding: 1rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 1.5rem;
+        padding: 1.25rem;
         background: var(--bg-primary);
-        box-shadow: var(--shadow-sm);
+        box-shadow: var(--shadow-md);
         transition: var(--transition);
     }
 
@@ -873,12 +969,13 @@ body {
         border: none;
         border-bottom: 1px solid var(--bg-tertiary);
         position: relative;
-        padding-left: 50%;
-        padding-right: 0.75rem;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        font-size: 0.875rem;
+        padding-left: 55%;
+        padding-right: 1rem;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+        font-size: 1.1rem;
         line-height: 1.4;
+        min-height: 70px;
     }
 
     .modern-table td:last-child {
@@ -888,15 +985,21 @@ body {
     .modern-table td:before {
         content: attr(data-label) ": ";
         position: absolute;
-        left: 8px;
-        width: 45%;
-        padding-right: 8px;
+        left: 12px;
+        top: 12px;
+        width: 90%;
+        padding-right: 12px;
         white-space: nowrap;
-        font-weight: 600;
-        color: var(--text-primary);
-        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        font-size: 0.9rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        line-height: 1.2;
+        background: rgba(79, 70, 229, 0.08);
+        padding: 8px 12px;
+        border-radius: 6px;
+        border-left: 3px solid var(--primary-color);
     }
 
     .table-actions {
@@ -912,14 +1015,18 @@ body {
     .table-action-btn {
         display: inline-block;
         width: 48%;
-        margin: 0.25rem 1%;
-        padding: 0.75rem 0.5rem;
-        font-size: 0.75rem;
+        margin: 0.5rem 1%;
+        padding: 1rem 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        min-height: 48px;
+        border-radius: var(--radius-md);
     }
 
-    /* Titres compacts */
+    /* Titres plus gros pour très petits écrans */
     .table-title, .filters-title {
-        font-size: 1.125rem;
+        font-size: 1.3rem;
+        font-weight: 800;
     }
 
     /* ID label compact */
