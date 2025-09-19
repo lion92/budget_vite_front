@@ -189,7 +189,26 @@ body {
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-md);
+}
+
+.input-group label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.input-group label::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0.6;
 }
 
 .input-group label {
@@ -1155,9 +1174,9 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1182,9 +1201,13 @@ body {
 }
 
 .modal-content.expense-form-modal {
-    max-width: 98vw;
-    width: 1000px;
-    min-width: 800px;
+    max-width: 95vw;
+    width: 1200px;
+    min-width: 900px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-content.category-modal {
@@ -1270,30 +1293,55 @@ body {
 
 /* === FORMULAIRES === */
 .form-depense, .expense-form {
-    padding: var(--space-xl);
     background: var(--bg-primary);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 100%;
 }
 
 .form-rows {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
-    margin-bottom: var(--space-2xl);
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-3xl);
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: var(--space-sm);
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--bg-secondary);
+}
+
+.form-rows::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-rows::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+}
+
+.form-rows::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: var(--radius-sm);
+}
+
+.form-rows::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
 }
 
 .depense-row, .expense-row {
-    background: var(--bg-secondary);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    border: 2px solid var(--border-light);
-    display: grid;
-    grid-template-columns: 2fr 1.5fr 1.5fr 1fr auto;
-    gap: var(--space-lg);
-    align-items: center;
+    background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    border: 3px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
     transition: all 0.3s ease;
     position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: var(--space-lg);
 }
 
 .depense-row:hover, .expense-row:hover {
@@ -1318,22 +1366,33 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--space-lg);
-    grid-column: 1 / -1;
+    padding-bottom: var(--space-md);
+    border-bottom: 2px solid var(--border-light);
 }
 
 .row-number {
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.1rem;
     color: var(--text-primary);
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.row-number::before {
+    content: '💰';
+    font-size: 1.2rem;
+    margin-right: var(--space-xs);
 }
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--space-lg);
+    grid-template-columns: 2fr 1fr 1.5fr 1fr;
+    gap: var(--space-xl);
     align-items: end;
 }
 
@@ -1343,15 +1402,16 @@ body {
 .form-grid input,
 .form-grid select {
     width: 100%;
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-lg) var(--space-xl);
     border: 2px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: var(--bg-primary);
     color: var(--text-primary);
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 500;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    min-height: 48px;
 }
 
 .depense-row input:focus,
@@ -1394,13 +1454,14 @@ body {
 
 /* === OPTIONS RÉCURRENTES AMÉLIORÉES === */
 .recurrente-options {
-    margin-top: var(--space-xl);
-    padding: var(--space-xl);
-    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
-    border-radius: var(--radius-lg);
-    border: 2px solid var(--primary);
+    margin-top: var(--space-2xl);
+    padding: var(--space-2xl);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, var(--bg-tertiary) 100%);
+    border-radius: var(--radius-xl);
+    border: 3px solid var(--primary);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
 }
 
 .recurrente-options::before {
@@ -1413,14 +1474,50 @@ body {
     background: var(--gradient-primary);
 }
 
-.recurrente-options label {
+.recurrente-options > label {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    font-weight: 600;
+    gap: var(--space-lg);
+    font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: var(--space-lg);
-    font-size: 1.05rem;
+    margin-bottom: var(--space-xl);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.recurrente-options > label:hover {
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.recurrente-options > label span {
+    position: relative;
+}
+
+.recurrente-options > label span::before {
+    content: '🔄';
+    margin-right: var(--space-sm);
+    font-size: 1.2rem;
+}
+
+.recurrence-config {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-left: var(--space-2xl);
+    padding: var(--space-lg);
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border);
+    animation: slideInDown 0.3s ease;
+}
+
+.recurrence-config label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    white-space: nowrap;
 }
 
 .recurrente-options input[type="checkbox"] {
@@ -1455,15 +1552,21 @@ body {
     align-items: center;
     flex-wrap: wrap;
     gap: var(--space-xl);
-    margin-top: var(--space-2xl);
-    padding-top: var(--space-xl);
-    border-top: 2px solid var(--border-light);
+    margin-top: var(--space-3xl);
+    padding: var(--space-2xl);
+    background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border-radius: var(--radius-xl);
+    border: 2px solid var(--border-light);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .action-buttons {
     display: flex;
-    gap: var(--space-lg);
+    gap: var(--space-xl);
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 /* === BOUTONS D'ACTION PRINCIPAUX === */
@@ -1640,6 +1743,38 @@ body {
         width: 95vw;
         min-width: auto;
         max-width: 95vw;
+        max-height: 85vh;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: var(--space-md);
+        width: 100%;
+    }
+
+    .action-buttons button {
+        width: 100%;
+        min-height: 50px;
+    }
+
+    .form-rows {
+        max-height: 50vh;
+    }
+
+    .expense-row {
+        padding: var(--space-lg);
+    }
+
+    .recurrence-config {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-md);
+        margin-left: 0;
     }
 
     .modal-content.category-modal {
@@ -1685,7 +1820,7 @@ body {
     /* Modales sur très petits écrans */
     .modal-content {
         width: 98vw;
-        max-height: 90vh;
+        max-height: 95vh;
         border-radius: var(--radius-lg);
     }
 
@@ -1693,7 +1828,34 @@ body {
     .modal-content.category-modal,
     .modal-content.revenue-form-modal {
         width: 98vw;
-        max-height: 90vh;
+        max-height: 95vh;
+    }
+
+    .form-actions {
+        padding: var(--space-lg);
+        margin-top: var(--space-xl);
+    }
+
+    .modal-body {
+        padding: var(--space-md);
+    }
+
+    .expense-row {
+        padding: var(--space-md);
+        margin-bottom: var(--space-sm);
+    }
+
+    .recurrente-options {
+        padding: var(--space-lg);
+        margin-top: var(--space-lg);
+    }
+
+    .row-number {
+        font-size: 1rem;
+    }
+
+    .input-group label {
+        font-size: 0.9rem;
     }
 
     .modal-overlay {
