@@ -33,15 +33,20 @@
 /* Mode sombre - Description spécifique */
 [data-theme="dark"] .enhanced-expense-table .description,
 .dark-mode .enhanced-expense-table .description {
-    color: #f8fafc !important;
-    background: rgba(30, 41, 59, 0.7) !important;
-    border-left-color: #64748b;
+    color: #C4B5FD !important;
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.12), rgba(196, 181, 253, 0.20)) !important;
+    border-left-color: #C4B5FD !important;
+    border-color: rgba(196, 181, 253, 0.3) !important;
+    box-shadow: 0 2px 4px rgba(196, 181, 253, 0.15) !important;
 }
 
 [data-theme="dark"] .enhanced-expense-table .description:hover,
 .dark-mode .enhanced-expense-table .description:hover {
-    background: rgba(30, 41, 59, 0.9) !important;
-    border-left-color: var(--table-primary);
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.20), rgba(196, 181, 253, 0.35)) !important;
+    border-left-color: #C4B5FD !important;
+    border-color: rgba(196, 181, 253, 0.5) !important;
+    box-shadow: 0 4px 8px rgba(196, 181, 253, 0.25) !important;
+    color: #DDD6FE !important;
 }
 
 [data-theme="dark"] .enhanced-expense-table .description-col,
@@ -353,6 +358,12 @@
     text-align: center;
     border-bottom: 1px solid var(--table-border);
     vertical-align: middle;
+    color: #000000;
+}
+
+[data-theme="dark"] .enhanced-expense-table .expense-table td,
+.dark-mode .enhanced-expense-table .expense-table td {
+    color: #ffffff !important;
 }
 
 /* Alignement spécifique par colonne */
@@ -476,7 +487,8 @@
     max-width: 220px;
     min-width: 180px;
     text-align: left;
-    background: rgba(51, 65, 85, 0.02);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.03), rgba(124, 58, 237, 0.08));
+    border-left: 2px solid rgba(124, 58, 237, 0.1);
 }
 
 .description {
@@ -486,17 +498,22 @@
     text-overflow: ellipsis;
     font-weight: 600;
     padding: 0.5rem;
-    color: #1f2937;
-    background: rgba(255, 255, 255, 0.7);
+    color: #7C3AED;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.15));
     border-radius: 0.4rem;
-    border-left: 3px solid var(--table-text-muted);
+    border-left: 3px solid #7C3AED;
+    border: 1px solid rgba(124, 58, 237, 0.2);
     transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.1);
 }
 
 .description:hover {
-    background: rgba(255, 255, 255, 0.9);
-    border-left-color: var(--table-primary);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(124, 58, 237, 0.25));
+    border-left-color: #7C3AED;
+    border-color: rgba(124, 58, 237, 0.4);
     transform: translateX(2px);
+    box-shadow: 0 4px 8px rgba(124, 58, 237, 0.2);
+    color: #6D28D9;
 }
 
 .category-col {
@@ -698,10 +715,16 @@
 }
 
 .card-description {
-    font-weight: 500;
-    color: var(--table-text);
+    font-weight: 600;
+    color: #7C3AED;
     margin-bottom: 0.75rem;
     line-height: 1.5;
+    padding: 0.5rem;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.15));
+    border-radius: 0.4rem;
+    border-left: 3px solid #7C3AED;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.1);
 }
 
 .card-category {

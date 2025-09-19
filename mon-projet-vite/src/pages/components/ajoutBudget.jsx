@@ -132,7 +132,7 @@ function AjoutBudget() {
                 <ul>
                     {listDesDepense.map((expense, index) => (
                         <li key={index}>
-                            {expense.description} - {expense.categorie} : {expense.montant}€ le {expense.dateTransaction}
+                            <span style={{ color: '#7C3AED', fontWeight: '600', background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.15))', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(124, 58, 237, 0.2)' }}>{expense.description}</span> - {expense.categorie} : {expense.montant}€ le {expense.dateTransaction}
                         </li>
                     ))}
                 </ul>

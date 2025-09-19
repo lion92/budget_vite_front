@@ -8,6 +8,7 @@ export default defineConfig({
     sourcemap: true
   },
   server: {
+    port: 3001,
     sourcemapIgnoreList: false
   }
 })

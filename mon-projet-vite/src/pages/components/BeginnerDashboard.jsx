@@ -288,7 +288,7 @@ const OverviewView = ({
                             {recentExpenses.map((expense, index) => (
                                 <div key={index} className="expense-item">
                                     <div className="expense-info">
-                                        <span className="expense-description">
+                                        <span className="expense-description" style={{ color: '#7C3AED', fontWeight: '600', background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.15))', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(124, 58, 237, 0.2)', boxShadow: '0 2px 4px rgba(124, 58, 237, 0.1)' }}>
                                             {expense.description || expense.category}
                                         </span>
                                         <span className="expense-date">

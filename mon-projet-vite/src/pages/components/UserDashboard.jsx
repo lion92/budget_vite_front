@@ -91,7 +91,7 @@ const UserDashboard = () => {
                 {dashboardData.recentExpenses.length > 0 ? (
                   dashboardData.recentExpenses.map((expense, index) => (
                     <div key={index} className="expense-item">
-                      <span className="expense-description">{expense.description}</span>
+                      <span className="expense-description" style={{ color: '#7C3AED', fontWeight: '600', background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.15))', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', border: '1px solid rgba(124, 58, 237, 0.2)', boxShadow: '0 2px 4px rgba(124, 58, 237, 0.1)' }}>{expense.description}</span>
                       <span className="expense-amount">{expense.amount}€</span>
                       <span className="expense-date">
                         {new Date(expense.date).toLocaleDateString()}
