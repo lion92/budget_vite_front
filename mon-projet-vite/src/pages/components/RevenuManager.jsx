@@ -157,7 +157,7 @@ const RevenueManager = ({ onClose }) => {
                 <tbody>
                 {(revenus || []).map(rev => (
                     <tr key={rev.id}>
-                        <td>{rev.name}</td>
+                        <td style={{ color: '#16a34a', fontWeight: '500' }}>{rev.name}</td>
                         <td>{rev.amount} €</td>
                         <td>{new Date(rev.date).toLocaleDateString("fr-FR")}</td>
                         <td>

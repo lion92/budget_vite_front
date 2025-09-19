@@ -248,7 +248,7 @@ const ExpenseTable = () => {
                         placeholder="Description"
                     />
                 ) : (
-                    <div className="description-cell" title={getValue()}>
+                    <div className="description-cell" title={getValue()} style={{ color: '#7C3AED', fontWeight: '600' }}>
                         {getValue()}
                     </div>
                 );

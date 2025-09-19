@@ -430,7 +430,7 @@ const EnhancedExpenseTable = () => {
                                                         className="edit-input"
                                                     />
                                                 ) : (
-                                                    <span className="description" title={expense.description}>
+                                                    <span className="description" title={expense.description} style={{ color: '#7C3AED', fontWeight: '600' }}>
                                                         {expense.description}
                                                     </span>
                                                 )}
@@ -527,7 +527,7 @@ const EnhancedExpenseTable = () => {
                                         <div className="card-amount">{formatCurrency(expense.montant)}</div>
                                     </div>
                                     <div className="card-body">
-                                        <div className="card-description">{expense.description}</div>
+                                        <div className="card-description" style={{ color: '#7C3AED', fontWeight: '600' }}>{expense.description}</div>
                                         <div className="card-category">
                                             <span
                                                 className="category-badge"
