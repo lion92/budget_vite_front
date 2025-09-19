@@ -96,71 +96,124 @@ export function Depenses() {
 
             {showDepenseForm && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
-                        <form onSubmit={handleCreate} className="form-depense">
-                            {depensesForm.map((dep, index) => (
-                                <div key={index} className="depense-row">
-                                    <input placeholder="Description" value={dep.description}
-                                           onChange={(e) => updateDepenseField(index, "description", e.target.value)}/>
-                                    <input
-                                        type="text"
-                                        inputMode="decimal"
-                                        placeholder="Montant (ex: 12.34)"
-                                        value={dep.montant}
-                                        onChange={(e) => {
-                                            const val = e.target.value;
-                                            // Autorise nombre avec max 2 décimales
-                                            if (/^\d*(\.\d{0,2})?$/.test(val)) {
-                                                updateDepenseField(index, "montant", val);
-                                            }
-                                        }}
-                                        onBlur={(e) => {
-                                            const val = parseFloat(e.target.value);
-                                            updateDepenseField(index, "montant", isNaN(val) ? "0.00" : val.toFixed(2));
-                                        }}
-                                    />
-                                    <select value={dep.categorie}
-                                            onChange={(e) => updateDepenseField(index, "categorie", e.target.value)}>
-                                        <option value="">-- Choisir catégorie --</option>
-                                        {categories?.map(c => <option key={c.id} value={c.id}>{c.categorie}</option>)}
-                                    </select>
-                                    <DatePicker selected={dep.date}
-                                                onChange={(date) => updateDepenseField(index, "date", date)}
-                                                dateFormat="dd/MM/yyyy"/>
-                                    {depensesForm.length > 1 &&
-                                        <button type="button" onClick={() => removeLigneDepense(index)}>❌</button>}
+                    <div className="modal-content expense-form-modal">
+                        <div className="modal-header">
+                            <h3>💰 Ajouter des dépenses</h3>
+                            <button type="button" className="close-btn" onClick={() => setShowDepenseForm(false)}>✕</button>
+                        </div>
+                        <div className="modal-body">
+                            <form onSubmit={handleCreate} className="expense-form">
+                                <div className="form-rows">
+                                    {depensesForm.map((dep, index) => (
+                                        <div key={index} className="expense-row">
+                                            <div className="row-header">
+                                                <span className="row-number">Dépense #{index + 1}</span>
+                                                {depensesForm.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn-danger btn-sm"
+                                                        onClick={() => removeLigneDepense(index)}
+                                                        title="Supprimer cette ligne"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                )}
+                                            </div>
+                                            <div className="form-grid">
+                                                <div className="input-group">
+                                                    <label>Description</label>
+                                                    <input
+                                                        placeholder="Description de la dépense"
+                                                        value={dep.description}
+                                                        onChange={(e) => updateDepenseField(index, "description", e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="input-group">
+                                                    <label>Montant (€)</label>
+                                                    <input
+                                                        type="text"
+                                                        inputMode="decimal"
+                                                        placeholder="0.00"
+                                                        value={dep.montant}
+                                                        onChange={(e) => {
+                                                            const val = e.target.value;
+                                                            if (/^\d*(\.\d{0,2})?$/.test(val)) {
+                                                                updateDepenseField(index, "montant", val);
+                                                            }
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            const val = parseFloat(e.target.value);
+                                                            updateDepenseField(index, "montant", isNaN(val) ? "0.00" : val.toFixed(2));
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="input-group">
+                                                    <label>Catégorie</label>
+                                                    <select
+                                                        value={dep.categorie}
+                                                        onChange={(e) => updateDepenseField(index, "categorie", e.target.value)}
+                                                    >
+                                                        <option value="">-- Choisir une catégorie --</option>
+                                                        {categories?.map(c => <option key={c.id} value={c.id}>{c.categorie}</option>)}
+                                                    </select>
+                                                </div>
+                                                <div className="input-group">
+                                                    <label>Date</label>
+                                                    <DatePicker
+                                                        selected={dep.date}
+                                                        onChange={(date) => updateDepenseField(index, "date", date)}
+                                                        dateFormat="dd/MM/yyyy"
+                                                        placeholderText="Sélectionner une date"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
 
-                            <div className="recurrente-options">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={isRecurrent}
-                                        onChange={(e) => setIsRecurrent(e.target.checked)}
-                                    />
-                                    Dépense récurrente
-                                </label>
-                                {isRecurrent && (
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max="24"
-                                        value={recurrenceMonths}
-                                        onChange={(e) => {
-                                            const val = parseInt(e.target.value, 10);
-                                            setRecurrenceMonths((!isNaN(val) && val > 0) ? val : 1);
-                                        }}
-                                        placeholder="Nombre de mois"
-                                    />
-                                )}
+                                <div className="recurrente-options">
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            checked={isRecurrent}
+                                            onChange={(e) => setIsRecurrent(e.target.checked)}
+                                        />
+                                        <span>Dépense récurrente</span>
+                                    </label>
+                                    {isRecurrent && (
+                                        <div className="recurrence-config">
+                                            <label htmlFor="recurrence-months">Nombre de mois :</label>
+                                            <input
+                                                id="recurrence-months"
+                                                type="number"
+                                                min="1"
+                                                max="24"
+                                                value={recurrenceMonths}
+                                                onChange={(e) => {
+                                                    const val = parseInt(e.target.value, 10);
+                                                    setRecurrenceMonths((!isNaN(val) && val > 0) ? val : 1);
+                                                }}
+                                                placeholder="Nombre de mois"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
 
-                            </div>
-
-                            <button type="button" onClick={addLigneDepense}>+ Ajouter une ligne</button>
-                            <button type="submit">Enregistrer les dépenses</button>
-                            <button type="button" onClick={() => setShowDepenseForm(false)}>Fermer</button>
-                        </form>
+                                <div className="form-actions">
+                                    <div className="action-buttons">
+                                        <button type="button" className="btn-success" onClick={addLigneDepense}>
+                                            ➕ Ajouter une ligne
+                                        </button>
+                                        <button type="submit" className="btn-primary btn-lg">
+                                            💾 Enregistrer les dépenses
+                                        </button>
+                                        <button type="button" className="btn-secondary" onClick={() => setShowDepenseForm(false)}>
+                                            ❌ Annuler
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             )}
