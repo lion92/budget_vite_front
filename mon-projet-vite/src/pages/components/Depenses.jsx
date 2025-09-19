@@ -92,9 +92,6 @@ export function Depenses() {
                 <button onClick={() => setShowImportModal(true)} className="btn-import">
                     <Upload /> Importer des données
                 </button>
-                <button onClick={() => setShowExpenseTable(true)} className="btn-table">
-                    <Table /> Voir le tableau des dépenses
-                </button>
             </div>
 
             {showDepenseForm && (
