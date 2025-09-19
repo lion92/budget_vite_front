@@ -29,38 +29,93 @@ export default function ItemCategorie(props) {
         changecategorie(categorie);
         changeBudgetDebutMois(budgetDebutMois);
         changeColor(color);
-        changeIcon(iconName); // ✅ ajoute l'icône sélectionnée au formulaire
+        changeIcon(iconName);
     };
 
     const handleDelete = (e) => {
-        e.stopPropagation(); // empêche le clic de remonter à la carte
-        del(e, id);
+        e.stopPropagation();
+        if (window.confirm(`Êtes-vous sûr de vouloir supprimer la catégorie "${categorie}" ?`)) {
+            del(e, id);
+        }
+    };
+
+    const formatBudget = (budget) => {
+        return budget ? `${parseFloat(budget).toLocaleString('fr-FR')} €` : "Non défini";
+    };
+
+    const getMonthYear = () => {
+        if (month && annee) {
+            return `${month} ${annee}`;
+        } else if (annee) {
+            return `Année ${annee}`;
+        }
+        return "Non spécifié";
     };
 
     return (
-        <div
-            className="card"
-            style={{ height: "420px", boxShadow: "7px 7px 7px black"}}
-            onClick={handleClick}
-        >
-            <div style={{backgroundColor:color, height:'1em', width:'1em'}}></div>
-            {/* ✅ Affichage de l'icône */}
-            {iconName && (
-                <div style={{ fontSize: 32, marginBottom: 10, color:'black' }}>
-                    <i className={iconName}></i>
+        <div className="category-item-card" onClick={handleClick}>
+            {/* Header avec couleur et icône */}
+            <div className="category-header">
+                <div
+                    className="category-color-indicator"
+                    style={{ backgroundColor: color }}
+                    title={`Couleur: ${color}`}
+                ></div>
+                {iconName && (
+                    <div className="category-icon" style={{ color: color }}>
+                        <i className={iconName}></i>
+                    </div>
+                )}
+            </div>
+
+            {/* Contenu principal */}
+            <div className="category-content">
+                <h3 className="category-name" title={categorie}>
+                    {categorie}
+                </h3>
+
+                <div className="category-details">
+                    <div className="detail-item">
+                        <span className="detail-label">📅 Période</span>
+                        <span className="detail-value">{getMonthYear()}</span>
+                    </div>
+
+                    <div className="detail-item">
+                        <span className="detail-label">💰 Budget</span>
+                        <span className="detail-value">{formatBudget(budgetDebutMois)}</span>
+                    </div>
+
+                    {title && (
+                        <div className="detail-item">
+                            <span className="detail-label">📝 Description</span>
+                            <span className="detail-value" title={title}>{title}</span>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
 
-            <h1 style={{ color: "black" }}>{title}</h1>
-            <h2 style={{ color: "black" }}>{color}</h2>
-            <p style={{ color: "blue" }}>{categorie}</p>
-            <p>Mois : {month}</p>
-            <p>Année : {annee}</p>
-            <p>Budget du mois : {budgetDebutMois}</p>
+            {/* Actions */}
+            <div className="category-actions">
+                <button
+                    className="edit-btn"
+                    onClick={handleClick}
+                    title="Modifier cette catégorie"
+                >
+                    ✏️ Modifier
+                </button>
+                <button
+                    className="delete-btn"
+                    onClick={handleDelete}
+                    title="Supprimer cette catégorie"
+                >
+                    🗑️ Supprimer
+                </button>
+            </div>
 
-            <button style={{display:"flex", height:'2em', alignItems:"center",justifyContent:'center', position:"absolute", bottom:'0'}} onClick={handleDelete}>
-                Supprimer
-            </button>
+            {/* Indicateur de sélection */}
+            <div className="selection-indicator">
+                <span>Cliquer pour modifier</span>
+            </div>
         </div>
     );
 }
