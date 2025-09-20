@@ -166,17 +166,19 @@ const Helloword = () => {
                                     </button>
                                 </div>
                             )}
-                            <iframe
-                                src="https://www.youtube.com/embed/9tD9YjPbvWI?si=QD8w4Ch03S2PwE1Q&rel=0&modestbranding=1&showinfo=0&enablejsapi=1"
-                                title="Démonstration Budget Manager"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerPolicy="strict-origin-when-cross-origin"
-                                allowFullScreen
-                                loading="lazy"
-                                onLoad={handleVideoLoad}
-                                onError={handleVideoError}
-                            ></iframe>
+                            <iframe width="560" height="315"
+                                    src="https://www.youtube.com/embed/2lio7fXO2vk?si=0LJOBKnpIoP_QYwo"
+                                    title="YouTube video player" frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin" allowFullScreen
+                                    onLoad={() => {
+                                        setIsVideoLoaded(true);
+                                        setVideoError(false);
+                                    }}
+                                    onError={() => {
+                                        setVideoError(true);
+                                        setIsVideoLoaded(false);
+                                    }}></iframe>
                         </div>
                     </div>
 

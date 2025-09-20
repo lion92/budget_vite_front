@@ -1,5 +1,55 @@
 /* Categories CSS - Version optimisée pour les contrastes et visibilité */
 
+/* Styles pour l'indicateur de modification */
+.editing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #fef3c7, #fbbf24);
+    border: 1px solid #f59e0b;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    animation: fadeInUp 0.3s ease-out;
+}
+
+.editing-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #92400e;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.cancel-edit-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-edit-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Variables spécifiques aux catégories avec contrastes améliorés */
 .categorie-wrapper {
     /* Variables locales héritées du thème global */

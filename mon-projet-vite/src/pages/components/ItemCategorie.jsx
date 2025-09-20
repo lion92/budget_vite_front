@@ -98,7 +98,13 @@ export default function ItemCategorie(props) {
             <div className="category-actions">
                 <button
                     className="edit-btn"
-                    onClick={handleClick}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleClick();
+                        // Passer automatiquement à l'onglet de création/modification
+                        const event = new CustomEvent('switchToCreateTab');
+                        window.dispatchEvent(event);
+                    }}
                     title="Modifier cette catégorie"
                 >
                     ✏️ Modifier
