@@ -158,11 +158,11 @@ const EnhancedExpenseTable = () => {
 
     // Gestion de l'édition
     const handleEdit = useCallback((expense) => {
-        const foundCategory = categories.find(c => c.categorie === expense.categorie);
+        const foundCategory = categories.find(c => c.id === expense.categorie || c.categorie === expense.categorie);
         setEditData({
             montant: expense.montant,
             description: expense.description,
-            categorie: foundCategory?.id || "",
+            categorie: foundCategory?.id || expense.categorie || "",
             dateTransaction: expense.dateTransaction.split("T")[0],
         });
         setEditingId(expense.id);
@@ -418,7 +418,9 @@ const EnhancedExpenseTable = () => {
                                                         className="edit-input"
                                                     />
                                                 ) : (
-                                                    <span className="amount">{formatCurrency(expense.montant)}</span>
+                                                    <span className={`amount ${Number(expense.montant) >= 0 ? 'positive' : 'negative'}`}>
+                                                        {formatCurrency(expense.montant)}
+                                                    </span>
                                                 )}
                                             </td>
                                             <td className="description-col">
@@ -430,7 +432,7 @@ const EnhancedExpenseTable = () => {
                                                         className="edit-input"
                                                     />
                                                 ) : (
-                                                    <span className="description" title={expense.description} style={{ color: '#7C3AED', fontWeight: '600' }}>
+                                                    <span className="description" title={expense.description}>
                                                         {expense.description}
                                                     </span>
                                                 )}
@@ -524,10 +526,12 @@ const EnhancedExpenseTable = () => {
                                 <div key={expense.id} className="expense-card">
                                     <div className="card-header">
                                         <div className="card-id">#{expense.id}</div>
-                                        <div className="card-amount">{formatCurrency(expense.montant)}</div>
+                                        <div className={`card-amount ${Number(expense.montant) >= 0 ? 'positive' : 'negative'}`}>
+                                            {formatCurrency(expense.montant)}
+                                        </div>
                                     </div>
                                     <div className="card-body">
-                                        <div className="card-description" style={{ color: '#7C3AED', fontWeight: '600' }}>{expense.description}</div>
+                                        <div className="card-description">{expense.description}</div>
                                         <div className="card-category">
                                             <span
                                                 className="category-badge"

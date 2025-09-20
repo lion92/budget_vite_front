@@ -150,9 +150,10 @@ const MonthlyExpensesByCategory = () => {
         }}>
             <h2 style={{
                 fontSize: 18,
-                color: isDarkMode ? "#f0f6fc" : "blueviolet",
+                color: isDarkMode ? "#f0f6fc" : "#000000",
                 textAlign: "center",
-                marginBottom: "16px"
+                marginBottom: "16px",
+                fontWeight: "bold"
             }}>Dépenses mensuelles par catégorie</h2>
 
             {isLoading ? (
@@ -168,8 +169,8 @@ const MonthlyExpensesByCategory = () => {
                     }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
                             <h3 style={{
-                                fontWeight: "600",
-                                color: isDarkMode ? "#f0f6fc" : "#0f172a"
+                                fontWeight: "700",
+                                color: isDarkMode ? "#f0f6fc" : "#000000"
                             }}>Filtrer par catégorie</h3>
                             <div style={{ display: "flex", gap: "8px" }}>
                                 <button
@@ -296,9 +297,9 @@ const MonthlyExpensesByCategory = () => {
                         backgroundColor: isDarkMode ? "#0d1117" : "transparent"
                     }}>
                         <h3 style={{
-                            fontWeight: "600",
+                            fontWeight: "700",
                             marginBottom: "8px",
-                            color: isDarkMode ? "#f0f6fc" : "#0f172a"
+                            color: isDarkMode ? "#f0f6fc" : "#000000"
                         }}>Légende des couleurs</h3>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                             {allCategories.map(category => (
@@ -324,7 +325,8 @@ const MonthlyExpensesByCategory = () => {
                                         }}
                                     ></div>
                                     <span style={{
-                                        color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                        color: isDarkMode ? "#c9d1d9" : "#000000",
+                                        fontWeight: "600"
                                     }}>{category}</span>
                                 </div>
                             ))}
@@ -340,9 +342,9 @@ const MonthlyExpensesByCategory = () => {
                             backgroundColor: isDarkMode ? "#0d1117" : "transparent"
                         }}>
                             <h3 style={{
-                                fontWeight: "600",
+                                fontWeight: "700",
                                 marginBottom: "8px",
-                                color: isDarkMode ? "#f0f6fc" : "#0f172a"
+                                color: isDarkMode ? "#f0f6fc" : "#000000"
                             }}>Résumé par mois</h3>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "16px" }}>
                                 {months.map(month => {
@@ -356,12 +358,14 @@ const MonthlyExpensesByCategory = () => {
                                         }}>
                                             <h4 style={{
                                                 marginBottom: "8px",
-                                                color: isDarkMode ? "#f0f6fc" : "black"
+                                                color: isDarkMode ? "#f0f6fc" : "#000000",
+                                                fontWeight: "700"
                                             }}>{month}</h4>
                                             <p style={{
                                                 fontWeight: "bold",
                                                 marginBottom: "8px",
-                                                color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                                color: isDarkMode ? "#c9d1d9" : "#000000",
+                                                fontSize: "16px"
                                             }}>Total: {Number(total).toFixed(2)} €</p>
                                             <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
                                                 {Object.entries(monthCategories)
@@ -379,11 +383,13 @@ const MonthlyExpensesByCategory = () => {
                                                                     }}
                                                                 ></div>
                                                                 <span style={{
-                                                                    color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                                                    color: isDarkMode ? "#c9d1d9" : "#000000",
+                                                                    fontWeight: "600"
                                                                 }}>{category}</span>
                                                             </span>
                                                             <span style={{
-                                                                color: isDarkMode ? "#c9d1d9" : "#0f172a"
+                                                                color: isDarkMode ? "#c9d1d9" : "#000000",
+                                                                fontWeight: "600"
                                                             }}>{Number(amount).toFixed(2)} €</span>
                                                         </li>
                                                     ))}

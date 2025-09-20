@@ -978,21 +978,35 @@ body {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
+    table-layout: fixed; /* Force un layout uniforme */
+    margin: 0;
+    border-spacing: 0;
 }
 
 .modern-table th {
     background: var(--bg-secondary);
     padding: var(--space-lg);
     text-align: left;
-    font-weight: 600;
-    color: var(--text-secondary);
-    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    color: #000000 !important;
+    border-bottom: 2px solid var(--border);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .modern-table td {
-    padding: var(--space-lg);
+    padding: var(--space-lg) !important;
     border-bottom: 1px solid var(--border-light);
-    vertical-align: middle;
+    vertical-align: middle !important;
+    color: #000000 !important;
+    font-weight: 500;
+    text-align: left !important;
+    box-sizing: border-box !important;
+    position: relative;
+    /* Forcer la réinitialisation des transformations */
+    transform: none !important;
+    margin: 0 !important;
 }
 
 .modern-table tbody tr:hover {
@@ -1126,23 +1140,212 @@ body {
     background: var(--bg-secondary);
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-sm);
-    color: var(--text-secondary);
+    color: #000000 !important;
+    font-weight: 600;
 }
 
 .amount {
-    font-weight: 600;
-    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: 'Arial', sans-serif;
+    /* Suppression du padding et border-radius pour alignement uniforme */
 }
 
+.amount.positive {
+    color: #16a34a !important; /* Vert pour montants positifs */
+    /* Suppression des styles de boîte pour alignement */
+}
+
+.amount.negative {
+    color: #dc2626 !important; /* Rouge pour montants négatifs */
+    /* Suppression des styles de boîte pour alignement */
+}
+
+/* === CELLULES DESCRIPTION === */
+.modern-table td.description {
+    color: #000000 !important;
+    font-weight: 600;
+    /* Centrage parfait dans la cellule */
+    padding: var(--space-lg) !important;
+    margin: 0 !important;
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    vertical-align: middle !important;
+    text-align: center !important; /* Centre horizontalement */
+    line-height: 1.4 !important;
+    /* Dimensions contrôlées */
+    max-width: 200px;
+    min-width: 150px;
+    word-wrap: break-word;
+    white-space: normal;
+    /* Réinitialisation complète des transformations */
+    transform: none !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    /* Flexbox pour centrage parfait */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* === RÈGLES RESPONSIVES POUR L'ALIGNEMENT === */
+
+/* Petits écrans - Mobile */
+@media (max-width: 768px) {
+    .modern-table td.description {
+        padding: var(--space-md) !important;
+        font-size: 0.875rem !important;
+        min-width: 120px;
+        max-width: 150px;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+}
+
+/* Écrans moyens - Tablette */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .modern-table td.description {
+        padding: var(--space-lg) !important;
+        font-size: 0.9rem !important;
+        min-width: 140px;
+        max-width: 180px;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+}
+
+/* Grands écrans - Desktop */
+@media (min-width: 1025px) {
+    .modern-table td.description {
+        padding: var(--space-lg) !important;
+        font-size: 1rem !important;
+        min-width: 150px;
+        max-width: 200px;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+}
+
+/* Très grands écrans - Large Desktop */
+@media (min-width: 1440px) {
+    .modern-table td.description {
+        padding: var(--space-lg) !important;
+        font-size: 1rem !important;
+        min-width: 160px;
+        max-width: 220px;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+}
+
+/* === CELLULES CATÉGORIE === */
 .category-cell {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
+    color: #000000 !important;
+    font-weight: 600;
+    /* Suppression des styles de boîte pour alignement uniforme */
 }
 
+.category-cell i {
+    color: #4299e1 !important;
+    font-size: 1.1rem;
+}
+
+/* === CELLULES DATE === */
 .date {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: #000000 !important;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+    /* Suppression des styles de boîte pour alignement uniforme */
+}
+
+/* ===============================
+   STYLES MODE SOMBRE
+=============================== */
+
+/* Mode sombre - En-têtes de tableau */
+[data-theme="dark"] .modern-table th,
+.dark-mode .modern-table th {
+    color: #ffffff !important;
+    background: var(--bg-secondary);
+}
+
+/* Mode sombre - Cellules de données */
+[data-theme="dark"] .modern-table td,
+.dark-mode .modern-table td {
+    color: #ffffff !important;
+}
+
+/* Mode sombre - IDs de tableau */
+[data-theme="dark"] .table-id,
+.dark-mode .table-id {
+    color: #ffffff !important;
+    background: var(--bg-tertiary);
+}
+
+/* Mode sombre - Montants positifs */
+[data-theme="dark"] .amount.positive,
+.dark-mode .amount.positive {
+    color: #4ade80 !important; /* Vert plus clair et lumineux */
+    font-weight: 800 !important;
+    text-shadow: 0 0 3px rgba(74, 222, 128, 0.8); /* Effet de lueur plus fort pour visibilité */
+}
+
+/* Mode sombre - Montants négatifs */
+[data-theme="dark"] .amount.negative,
+.dark-mode .amount.negative {
+    color: #f87171 !important; /* Rouge plus clair et lumineux */
+    font-weight: 800 !important;
+    text-shadow: 0 0 3px rgba(248, 113, 113, 0.8); /* Effet de lueur plus fort pour visibilité */
+}
+
+/* Mode sombre - Descriptions */
+[data-theme="dark"] .modern-table td.description,
+.dark-mode .modern-table td.description {
+    color: #ffffff !important;
+    /* Suppression des styles de boîte pour alignement uniforme */
+}
+
+/* === RÈGLE GLOBALE POUR TOUTES LES DESCRIPTIONS === */
+.description {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    /* Forcer le centrage sur tous les éléments avec cette classe */
+}
+
+/* Mode sombre - Catégories */
+[data-theme="dark"] .category-cell,
+.dark-mode .category-cell {
+    color: #ffffff !important;
+    /* Suppression des styles de boîte pour alignement uniforme */
+}
+
+[data-theme="dark"] .category-cell i,
+.dark-mode .category-cell i {
+    color: #60a5fa !important;
+}
+
+/* Mode sombre - Dates */
+[data-theme="dark"] .date,
+.dark-mode .date {
+    color: #ffffff !important;
+    /* Suppression des styles de boîte pour alignement uniforme */
 }
 
 /* === INPUTS === */
@@ -2063,68 +2266,169 @@ mark,
     border: 0;
 }
 
-/* === SYSTÈME D'ONGLETS === */
-.tab-navigation {
-    display: flex;
-    background: var(--bg-primary);
+/* === NAVIGATION MODERNE === */
+.modern-navigation-container {
+    margin-bottom: var(--space-3xl);
+}
+
+.modern-nav {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-xl);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    pointer-events: none;
+}
+
+.nav-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-lg);
+    position: relative;
+    z-index: 1;
+}
+
+.nav-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-xl);
-    padding: var(--space-sm);
-    box-shadow: var(--shadow-md);
-    gap: var(--space-xs);
-    margin-bottom: var(--space-2xl);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.tab-navigation::-webkit-scrollbar {
-    display: none;
-}
-
-.tab-btn {
-    flex: 1;
-    min-width: 180px;
-    padding: var(--space-lg) var(--space-xl);
-    border: none;
-    border-radius: var(--radius-lg);
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
+    padding: var(--space-xl);
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    text-align: left;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.nav-item:hover::before {
+    left: 100%;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.nav-icon {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    transition: all var(--transition);
-    white-space: nowrap;
-    position: relative;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
 }
 
-.tab-btn:hover {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    transform: translateY(-1px);
+.nav-item.active .nav-icon {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
 }
 
-.tab-btn.active {
-    background: var(--gradient-primary);
-    color: var(--text-inverse);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+.nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+}
+
+.nav-title {
+    font-size: 1.1rem;
     font-weight: 600;
+    color: white;
+    margin: 0;
 }
 
-.tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    background: var(--primary);
-    border-radius: 50%;
+.nav-subtitle {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    font-weight: 400;
+}
+
+.nav-item.active .nav-title {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item.active .nav-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive pour navigation moderne */
+@media (max-width: 768px) {
+    .nav-menu {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .nav-item {
+        padding: var(--space-lg);
+    }
+
+    .nav-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .nav-title {
+        font-size: 1rem;
+    }
+
+    .nav-subtitle {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modern-nav {
+        padding: var(--space-lg);
+    }
+
+    .nav-item {
+        padding: var(--space-md);
+    }
+
+    .nav-subtitle {
+        display: none;
+    }
 }
 
 /* === CONTENU DES ONGLETS === */
@@ -2176,68 +2480,6 @@ mark,
     margin-top: var(--space-2xl);
 }
 
-/* Responsive pour les onglets */
-@media (max-width: 768px) {
-    .tab-btn {
-        min-width: 60px;
-        max-width: 70px;
-        padding: var(--space-md) var(--space-xs);
-        font-size: 0.75rem;
-        flex-direction: column;
-        gap: var(--space-xs);
-        min-height: 48px; /* Zone de touch recommandée */
-        border-radius: var(--radius-md);
-    }
-
-    .tab-btn svg {
-        width: 20px;
-        height: 20px;
-        flex-shrink: 0;
-    }
-
-    .tab-navigation {
-        justify-content: space-between;
-        gap: var(--space-xs);
-        padding: var(--space-xs);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-radius: var(--radius-lg);
-    }
-
-    /* Masquer le texte sur mobile, garder seulement les icônes */
-    .tab-btn span {
-        display: none;
-    }
-
-    /* Améliorer l'état actif sur mobile */
-    .tab-btn.active {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-    }
-
-    /* Améliorer le feedback tactile */
-    .tab-btn:active {
-        transform: scale(0.95);
-    }
-}
-
-/* Mobile très petit (iPhone SE et similaires) */
-@media (max-width: 375px) {
-    .tab-btn {
-        min-width: 50px;
-        max-width: 60px;
-        padding: var(--space-sm) var(--space-xs);
-    }
-
-    .tab-btn svg {
-        width: 18px;
-        height: 18px;
-    }
-
-    .tab-navigation {
-        padding: 6px;
-        gap: 4px;
-    }
-}
 
 /* ========================================
    HISTORIQUE DES BUDGETS

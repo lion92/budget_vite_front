@@ -192,7 +192,7 @@
     border-bottom: 2px solid var(--border-color, #e9ecef);
     text-align: left;
     font-weight: 600;
-    color: var(--text-primary, #2c3e50);
+    color: #000000 !important;
 }
 
 .header-content {
@@ -246,6 +246,7 @@
     padding: 1rem;
     border-bottom: 1px solid var(--border-light, #f1f3f4);
     vertical-align: middle;
+    color: #000000 !important;
 }
 
 .expense-table tbody tr {
@@ -643,6 +644,7 @@
     .expense-table td {
         padding: 0.75rem 0.5rem;
         font-size: 0.85rem;
+        color: #000000 !important;
     }
 
     .header-content {
