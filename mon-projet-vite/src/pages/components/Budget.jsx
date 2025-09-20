@@ -16,7 +16,7 @@ import {
     FilePlus, Table, BarChartBig, Download, Filter, RefreshCw,
     TrendingUp, TrendingDown, Wallet, Calendar, X, Plus, Trash2, Edit,
     Eye, EyeOff, Settings, PiggyBank, Target, AlertCircle, ChevronDown,
-    ChevronUp, Layers
+    ChevronUp, Layers, Check
 } from 'lucide-react';
 
 export default function Budget() {
@@ -38,6 +38,15 @@ export default function Budget() {
     // États d'affichage - NOUVEAU SYSTÈME D'ONGLETS
     const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, expenses, analytics, tools, history
     const [showFilters, setShowFilters] = useState(false);
+
+    // États pour la modification
+    const [editingId, setEditingId] = useState(null);
+    const [editData, setEditData] = useState({
+        montant: "",
+        description: "",
+        categorie: "",
+        dateTransaction: "",
+    });
 
     // États pour l'historique des budgets
     const [showBudgetHistory, setShowBudgetHistory] = useState(false);
@@ -61,7 +70,7 @@ export default function Budget() {
     const {
         depenses, revenus, categories,
         fetchDepenses, fetchCategories, fetchRevenus,
-        addDepense, deleteDepense
+        addDepense, deleteDepense, updateDepense
     } = useBudgetStore();
 
     useEffect(() => {
@@ -105,10 +114,41 @@ export default function Budget() {
         await deleteDepense(id, notify);
     };
 
-    const handleEdit = (id) => {
-        // TODO: Implémenter la modification
-        console.log("Modifier dépense ID:", id);
-        notify("Fonctionnalité de modification à venir", "info");
+    const handleEdit = (expense) => {
+        const foundCategory = categories.find(c => c.id === expense.categorie || c.categorie === expense.categorie);
+        setEditData({
+            montant: expense.montant,
+            description: expense.description,
+            categorie: foundCategory?.id || expense.categorie || "",
+            dateTransaction: expense.dateTransaction.split("T")[0],
+        });
+        setEditingId(expense.id);
+    };
+
+    const handleEditSubmit = async (id) => {
+        const date = new Date(editData.dateTransaction);
+        await updateDepense(
+            {
+                id,
+                montant: editData.montant,
+                description: editData.description,
+                categorie: parseInt(editData.categorie),
+                date,
+            },
+            notify
+        );
+        setEditingId(null);
+        await fetchDepenses();
+    };
+
+    const handleEditCancel = () => {
+        setEditingId(null);
+        setEditData({
+            montant: "",
+            description: "",
+            categorie: "",
+            dateTransaction: "",
+        });
     };
 
     // Calculs financiers
@@ -307,50 +347,75 @@ export default function Budget() {
                     </div>
                 </div>
 
-                <div className="actions-toolbar">
-                    {/* Navigation par onglets - Mise en avant */}
-                    <div className="tab-navigation">
-                        <button
-                            className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('dashboard')}
-                            title="Tableau de bord"
-                        >
-                            <Wallet size={18} />
-                            <span>Tableau de bord</span>
-                        </button>
-                        <button
-                            className={`tab-btn ${activeTab === 'expenses' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('expenses')}
-                            title="Dépenses détaillées"
-                        >
-                            <Table size={18} />
-                            <span>Dépenses détaillées</span>
-                        </button>
-                        <button
-                            className={`tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('analytics')}
-                            title="Analyses & Graphiques"
-                        >
-                            <BarChartBig size={18} />
-                            <span>Analyses & Graphiques</span>
-                        </button>
-                        <button
-                            className={`tab-btn ${activeTab === 'tools' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('tools')}
-                            title="Outils & Import"
-                        >
-                            <FilePlus size={18} />
-                            <span>Outils & Import</span>
-                        </button>
-                        <button
-                            className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('history')}
-                            title="Historique"
-                        >
-                            <Calendar size={18} />
-                            <span>Historique</span>
-                        </button>
-                    </div>
+                <div className="modern-navigation-container">
+                    <nav className="modern-nav">
+                        <div className="nav-menu">
+                            <button
+                                className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('dashboard')}
+                            >
+                                <div className="nav-icon">
+                                    <Wallet size={22} />
+                                </div>
+                                <div className="nav-content">
+                                    <span className="nav-title">Tableau de bord</span>
+                                    <span className="nav-subtitle">Vue d'ensemble financière</span>
+                                </div>
+                            </button>
+
+                            <button
+                                className={`nav-item ${activeTab === 'expenses' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('expenses')}
+                            >
+                                <div className="nav-icon">
+                                    <Table size={22} />
+                                </div>
+                                <div className="nav-content">
+                                    <span className="nav-title">Dépenses</span>
+                                    <span className="nav-subtitle">Gestion détaillée</span>
+                                </div>
+                            </button>
+
+                            <button
+                                className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('analytics')}
+                            >
+                                <div className="nav-icon">
+                                    <BarChartBig size={22} />
+                                </div>
+                                <div className="nav-content">
+                                    <span className="nav-title">Analyses</span>
+                                    <span className="nav-subtitle">Graphiques & rapports</span>
+                                </div>
+                            </button>
+
+                            <button
+                                className={`nav-item ${activeTab === 'tools' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('tools')}
+                            >
+                                <div className="nav-icon">
+                                    <FilePlus size={22} />
+                                </div>
+                                <div className="nav-content">
+                                    <span className="nav-title">Outils</span>
+                                    <span className="nav-subtitle">Import & export</span>
+                                </div>
+                            </button>
+
+                            <button
+                                className={`nav-item ${activeTab === 'history' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('history')}
+                            >
+                                <div className="nav-icon">
+                                    <Calendar size={22} />
+                                </div>
+                                <div className="nav-content">
+                                    <span className="nav-title">Historique</span>
+                                    <span className="nav-subtitle">Archives & tendances</span>
+                                </div>
+                            </button>
+                        </div>
+                    </nav></div>
 
                     {/* Actions rapides - Réorganisées */}
                     <div className="quick-actions">
@@ -389,7 +454,6 @@ export default function Budget() {
                             </button>
                         </div>
                     </div>
-                </div>
             </section>
 
             {/* === CONTENU DES ONGLETS === */}
@@ -633,44 +697,110 @@ export default function Budget() {
                                         </thead>
                                         <tbody>
                                         {displayedDepenses.map(dep => (
-                                            <tr key={dep.id}>
+                                            <tr key={dep.id} className={editingId === dep.id ? 'editing' : ''}>
                                                 <td>
                                                     <span className="table-id">#{dep.id}</span>
                                                 </td>
                                                 <td>
-                                                    <span className="amount">{dep.montant} €</span>
+                                                    {editingId === dep.id ? (
+                                                        <input
+                                                            type="number"
+                                                            step="0.01"
+                                                            value={editData.montant}
+                                                            onChange={(e) => setEditData({ ...editData, montant: e.target.value })}
+                                                            className="edit-input"
+                                                        />
+                                                    ) : (
+                                                        <span className={`amount ${Number(dep.montant) >= 0 ? 'positive' : 'negative'}`}>
+                                                            {dep.montant} €
+                                                        </span>
+                                                    )}
                                                 </td>
-                                                <td className="description">{dep.description}</td>
-                                                <td>
-                                                    <div className="category-cell">
-                                                        {dep?.iconName && (
-                                                            <i className={dep.iconName} style={{marginRight: '8px'}}></i>
-                                                        )}
-                                                        {dep.categorie}
-                                                    </div>
+                                                <td className="description">
+                                                    {editingId === dep.id ? (
+                                                        <input
+                                                            type="text"
+                                                            value={editData.description}
+                                                            onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                                                            className="edit-input"
+                                                        />
+                                                    ) : (
+                                                        dep.description
+                                                    )}
                                                 </td>
                                                 <td>
-                                                    <span className="date">
-                                                        {new Date(dep.dateTransaction).toLocaleDateString('fr-FR')}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <div className="action-buttons">
-                                                        <button
-                                                            className="btn btn-primary btn-sm action-btn"
-                                                            onClick={() => handleEdit(dep.id)}
-                                                            title="Modifier cette dépense"
+                                                    {editingId === dep.id ? (
+                                                        <select
+                                                            value={editData.categorie}
+                                                            onChange={(e) => setEditData({ ...editData, categorie: e.target.value })}
+                                                            className="edit-select"
                                                         >
-                                                            <Edit size={16} />
-                                                        </button>
-                                                        <button
-                                                            className="btn btn-danger btn-sm action-btn"
-                                                            onClick={() => handleDelete(dep.id)}
-                                                            title="Supprimer cette dépense"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
+                                                            <option value="">-- Choisir --</option>
+                                                            {categories.map((cat) => (
+                                                                <option key={cat.id} value={cat.id}>
+                                                                    {cat.categorie}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        <div className="category-cell">
+                                                            {dep?.iconName && (
+                                                                <i className={dep.iconName} style={{marginRight: '8px'}}></i>
+                                                            )}
+                                                            {dep.categorie}
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editingId === dep.id ? (
+                                                        <input
+                                                            type="date"
+                                                            value={editData.dateTransaction}
+                                                            onChange={(e) => setEditData({ ...editData, dateTransaction: e.target.value })}
+                                                            className="edit-input"
+                                                        />
+                                                    ) : (
+                                                        <span className="date">
+                                                            {new Date(dep.dateTransaction).toLocaleDateString('fr-FR')}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editingId === dep.id ? (
+                                                        <div className="action-buttons">
+                                                            <button
+                                                                onClick={() => handleEditSubmit(dep.id)}
+                                                                className="btn btn-success btn-sm action-btn"
+                                                                title="Sauvegarder"
+                                                            >
+                                                                <Check size={16} />
+                                                            </button>
+                                                            <button
+                                                                onClick={handleEditCancel}
+                                                                className="btn btn-secondary btn-sm action-btn"
+                                                                title="Annuler"
+                                                            >
+                                                                <X size={16} />
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="action-buttons">
+                                                            <button
+                                                                className="btn btn-primary btn-sm action-btn"
+                                                                onClick={() => handleEdit(dep)}
+                                                                title="Modifier cette dépense"
+                                                            >
+                                                                <Edit size={16} />
+                                                            </button>
+                                                            <button
+                                                                className="btn btn-danger btn-sm action-btn"
+                                                                onClick={() => handleDelete(dep.id)}
+                                                                title="Supprimer cette dépense"
+                                                            >
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </div>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))}

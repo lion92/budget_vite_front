@@ -18,7 +18,8 @@
       "Bash(taskkill:*)",
       "Bash(TASKKILL /F /IM node.exe)",
       "Bash(netstat:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

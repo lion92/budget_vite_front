@@ -9,7 +9,7 @@
     --table-warning: #d97706;
     --table-info: #0284c7;
     --table-border: #e2e8f0;
-    --table-text: #334155;
+    --table-text: #000000;
     --table-text-muted: #64748b;
     --table-bg: #ffffff;
     --table-bg-alt: #f1f5f9;
@@ -33,25 +33,58 @@
 /* Mode sombre - Description spécifique */
 [data-theme="dark"] .enhanced-expense-table .description,
 .dark-mode .enhanced-expense-table .description {
-    color: #C4B5FD !important;
-    background: linear-gradient(135deg, rgba(196, 181, 253, 0.12), rgba(196, 181, 253, 0.20)) !important;
-    border-left-color: #C4B5FD !important;
-    border-color: rgba(196, 181, 253, 0.3) !important;
-    box-shadow: 0 2px 4px rgba(196, 181, 253, 0.15) !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.20)) !important;
+    border-left-color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.15) !important;
 }
 
 [data-theme="dark"] .enhanced-expense-table .description:hover,
 .dark-mode .enhanced-expense-table .description:hover {
-    background: linear-gradient(135deg, rgba(196, 181, 253, 0.20), rgba(196, 181, 253, 0.35)) !important;
-    border-left-color: #C4B5FD !important;
-    border-color: rgba(196, 181, 253, 0.5) !important;
-    box-shadow: 0 4px 8px rgba(196, 181, 253, 0.25) !important;
-    color: #DDD6FE !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.35)) !important;
+    border-left-color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
 }
 
 [data-theme="dark"] .enhanced-expense-table .description-col,
 .dark-mode .enhanced-expense-table .description-col {
     background: rgba(148, 163, 184, 0.05);
+}
+
+/* Mode sombre - Card description */
+[data-theme="dark"] .enhanced-expense-table .card-description,
+.dark-mode .enhanced-expense-table .card-description {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.15)) !important;
+    border-left-color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Mode sombre - Montants colorés */
+[data-theme="dark"] .enhanced-expense-table .amount.positive,
+[data-theme="dark"] .enhanced-expense-table .card-amount.positive,
+.dark-mode .enhanced-expense-table .amount.positive,
+.dark-mode .enhanced-expense-table .card-amount.positive {
+    color: #22c55e !important; /* Vert plus clair en mode sombre */
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="dark"] .enhanced-expense-table .amount.negative,
+[data-theme="dark"] .enhanced-expense-table .card-amount.negative,
+.dark-mode .enhanced-expense-table .amount.negative,
+.dark-mode .enhanced-expense-table .card-amount.negative {
+    color: #ef4444 !important; /* Rouge plus clair en mode sombre */
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* ====== CONTENEUR PRINCIPAL ====== */
@@ -358,11 +391,20 @@
     text-align: center;
     border-bottom: 1px solid var(--table-border);
     vertical-align: middle;
-    color: #000000;
+    color: #000000 !important;
+}
+
+.expense-table th {
+    color: #000000 !important;
 }
 
 [data-theme="dark"] .enhanced-expense-table .expense-table td,
 .dark-mode .enhanced-expense-table .expense-table td {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .enhanced-expense-table .expense-table th,
+.dark-mode .enhanced-expense-table .expense-table th {
     color: #ffffff !important;
 }
 
@@ -406,7 +448,7 @@
 .expense-table th {
     background: linear-gradient(135deg, var(--table-secondary) 0%, var(--table-bg-alt) 100%);
     font-weight: 700;
-    color: var(--table-text);
+    color: #000000 !important;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -474,10 +516,23 @@
 
 .amount {
     font-weight: 700;
-    color: var(--table-success);
     font-family: 'Arial', sans-serif;
     font-size: 1.05rem;
-    background: linear-gradient(135deg, var(--table-success), #38b2ac);
+}
+
+.amount.positive,
+.card-amount.positive {
+    color: #16a34a !important; /* Vert pour montants positifs */
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.amount.negative,
+.card-amount.negative {
+    color: #dc2626 !important; /* Rouge pour montants négatifs */
+    background: linear-gradient(135deg, #dc2626, #ef4444);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -487,33 +542,42 @@
     max-width: 220px;
     min-width: 180px;
     text-align: left;
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.03), rgba(124, 58, 237, 0.08));
-    border-left: 2px solid rgba(124, 58, 237, 0.1);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.08));
+    border-left: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .description {
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: normal;
+    overflow: visible;
+    word-wrap: break-word;
     font-weight: 600;
     padding: 0.5rem;
-    color: #7C3AED;
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.15));
-    border-radius: 0.4rem;
-    border-left: 3px solid #7C3AED;
-    border: 1px solid rgba(124, 58, 237, 0.2);
+    color: #000000 !important;
+    /* Suppression des styles de boîte pour centrage uniforme */
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.1);
+    vertical-align: middle !important;
 }
 
 .description:hover {
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(124, 58, 237, 0.25));
-    border-left-color: #7C3AED;
-    border-color: rgba(124, 58, 237, 0.4);
-    transform: translateX(2px);
-    box-shadow: 0 4px 8px rgba(124, 58, 237, 0.2);
-    color: #6D28D9;
+    /* Maintien du centrage au survol */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    /* Suppression des transformations qui cassent l'alignement */
+    transform: none !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #000000 !important;
 }
 
 .category-col {
@@ -716,15 +780,15 @@
 
 .card-description {
     font-weight: 600;
-    color: #7C3AED;
+    color: #1F2937;
     margin-bottom: 0.75rem;
     line-height: 1.5;
     padding: 0.5rem;
-    background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(124, 58, 237, 0.15));
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.08), rgba(31, 41, 55, 0.15));
     border-radius: 0.4rem;
-    border-left: 3px solid #7C3AED;
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.1);
+    border-left: 3px solid #1F2937;
+    border: 1px solid rgba(31, 41, 55, 0.2);
+    box-shadow: 0 2px 4px rgba(31, 41, 55, 0.1);
 }
 
 .card-category {

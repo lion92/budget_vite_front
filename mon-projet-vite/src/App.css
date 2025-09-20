@@ -896,7 +896,114 @@ tr:hover {
   background: var(--surface-hover);
 }
 
-/* Navigation menu harmonisé */
+/* Navigation moderne */
+.modern-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  border-bottom: 3px solid var(--primary-500);
+}
+
+.nav-brand h2 {
+  color: var(--text-inverse);
+  margin: 0;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  background: linear-gradient(45deg, #ffffff, #f0f6fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-inverse);
+  border-radius: var(--border-radius-lg);
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link li {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition-normal);
+  white-space: nowrap;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.nav-link:hover li {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link.active li {
+  background: var(--text-inverse);
+  color: var(--primary-700);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Section héro */
+.hero-section {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background: var(--gradient-surface);
+  border-radius: var(--border-radius-2xl);
+  margin: var(--spacing-xl) auto;
+  max-width: 800px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+
+.hero-section h1 {
+  margin-bottom: var(--spacing-lg);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-section h2 {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.hero-section p {
+  color: var(--text-muted);
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Navigation menu harmonisé (legacy) */
 nav.menu {
   display: flex;
   align-items: center;
@@ -1198,7 +1305,35 @@ li:hover {
     border-radius: var(--border-radius-md);
   }
 
-  /* Navigation mobile améliorée */
+  /* Navigation moderne responsive */
+  .modern-nav {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    position: relative;
+  }
+
+  .nav-brand h2 {
+    font-size: var(--font-size-xl);
+    text-align: center;
+  }
+
+  .nav-links {
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .nav-link li {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+
+  .hero-section {
+    margin: var(--spacing-md) var(--spacing-sm);
+    padding: var(--spacing-lg);
+  }
+
+  /* Navigation mobile améliorée (legacy) */
   nav.menu {
     flex-direction: column;
     padding: var(--spacing-sm);
@@ -1369,7 +1504,39 @@ li:hover {
     margin-bottom: var(--spacing-md);
   }
 
-  /* Navigation ultra-compacte */
+  /* Navigation moderne ultra-compacte */
+  .modern-nav {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+
+  .nav-brand h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    width: 100%;
+  }
+
+  .nav-link {
+    width: 100%;
+  }
+
+  .nav-link li {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    text-align: center;
+    width: 100%;
+  }
+
+  .hero-section {
+    margin: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+
+  /* Navigation ultra-compacte (legacy) */
   .menu > ul > li {
     padding: var(--spacing-sm);
     font-size: var(--font-size-sm);
