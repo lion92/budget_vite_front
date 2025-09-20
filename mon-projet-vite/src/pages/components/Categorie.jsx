@@ -195,6 +195,17 @@ export function Categorie({ activeView = 'manage' }) {
 
     useEffect(() => {
         fetchAPI();
+
+        // Écouter l'événement pour changer d'onglet
+        const handleSwitchTab = () => {
+            setCurrentView('create');
+        };
+
+        window.addEventListener('switchToCreateTab', handleSwitchTab);
+
+        return () => {
+            window.removeEventListener('switchToCreateTab', handleSwitchTab);
+        };
     }, []);
 
     const fetchAPI = useCallback(async () => {
@@ -379,8 +390,37 @@ export function Categorie({ activeView = 'manage' }) {
     const renderCreateView = () => (
         <div className="modal-section">
             <div className="section-header">
-                <h3 className="section-title">Nouvelle Catégorie</h3>
-                <p className="section-description">Créez une nouvelle catégorie pour organiser vos dépenses</p>
+                <h3 className="section-title">
+                    {idVal !== -1 ? 'Modifier la Catégorie' : 'Nouvelle Catégorie'}
+                </h3>
+                <p className="section-description">
+                    {idVal !== -1
+                        ? 'Modifiez les informations de votre catégorie'
+                        : 'Créez une nouvelle catégorie pour organiser vos dépenses'
+                    }
+                </p>
+                {idVal !== -1 && (
+                    <div className="editing-indicator">
+                        <span className="editing-badge">
+                            ✏️ Modification en cours: <strong>{categorie}</strong>
+                        </span>
+                        <button
+                            className="cancel-edit-btn"
+                            onClick={() => {
+                                setId(-1);
+                                setCategorie("");
+                                setCategorieDescription("");
+                                setColorCategorie("#000000");
+                                setMonth("");
+                                setAnnee("");
+                                setBudgetDebutMois(0);
+                                setIconName("");
+                            }}
+                        >
+                            ❌ Annuler
+                        </button>
+                    </div>
+                )}
             </div>
 
             <form className="categorie-form modal-form" onSubmit={fetchCreate}>
@@ -572,12 +612,15 @@ export function Categorie({ activeView = 'manage' }) {
                 </div>
 
                 <div className="form-buttons">
-                    <button type="button" className="btn-secondary" onClick={fetchUpdate} disabled={idVal === -1}>
-                        {idVal === -1 ? 'Sélectionner pour modifier' : 'Mettre à jour'}
-                    </button>
-                    <button type="submit" className="btn-primary">
-                        Créer la catégorie
-                    </button>
+                    {idVal !== -1 ? (
+                        <button type="button" className="btn-primary" onClick={fetchUpdate}>
+                            💾 Sauvegarder les modifications
+                        </button>
+                    ) : (
+                        <button type="submit" className="btn-primary">
+                            ➕ Créer la catégorie
+                        </button>
+                    )}
                 </div>
             </form>
         </div>
