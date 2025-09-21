@@ -3,8 +3,7 @@ import Item from "./Item.jsx";
 import lien from './lien'
 import {Link} from "react-router-dom";
 import {useNotify} from "./Notification";
-import './css/design-system.css'
-
+import './css/form.css'
 export default function Form(props) {
     let [titre, setValue] = useState("");
     let [valueInputTitre, setTitre] = useState("");
@@ -336,321 +335,442 @@ export default function Form(props) {
     return (
         <div className="form-container">
             <div className="form-wrapper">
+                {/* Section formulaire améliorée */}
                 <div className="form-content">
-                    <div className="id-display">
-                        <label className="id-label">
-                            {idVal !== -1 ? `Modification ID: ${idVal}` : 'Nouvelle tâche'}
-                        </label>
+                    <div className="form-header">
+                        <h2 className="form-title">
+                            <span className="form-icon">{idVal !== -1 ? '✏️' : '📝'}</span>
+                            {idVal !== -1 ? 'Modifier la tâche' : 'Créer une nouvelle tâche'}
+                        </h2>
+                        {idVal !== -1 && (
+                            <div className="editing-badge">
+                                <span className="editing-text">ID: {idVal}</span>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="form-inputs">
-                        <div className="input-group">
-                            <label className="input-label">Titre</label>
-                            <input
-                                className="input-field title-input"
-                                placeholder="Entrez le titre de votre tâche"
-                                value={titre}
-                                onChange={(e) => Valuechange(e)}
-                            />
+                    <form className="task-form" onSubmit={(e) => {
+                        e.preventDefault();
+                        idVal !== -1 ? modifier(e) : fetchCreer(e);
+                    }}>
+                        <div className="form-grid">
+                            <div className="input-section">
+                                <label className="input-label" htmlFor="task-title">
+                                    <span className="label-icon">📋</span>
+                                    Titre de la tâche
+                                    <span className="required-asterisk">*</span>
+                                </label>
+                                <input
+                                    id="task-title"
+                                    className="input-field title-input"
+                                    placeholder="Ex: Finaliser le rapport mensuel"
+                                    value={titre}
+                                    onChange={(e) => Valuechange(e)}
+                                    required
+                                    autoComplete="off"
+                                    maxLength={100}
+                                />
+                                <div className="input-hint">
+                                    {titre.length}/100 caractères
+                                </div>
+                            </div>
+
+                            <div className="input-section">
+                                <label className="input-label" htmlFor="task-description">
+                                    <span className="label-icon">📄</span>
+                                    Description détaillée
+                                </label>
+                                <textarea
+                                    id="task-description"
+                                    className="textarea-field description-input"
+                                    placeholder="Décrivez votre tâche en détail : objectifs, étapes, ressources nécessaires..."
+                                    value={valueInputDescription}
+                                    onChange={(e) => valueChangeDescription(e)}
+                                    rows="4"
+                                    maxLength={500}
+                                />
+                                <div className="input-hint">
+                                    {valueInputDescription.length}/500 caractères
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="input-group">
-                            <label className="input-label">Description</label>
-                            <textarea
-                                className="textarea-field description-input"
-                                placeholder="Décrivez votre tâche en détail..."
-                                value={valueInputDescription}
-                                onChange={(e) => valueChangeDescription(e)}
-                                rows="4"
-                            />
-                        </div>
-
-                        <div className="button-group">
-                            {idVal !== -1 ? (
-                                <button className="btn btn-update" onClick={modifier}>
-                                    ✏️ Modifier
-                                </button>
-                            ) : null}
-                            <button className="btn btn-create" onClick={fetchCreer}>
-                                ➕ Créer
-                            </button>
-                            {idVal !== -1 && (
+                        <div className="form-actions">
+                            <div className="primary-actions">
                                 <button
-                                    className="btn btn-cancel"
-                                    onClick={() => {
-                                        setValue("");
-                                        setDescription("");
-                                        setId(-1);
-                                        setEditingItem(null);
-                                    }}
-                                    style={{
-                                        background: 'var(--secondary-gradient)',
-                                        color: 'white'
-                                    }}
+                                    type="submit"
+                                    className={`btn ${idVal !== -1 ? 'btn-update' : 'btn-create'}`}
+                                    disabled={!titre.trim()}
                                 >
-                                    ❌ Annuler
+                                    <span className="btn-icon">{idVal !== -1 ? '💾' : '➕'}</span>
+                                    <span className="btn-text">{idVal !== -1 ? 'Sauvegarder' : 'Créer la tâche'}</span>
                                 </button>
+                            </div>
+
+                            {idVal !== -1 && (
+                                <div className="secondary-actions">
+                                    <button
+                                        type="button"
+                                        className="btn btn-cancel"
+                                        onClick={() => {
+                                            setValue("");
+                                            setDescription("");
+                                            setId(-1);
+                                            setEditingItem(null);
+                                        }}
+                                    >
+                                        <span className="btn-icon">↩️</span>
+                                        <span className="btn-text">Annuler</span>
+                                    </button>
+                                </div>
                             )}
                         </div>
-                    </div>
+                    </form>
                 </div>
 
-                {/* Section des filtres */}
+                {/* Section des filtres améliorée */}
                 <div className="filters-section">
                     <div className="filters-header">
-                        <h3 className="filters-title">
-                            <span className="filter-icon">🔍</span>
-                            Filtres & Recherche
-                        </h3>
+                        <div className="filters-title-group">
+                            <h3 className="filters-title">
+                                <span className="filter-icon">🔍</span>
+                                Recherche et filtres
+                            </h3>
+                            <p className="filters-subtitle">Trouvez rapidement vos tâches</p>
+                        </div>
                         <button
                             className="reset-filters-btn"
                             onClick={resetFilters}
                             title="Réinitialiser tous les filtres"
+                            disabled={!filters.searchTerm && filters.sortBy === 'date' && filters.sortOrder === 'desc' && filters.dateFilter === 'all'}
                         >
-                            ↻ Reset
+                            <span className="reset-icon">↻</span>
+                            <span className="reset-text">Reset</span>
                         </button>
                     </div>
 
-                    <div className="filters-grid">
-                        {/* Barre de recherche */}
-                        <div className="filter-group search-group">
-                            <label className="filter-label">Rechercher</label>
-                            <div className="search-input-wrapper">
-                                <input
-                                    type="text"
-                                    className="search-input"
-                                    placeholder="Rechercher dans les titres et descriptions..."
-                                    value={filters.searchTerm}
-                                    onChange={(e) => updateFilter('searchTerm', e.target.value)}
-                                />
-                                <span className="search-icon">🔍</span>
-                            </div>
-                        </div>
-
-                        {/* Tri */}
-                        <div className="filter-group">
-                            <label className="filter-label">Trier par</label>
-                            <select
-                                className="filter-select"
-                                value={filters.sortBy}
-                                onChange={(e) => updateFilter('sortBy', e.target.value)}
-                            >
-                                <option value="date">Date de création</option>
-                                <option value="title">Titre (A-Z)</option>
-                                <option value="description">Description (A-Z)</option>
-                            </select>
-                        </div>
-
-                        {/* Ordre de tri */}
-                        <div className="filter-group">
-                            <label className="filter-label">Ordre</label>
-                            <select
-                                className="filter-select"
-                                value={filters.sortOrder}
-                                onChange={(e) => updateFilter('sortOrder', e.target.value)}
-                            >
-                                <option value="desc">Décroissant</option>
-                                <option value="asc">Croissant</option>
-                            </select>
-                        </div>
-
-                        {/* Filtre par date */}
-                        <div className="filter-group">
-                            <label className="filter-label">Période</label>
-                            <select
-                                className="filter-select"
-                                value={filters.dateFilter}
-                                onChange={(e) => updateFilter('dateFilter', e.target.value)}
-                            >
-                                <option value="all">Toutes les dates</option>
-                                <option value="today">Aujourd'hui</option>
-                                <option value="week">Cette semaine</option>
-                                <option value="month">Ce mois</option>
-                            </select>
+                    {/* Barre de recherche mise en avant */}
+                    <div className="search-section">
+                        <div className="search-input-wrapper">
+                            <span className="search-icon-left">🔍</span>
+                            <input
+                                type="text"
+                                className="search-input-main"
+                                placeholder="Rechercher une tâche par titre ou description..."
+                                value={filters.searchTerm}
+                                onChange={(e) => updateFilter('searchTerm', e.target.value)}
+                                autoComplete="off"
+                            />
+                            {filters.searchTerm && (
+                                <button
+                                    className="search-clear-btn"
+                                    onClick={() => updateFilter('searchTerm', '')}
+                                    title="Effacer la recherche"
+                                >
+                                    ✕
+                                </button>
+                            )}
                         </div>
                     </div>
 
-                    {/* Statistiques */}
-                    <div className="stats-section">
-                        <div className="stats-item">
-                            <span className="stats-number">{listItem.length}</span>
-                            <span className="stats-label">Tâches affichées</span>
-                        </div>
-                        <div className="stats-item">
-                            <span className="stats-number">{allItems.length}</span>
-                            <span className="stats-label">Total</span>
-                        </div>
-                        {filters.searchTerm && (
-                            <div className="stats-item search-stats">
-                                <span className="stats-label">
-                                    Résultats pour "{filters.searchTerm}"
-                                </span>
+                    {/* Filtres avancés dans un accordéon */}
+                    <details className="advanced-filters" open>
+                        <summary className="filters-toggle">
+                            <span className="toggle-icon">⚙️</span>
+                            <span className="toggle-text">Options de tri</span>
+                            <span className="toggle-arrow">▼</span>
+                        </summary>
+
+                        <div className="filters-grid">
+                            <div className="filter-group">
+                                <label className="filter-label" htmlFor="sort-by">
+                                    <span className="label-icon">📊</span>
+                                    Trier par
+                                </label>
+                                <select
+                                    id="sort-by"
+                                    className="filter-select"
+                                    value={filters.sortBy}
+                                    onChange={(e) => updateFilter('sortBy', e.target.value)}
+                                >
+                                    <option value="date">📅 Date de création</option>
+                                    <option value="title">🔤 Titre alphabétique</option>
+                                    <option value="description">📝 Description alphabétique</option>
+                                </select>
                             </div>
-                        )}
+
+                            <div className="filter-group">
+                                <label className="filter-label" htmlFor="sort-order">
+                                    <span className="label-icon">🔄</span>
+                                    Ordre
+                                </label>
+                                <select
+                                    id="sort-order"
+                                    className="filter-select"
+                                    value={filters.sortOrder}
+                                    onChange={(e) => updateFilter('sortOrder', e.target.value)}
+                                >
+                                    <option value="desc">⬇️ Plus récent en premier</option>
+                                    <option value="asc">⬆️ Plus ancien en premier</option>
+                                </select>
+                            </div>
+
+                            <div className="filter-group">
+                                <label className="filter-label" htmlFor="date-filter">
+                                    <span className="label-icon">📆</span>
+                                    Période
+                                </label>
+                                <select
+                                    id="date-filter"
+                                    className="filter-select"
+                                    value={filters.dateFilter}
+                                    onChange={(e) => updateFilter('dateFilter', e.target.value)}
+                                >
+                                    <option value="all">🌐 Toutes les périodes</option>
+                                    <option value="today">📅 Aujourd'hui</option>
+                                    <option value="week">📊 Cette semaine</option>
+                                    <option value="month">📈 Ce mois</option>
+                                </select>
+                            </div>
+                        </div>
+                    </details>
+
+                    {/* Statistiques améliorées */}
+                    <div className="stats-dashboard">
+                        <div className="stats-grid">
+                            <div className="stats-card primary">
+                                <div className="stats-icon">📊</div>
+                                <div className="stats-content">
+                                    <div className="stats-number">{listItem.length}</div>
+                                    <div className="stats-label">Affichées</div>
+                                </div>
+                            </div>
+                            <div className="stats-card secondary">
+                                <div className="stats-icon">📚</div>
+                                <div className="stats-content">
+                                    <div className="stats-number">{allItems.length}</div>
+                                    <div className="stats-label">Au total</div>
+                                </div>
+                            </div>
+                            {filters.searchTerm && (
+                                <div className="stats-card search">
+                                    <div className="stats-icon">🔍</div>
+                                    <div className="stats-content">
+                                        <div className="stats-search-term">"{filters.searchTerm}"</div>
+                                        <div className="stats-label">Recherche active</div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
-                {/* TABLEAU REMPLAÇANT LES CARDS */}
+                {/* SECTION DES TÂCHES AMÉLIORÉE */}
                 {!load ? (
-                    <div className="table-container">
-                        <div className="table-wrapper">
-                            <div className="table-header">
-                                <h2 className="table-title">
-                                    <span className="table-icon">📋</span>
-                                    Mes Tâches ({listItem.length})
-                                </h2>
-                                <div className="table-header-actions">
-                                    <span className="table-info">
-                                        {listItem.length} tâche{listItem.length !== 1 ? 's' : ''} affichée{listItem.length !== 1 ? 's' : ''}
-                                    </span>
+                    <div className="tasks-container">
+                        <div className="tasks-wrapper">
+                            <div className="tasks-header">
+                                <div className="header-content">
+                                    <h2 className="tasks-title">
+                                        <span className="tasks-icon">📋</span>
+                                        <span className="title-text">Mes Tâches</span>
+                                        <span className="tasks-count">({listItem.length})</span>
+                                    </h2>
+                                    <p className="tasks-subtitle">
+                                        {listItem.length === 0
+                                            ? 'Aucune tâche pour le moment'
+                                            : `${listItem.length} tâche${listItem.length !== 1 ? 's' : ''} ${listItem.length !== allItems.length ? 'filtrée' + (listItem.length !== 1 ? 's' : '') : ''}`
+                                        }
+                                    </p>
+                                </div>
+                                <div className="header-actions">
+                                    {listItem.length > 0 && (
+                                        <button
+                                            className="view-toggle-btn"
+                                            onClick={() => {
+                                                // Fonctionnalité future : basculer entre vue tableau et carte
+                                            }}
+                                            title="Changer la vue (bientôt disponible)"
+                                        >
+                                            <span className="view-icon">⊞</span>
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 
                             {listItem.length > 0 ? (
-                                <table className="modern-table">
-                                    <thead>
-                                    <tr>
-                                        <th
-                                            className="sortable"
-                                            onClick={() => handleSort('title')}
-                                            title="Trier par titre"
-                                        >
-                                            Titre
-                                            {filters.sortBy === 'title' && (
-                                                <span style={{marginLeft: '8px', fontSize: '12px'}}>
-                                                        {filters.sortOrder === 'asc' ? '↑' : '↓'}
-                                                    </span>
-                                            )}
-                                        </th>
-                                        <th
-                                            className="sortable"
-                                            onClick={() => handleSort('description')}
-                                            title="Trier par description"
-                                        >
-                                            Description
-                                            {filters.sortBy === 'description' && (
-                                                <span style={{marginLeft: '8px', fontSize: '12px'}}>
-                                                        {filters.sortOrder === 'asc' ? '↑' : '↓'}
-                                                    </span>
-                                            )}
-                                        </th>
-                                        <th
-                                            className="sortable"
-                                            onClick={() => handleSort('date')}
-                                            title="Trier par date"
-                                        >
-                                            Date de création
-                                            {filters.sortBy === 'date' && (
-                                                <span style={{marginLeft: '8px', fontSize: '12px'}}>
-                                                        {filters.sortOrder === 'asc' ? '↑' : '↓'}
-                                                    </span>
-                                            )}
-                                        </th>
-                                        <th>Actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {listItem.map((item, index) => (
-                                        <tr
-                                            key={item.id || index}
-                                            className={editingItem === item.id ? 'editing-row' : ''}
-                                            style={{
-                                                backgroundColor: editingItem === item.id ? 'rgba(102, 126, 234, 0.1)' : 'transparent'
-                                            }}
-                                        >
-                                            <td data-label="Titre">
-                                                <div className="task-title-mobile" style={{
-                                                    fontWeight: '800',
-                                                    fontSize: '1.3rem',
-                                                    color: editingItem === item.id ? '#8b5cf6' : '#000000',
-                                                    lineHeight: '1.3',
-                                                    marginBottom: '0.5rem',
-                                                    textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-                                                }}>
-                                                    📝 {item.title || 'Sans titre'}
-                                                </div>
-                                            </td>
-                                            <td data-label="Description">
-                                                <div className="task-description-mobile" title={item.description} style={{
-                                                    color: '#1a202c',
-                                                    lineHeight: '1.4',
-                                                    fontSize: '1.1rem',
-                                                    fontWeight: '600',
-                                                    maxWidth: '100%'
-                                                }}>
-                                                    {item.description ? (
-                                                        <span style={{ color: '#1a202c' }}>
-                                                            📄 {truncateText(item.description, 100)}
-                                                        </span>
-                                                    ) : (
-                                                        <span style={{ color: '#6b7280', fontStyle: 'italic', fontSize: '1rem' }}>
-                                                            💭 Aucune description fournie
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td data-label="Date" className="table-date" style={{
-                                                fontSize: '1rem',
-                                                fontWeight: '500',
-                                                color: '#374151'
-                                            }}>
-                                                📅 {formatDate(item.createdAt)}
-                                            </td>
-                                            <td data-label="Actions" className="table-actions">
-                                                <button
-                                                    className="table-action-btn edit"
-                                                    onClick={() => handleEdit(item)}
-                                                    title="Modifier cette tâche"
+                                <div className="tasks-grid">
+                                    {/* Vue tableau pour desktop */}
+                                    <div className="table-view">
+                                        <table className="modern-table">
+                                            <thead>
+                                            <tr>
+                                                <th
+                                                    className="sortable"
+                                                    onClick={() => handleSort('title')}
+                                                    title="Trier par titre"
                                                 >
-                                                    ✏️ Modifier
-                                                </button>
-                                                <button
-                                                    className="table-action-btn delete"
-                                                    onClick={() => handleDelete(item)}
-                                                    title="Supprimer cette tâche"
+                                                    <span className="th-content">
+                                                        <span className="th-icon">📝</span>
+                                                        <span className="th-text">Titre</span>
+                                                        {filters.sortBy === 'title' && (
+                                                            <span className="sort-indicator">
+                                                                {filters.sortOrder === 'asc' ? '↑' : '↓'}
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                </th>
+                                                <th
+                                                    className="sortable"
+                                                    onClick={() => handleSort('description')}
+                                                    title="Trier par description"
                                                 >
-                                                    🗑️ Supprimer
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
+                                                    <span className="th-content">
+                                                        <span className="th-icon">📄</span>
+                                                        <span className="th-text">Description</span>
+                                                        {filters.sortBy === 'description' && (
+                                                            <span className="sort-indicator">
+                                                                {filters.sortOrder === 'asc' ? '↑' : '↓'}
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                </th>
+                                                <th
+                                                    className="sortable"
+                                                    onClick={() => handleSort('date')}
+                                                    title="Trier par date"
+                                                >
+                                                    <span className="th-content">
+                                                        <span className="th-icon">📅</span>
+                                                        <span className="th-text">Date</span>
+                                                        {filters.sortBy === 'date' && (
+                                                            <span className="sort-indicator">
+                                                                {filters.sortOrder === 'asc' ? '↑' : '↓'}
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                </th>
+                                                <th className="actions-column">
+                                                    <span className="th-content">
+                                                        <span className="th-icon">⚙️</span>
+                                                        <span className="th-text">Actions</span>
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {listItem.map((item, index) => (
+                                                <tr
+                                                    key={item.id || index}
+                                                    className={`task-row ${editingItem === item.id ? 'editing-row' : ''}`}
+                                                >
+                                                    <td data-label="Titre" className="title-cell">
+                                                        <div className="task-title">
+                                                            <span className="task-emoji">📝</span>
+                                                            <span className="title-text">{item.title || 'Sans titre'}</span>
+                                                            {editingItem === item.id && (
+                                                                <span className="editing-indicator">✏️</span>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Description" className="description-cell">
+                                                        <div className="task-description" title={item.description}>
+                                                            {item.description ? (
+                                                                <>
+                                                                    <span className="desc-icon">📄</span>
+                                                                    <span className="desc-text">{truncateText(item.description, 80)}</span>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <span className="desc-icon">💭</span>
+                                                                    <span className="desc-placeholder">Aucune description</span>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Date" className="date-cell">
+                                                        <div className="task-date">
+                                                            <span className="date-icon">🕒</span>
+                                                            <span className="date-text">{formatDate(item.createdAt)}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Actions" className="actions-cell">
+                                                        <div className="task-actions">
+                                                            <button
+                                                                className="action-btn edit-btn"
+                                                                onClick={() => handleEdit(item)}
+                                                                title="Modifier cette tâche"
+                                                            >
+                                                                <span className="btn-icon">✏️</span>
+                                                                <span className="btn-text">Modifier</span>
+                                                            </button>
+                                                            <button
+                                                                className="action-btn delete-btn"
+                                                                onClick={() => handleDelete(item)}
+                                                                title="Supprimer cette tâche"
+                                                            >
+                                                                <span className="btn-icon">🗑️</span>
+                                                                <span className="btn-text">Supprimer</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             ) : (
-                                <div className="table-empty">
-                                    {filters.searchTerm || filters.dateFilter !== 'all'
-                                        ? 'Aucune tâche ne correspond à vos critères de recherche'
-                                        : 'Aucune tâche créée pour le moment'
-                                    }
+                                <div className="empty-state">
+                                    <div className="empty-icon">📝</div>
+                                    <h3 className="empty-title">
+                                        {filters.searchTerm || filters.dateFilter !== 'all'
+                                            ? 'Aucun résultat trouvé'
+                                            : 'Aucune tâche créée'
+                                        }
+                                    </h3>
+                                    <p className="empty-message">
+                                        {filters.searchTerm || filters.dateFilter !== 'all'
+                                            ? 'Essayez de modifier vos critères de recherche'
+                                            : 'Commencez par créer votre première tâche ci-dessus'
+                                        }
+                                    </p>
+                                    {(filters.searchTerm || filters.dateFilter !== 'all') && (
+                                        <button className="empty-action-btn" onClick={resetFilters}>
+                                            <span className="btn-icon">🔄</span>
+                                            <span className="btn-text">Réinitialiser les filtres</span>
+                                        </button>
+                                    )}
                                 </div>
                             )}
 
-                            <div className="table-pagination">
-                                <div className="pagination-info">
-                                    {listItem.length > 0 ? (
-                                        <>
-                                            Affichage de {listItem.length} tâche{listItem.length !== 1 ? 's' : ''}
-                                            {allItems.length !== listItem.length && (
-                                                <span style={{fontStyle: 'italic', marginLeft: '10px'}}>
-                                                    (sur {allItems.length} au total)
-                                                </span>
-                                            )}
-                                            {filters.searchTerm && (
-                                                <span style={{fontStyle: 'italic', marginLeft: '10px'}}>
-                                                    - filtré pour "{filters.searchTerm}"
-                                                </span>
-                                            )}
-                                        </>
-                                    ) : (
-                                        'Aucune tâche à afficher'
-                                    )}
+                            {listItem.length > 0 && (
+                                <div className="tasks-footer">
+                                    <div className="footer-info">
+                                        <div className="results-summary">
+                                            <span className="summary-icon">📊</span>
+                                            <span className="summary-text">
+                                                {listItem.length} tâche{listItem.length !== 1 ? 's' : ''} affichée{listItem.length !== 1 ? 's' : ''}
+                                                {allItems.length !== listItem.length && (
+                                                    <span className="total-count"> sur {allItems.length} au total</span>
+                                                )}
+                                            </span>
+                                        </div>
+                                        {filters.searchTerm && (
+                                            <div className="filter-info">
+                                                <span className="filter-icon">🔍</span>
+                                                <span className="filter-text">Filtré pour "{filters.searchTerm}"</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="footer-actions">
+                                        <button className="footer-btn" disabled title="Pagination disponible prochainement">
+                                            <span className="btn-icon">📄</span>
+                                            <span className="btn-text">Page 1/1</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="pagination-controls">
-                                    <button className="pagination-btn" disabled>
-                                        Page 1 sur 1
-                                    </button>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 ) : (
