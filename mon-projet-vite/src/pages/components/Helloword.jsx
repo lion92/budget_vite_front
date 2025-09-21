@@ -1,47 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './css/accueil.css'
-import BaniereLetchi from "./BaniereLetchi";
-import ModernDashboard from './ModernDashboard';
-import { Button, Card, FeatureCard, toast } from './ui';
+import { toast } from './ui';
+import { RefreshCw } from 'lucide-react';
 
 
 const Helloword = () => {
     const [isVisible, setIsVisible] = useState(false);
-    const [currentFeature, setCurrentFeature] = useState(0);
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
     const [videoError, setVideoError] = useState(false);
 
-    const features = [
-        { 
-            icon: "💰", 
-            title: "Suivi des Dépenses", 
-            description: "Contrôlez facilement vos dépenses quotidiennes" 
-        },
-        { 
-            icon: "📊", 
-            title: "Analyses Visuelles", 
-            description: "Graphiques intuitifs pour comprendre vos habitudes" 
-        },
-        { 
-            icon: "🎯", 
-            title: "Objectifs Financiers", 
-            description: "Définissez et atteignez vos objectifs d'épargne" 
-        },
-        { 
-            icon: "📱", 
-            title: "Interface Moderne", 
-            description: "Design responsive et expérience utilisateur optimale" 
-        }
-    ];
 
     useEffect(() => {
         setIsVisible(true);
-        const interval = setInterval(() => {
-            setCurrentFeature(prev => (prev + 1) % features.length);
-        }, 3000);
-        
-        return () => clearInterval(interval);
-    }, [features.length]);
+    }, []);
 
     const handleVideoLoad = () => {
         setIsVideoLoaded(true);
@@ -57,20 +28,9 @@ const Helloword = () => {
 
     return (
         <>
-            <ModernDashboard />
             <div className={`welcome-container ${isVisible ? 'animate-in' : ''}`}>
-                {/* Particules flottantes animées */}
-                <div className="floating-particles">
-                    {[...Array(6)].map((_, i) => (
-                        <div key={i} className={`particle particle-${i + 1}`} />
-                    ))}
-                </div>
 
                 <div className="content-box">
-                    {/* Badge "Nouveau" animé */}
-                    <div className="new-badge">
-                        <span className="new-badge-text">✨ Nouvelle Version</span>
-                    </div>
 
                     <h1 className="main-title">
                         Bienvenue dans <span className="gradient-text">Budget Manager</span>
@@ -82,56 +42,7 @@ const Helloword = () => {
                         de gestion financière personnelle.
                     </p>
 
-                    {/* Carousel des fonctionnalités */}
-                    <div className="features-carousel">
-                        <div className="feature-card active">
-                            <div className="feature-icon">{features[currentFeature].icon}</div>
-                            <h3 className="feature-title">{features[currentFeature].title}</h3>
-                            <p className="feature-description">{features[currentFeature].description}</p>
-                        </div>
-                        
-                        {/* Indicateurs du carousel */}
-                        <div className="carousel-indicators">
-                            {features.map((_, index) => (
-                                <button
-                                    key={index}
-                                    className={`indicator ${index === currentFeature ? 'active' : ''}`}
-                                    onClick={() => setCurrentFeature(index)}
-                                />
-                            ))}
-                        </div>
-                    </div>
 
-                    {/* Boutons d'action améliorés */}
-                    <div className="action-buttons">
-                        <Button
-                            variant="primary"
-                            size="large"
-                            icon={<span>👤</span>}
-                            onClick={() => {
-                                toast.info('Redirection vers le site du créateur...', {
-                                    description: 'Vous allez être redirigé vers le portfolio de Kriss CLOTILDE'
-                                });
-                                setTimeout(() => {
-                                    window.open('https://projet.krissclotilde.com/', '_blank', 'noopener,noreferrer');
-                                }, 1000);
-                            }}
-                        >
-                            Découvrir le créateur
-                        </Button>
-
-                        <Button
-                            variant="secondary"
-                            size="large"
-                            icon={<span>🎥</span>}
-                            onClick={() => {
-                                toast.success('Défilement vers la vidéo de démonstration');
-                                document.querySelector('.video-wrapper')?.scrollIntoView({ behavior: 'smooth' });
-                            }}
-                        >
-                            Voir la démonstration
-                        </Button>
-                    </div>
 
 
                     {/* Wrapper vidéo amélioré */}
@@ -161,8 +72,9 @@ const Helloword = () => {
                                                 setTimeout(() => iframe.src = currentSrc, 100);
                                             }
                                         }}
+                                        title="Réessayer"
                                     >
-                                        Réessayer
+                                        <RefreshCw size={18} />
                                     </button>
                                 </div>
                             )}
@@ -182,72 +94,6 @@ const Helloword = () => {
                         </div>
                     </div>
 
-                    {/* Fonctionnalités avec nouvelles cartes */}
-                    <div className="features-section" style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                        gap: 'var(--spacing-lg)',
-                        marginTop: 'var(--spacing-2xl)',
-                        marginBottom: 'var(--spacing-2xl)'
-                    }}>
-                        {features.map((feature, index) => (
-                            <FeatureCard
-                                key={index}
-                                icon={<span style={{ fontSize: '2rem' }}>{feature.icon}</span>}
-                                title={feature.title}
-                                description={feature.description}
-                                action={
-                                    <Button
-                                        variant="ghost"
-                                        size="small"
-                                        onClick={() => {
-                                            toast.success(`Fonctionnalité: ${feature.title}`, {
-                                                description: feature.description
-                                            });
-                                        }}
-                                    >
-                                        En savoir plus
-                                    </Button>
-                                }
-                                hoverable
-                                onClick={() => {
-                                    toast.info(`Découvrir: ${feature.title}`);
-                                }}
-                            />
-                        ))}
-                    </div>
-
-                    {/* Témoignages rapides */}
-                    <Card
-                        variant="primary"
-                        className="testimonials-preview"
-                        style={{
-                            textAlign: 'center',
-                            marginTop: 'var(--spacing-xl)'
-                        }}
-                    >
-                        <div className="testimonial-item">
-                            <div className="testimonial-stars" style={{
-                                fontSize: '1.5rem',
-                                marginBottom: 'var(--spacing-md)'
-                            }}>⭐⭐⭐⭐⭐</div>
-                            <p style={{
-                                fontSize: 'var(--font-size-lg)',
-                                fontStyle: 'italic',
-                                marginBottom: 'var(--spacing-sm)'
-                            }}>"Interface intuitive et design moderne !"</p>
-                            <cite style={{
-                                fontSize: 'var(--font-size-sm)',
-                                color: 'var(--text-muted)'
-                            }}>- Marie D.</cite>
-                        </div>
-                    </Card>
-                </div>
-
-                {/* Scroll indicator */}
-                <div className="scroll-indicator">
-                    <div className="scroll-arrow">↓</div>
-                    <span>Scroll pour explorer</span>
                 </div>
             </div>
         </>

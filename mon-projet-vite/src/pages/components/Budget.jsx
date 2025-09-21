@@ -4,6 +4,7 @@ import jsPDF from "jspdf";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import './css/budget_style.css';
+import './css/new-expense-table.css';
 import { useNotify } from "./Notification";
 import AllSpend from "././AllSpend.jsx";
 import useBudgetStore from "../../useBudgetStore";
@@ -16,7 +17,7 @@ import {
     FilePlus, Table, BarChartBig, Download, Filter, RefreshCw,
     TrendingUp, TrendingDown, Wallet, Calendar, X, Plus, Trash2, Edit,
     Eye, EyeOff, Settings, PiggyBank, Target, AlertCircle, ChevronDown,
-    ChevronUp, Layers, Check
+    ChevronUp, Layers, Check, Save
 } from 'lucide-react';
 
 export default function Budget() {
@@ -78,6 +79,16 @@ export default function Budget() {
         fetchCategories();
         fetchRevenus();
     }, []);
+
+    // Réinitialiser l'affichage quand on change de mois/année
+    useEffect(() => {
+        setShowAllDepenses(false);
+        setFilterId('');
+        setFilterMontant('');
+        setFilterDescription('');
+        setFilterCategorie('');
+        setFilterDate('');
+    }, [selectedMonth, selectedYear]);
 
     // Fonctions utilitaires
     const updateDepenseField = (index, field, value) => {
@@ -217,6 +228,7 @@ export default function Budget() {
         setFilterDescription('');
         setFilterCategorie('');
         setFilterDate('');
+        setShowAllDepenses(false);
     };
 
     // Filtrage intelligent des dépenses avec limitation
@@ -236,7 +248,7 @@ export default function Budget() {
         ? sortedFilteredDepenses
         : sortedFilteredDepenses.slice(0, maxDepensesDisplay);
 
-    const hasMoreDepenses = sortedFilteredDepenses.length > maxDepensesDisplay;
+    const hasMoreDepenses = !showAllDepenses && sortedFilteredDepenses.length > maxDepensesDisplay;
 
     const advice = getFinancialAdvice();
 
@@ -353,65 +365,50 @@ export default function Budget() {
                             <button
                                 className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('dashboard')}
+                                title="Tableau de bord - Vue d'ensemble financière"
                             >
                                 <div className="nav-icon">
                                     <Wallet size={22} />
-                                </div>
-                                <div className="nav-content">
-                                    <span className="nav-title">Tableau de bord</span>
-                                    <span className="nav-subtitle">Vue d'ensemble financière</span>
                                 </div>
                             </button>
 
                             <button
                                 className={`nav-item ${activeTab === 'expenses' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('expenses')}
+                                title="Dépenses - Gestion détaillée"
                             >
                                 <div className="nav-icon">
                                     <Table size={22} />
-                                </div>
-                                <div className="nav-content">
-                                    <span className="nav-title">Dépenses</span>
-                                    <span className="nav-subtitle">Gestion détaillée</span>
                                 </div>
                             </button>
 
                             <button
                                 className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('analytics')}
+                                title="Analyses - Graphiques & rapports"
                             >
                                 <div className="nav-icon">
                                     <BarChartBig size={22} />
-                                </div>
-                                <div className="nav-content">
-                                    <span className="nav-title">Analyses</span>
-                                    <span className="nav-subtitle">Graphiques & rapports</span>
                                 </div>
                             </button>
 
                             <button
                                 className={`nav-item ${activeTab === 'tools' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('tools')}
+                                title="Outils - Import & export"
                             >
                                 <div className="nav-icon">
                                     <FilePlus size={22} />
-                                </div>
-                                <div className="nav-content">
-                                    <span className="nav-title">Outils</span>
-                                    <span className="nav-subtitle">Import & export</span>
                                 </div>
                             </button>
 
                             <button
                                 className={`nav-item ${activeTab === 'history' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('history')}
+                                title="Historique - Archives & tendances"
                             >
                                 <div className="nav-icon">
                                     <Calendar size={22} />
-                                </div>
-                                <div className="nav-content">
-                                    <span className="nav-title">Historique</span>
-                                    <span className="nav-subtitle">Archives & tendances</span>
                                 </div>
                             </button>
                         </div>
@@ -426,10 +423,6 @@ export default function Budget() {
                                 title="Ajouter une ou plusieurs dépenses"
                             >
                                 <Plus size={20} />
-                                <span className="btn-text">
-                                    <span className="btn-main">Ajouter</span>
-                                    <span className="btn-sub">Dépenses</span>
-                                </span>
                             </button>
                             <button
                                 className="btn btn-success btn-lg"
@@ -437,10 +430,6 @@ export default function Budget() {
                                 title="Ajouter un nouveau revenu"
                             >
                                 <TrendingUp size={20} />
-                                <span className="btn-text">
-                                    <span className="btn-main">Ajouter</span>
-                                    <span className="btn-sub">Revenu</span>
-                                </span>
                             </button>
                         </div>
                         <div className="secondary-actions">
@@ -450,7 +439,6 @@ export default function Budget() {
                                 title="Gérer les catégories de dépenses"
                             >
                                 <Settings size={18} />
-                                Catégories
                             </button>
                         </div>
                     </div>
@@ -474,9 +462,9 @@ export default function Budget() {
                                     <button
                                         className="btn btn-outline"
                                         onClick={downloadBilanPDF}
+                                        title="Télécharger PDF"
                                     >
                                         <Download size={18} />
-                                        Télécharger PDF
                                     </button>
                                 </div>
 
@@ -577,16 +565,16 @@ export default function Budget() {
                                         <button
                                             className={`btn btn-outline ${showFilters ? 'active' : ''}`}
                                             onClick={() => setShowFilters(!showFilters)}
+                                            title="Filtres"
                                         >
                                             <Filter size={18} />
-                                            Filtres
                                         </button>
                                         <button
                                             className="btn btn-outline"
                                             onClick={clearFilters}
+                                            title="Réinitialiser"
                                         >
                                             <RefreshCw size={18} />
-                                            Réinitialiser
                                         </button>
                                     </div>
                                 </div>
@@ -597,7 +585,10 @@ export default function Budget() {
                                         <label>Nombre d'éléments :</label>
                                         <select
                                             value={maxDepensesDisplay}
-                                            onChange={(e) => setMaxDepensesDisplay(parseInt(e.target.value))}
+                                            onChange={(e) => {
+                                                setMaxDepensesDisplay(parseInt(e.target.value));
+                                                setShowAllDepenses(false);
+                                            }}
                                             className="control-select"
                                         >
                                             <option value={25}>25 dépenses</option>
@@ -606,22 +597,30 @@ export default function Budget() {
                                             <option value={1000}>1000 dépenses</option>
                                         </select>
                                     </div>
-                                    {hasMoreDepenses && !showAllDepenses && (
+                                    <div className="display-info">
+                                        <span className="info-text">
+                                            {showAllDepenses
+                                                ? `Affichage de toutes les ${displayedDepenses.length} dépenses`
+                                                : `Affichage de ${displayedDepenses.length} sur ${sortedFilteredDepenses.length} dépenses`
+                                            }
+                                        </span>
+                                    </div>
+                                    {hasMoreDepenses && (
                                         <button
                                             className="btn btn-secondary btn-sm"
                                             onClick={() => setShowAllDepenses(true)}
+                                            title={`Voir toutes (${sortedFilteredDepenses.length})`}
                                         >
                                             <ChevronDown size={16} />
-                                            Voir toutes ({sortedFilteredDepenses.length})
                                         </button>
                                     )}
                                     {showAllDepenses && (
                                         <button
                                             className="btn btn-secondary btn-sm"
                                             onClick={() => setShowAllDepenses(false)}
+                                            title="Voir moins"
                                         >
                                             <ChevronUp size={16} />
-                                            Voir moins
                                         </button>
                                     )}
                                 </div>
@@ -683,133 +682,309 @@ export default function Budget() {
                                     </div>
                                 )}
 
-                                <div className="table-container">
-                                    <table className="modern-table">
-                                        <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Montant</th>
-                                            <th>Description</th>
-                                            <th>Catégorie</th>
-                                            <th>Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {displayedDepenses.map(dep => (
-                                            <tr key={dep.id} className={editingId === dep.id ? 'editing' : ''}>
-                                                <td>
-                                                    <span className="table-id">#{dep.id}</span>
-                                                </td>
-                                                <td>
-                                                    {editingId === dep.id ? (
-                                                        <input
-                                                            type="number"
-                                                            step="0.01"
-                                                            value={editData.montant}
-                                                            onChange={(e) => setEditData({ ...editData, montant: e.target.value })}
-                                                            className="edit-input"
-                                                        />
-                                                    ) : (
-                                                        <span className={`amount ${Number(dep.montant) >= 0 ? 'positive' : 'negative'}`}>
-                                                            {dep.montant} €
-                                                        </span>
-                                                    )}
-                                                </td>
-                                                <td className="description">
-                                                    {editingId === dep.id ? (
-                                                        <input
-                                                            type="text"
-                                                            value={editData.description}
-                                                            onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                                                            className="edit-input"
-                                                        />
-                                                    ) : (
-                                                        dep.description
-                                                    )}
-                                                </td>
-                                                <td>
-                                                    {editingId === dep.id ? (
-                                                        <select
-                                                            value={editData.categorie}
-                                                            onChange={(e) => setEditData({ ...editData, categorie: e.target.value })}
-                                                            className="edit-select"
+                                <div className="new-expense-table-container">
+                                    {/* Nouveau tableau moderne avec design ultra clean */}
+                                    <div className="table-wrapper">
+                                        <div className="table-scroll">
+                                            <table className="expense-data-table">
+                                                <thead className="table-head">
+                                                    <tr>
+                                                        <th className="th-id">
+                                                            <div className="th-content">
+                                                                <span>ID</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="th-amount">
+                                                            <div className="th-content">
+                                                                <span>Montant</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="th-description">
+                                                            <div className="th-content">
+                                                                <span>Description</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="th-category">
+                                                            <div className="th-content">
+                                                                <span>Catégorie</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="th-date">
+                                                            <div className="th-content">
+                                                                <span>Date</span>
+                                                            </div>
+                                                        </th>
+                                                        <th className="th-actions">
+                                                            <div className="th-content">
+                                                                <span>Actions</span>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="table-body">
+                                                    {displayedDepenses.map((dep, index) => (
+                                                        <tr
+                                                            key={dep.id}
+                                                            className={`table-row ${editingId === dep.id ? 'row-editing' : ''} ${index % 2 === 0 ? 'row-even' : 'row-odd'}`}
                                                         >
-                                                            <option value="">-- Choisir --</option>
-                                                            {categories.map((cat) => (
-                                                                <option key={cat.id} value={cat.id}>
-                                                                    {cat.categorie}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    ) : (
-                                                        <div className="category-cell">
-                                                            {dep?.iconName && (
-                                                                <i className={dep.iconName} style={{marginRight: '8px'}}></i>
+                                                            <td className="td-id">
+                                                                <div className="cell-content">
+                                                                    <div className="id-badge">#{dep.id}</div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="td-amount">
+                                                                <div className="cell-content">
+                                                                    {editingId === dep.id ? (
+                                                                        <input
+                                                                            type="number"
+                                                                            step="0.01"
+                                                                            value={editData.montant}
+                                                                            onChange={(e) => setEditData({ ...editData, montant: e.target.value })}
+                                                                            className="amount-edit-input"
+                                                                        />
+                                                                    ) : (
+                                                                        <div className={`amount-display ${Number(dep.montant) >= 0 ? 'amount-positive' : 'amount-negative'}`}>
+                                                                            <span className="amount-value">{Number(dep.montant).toFixed(2)} €</span>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                            <td className="td-description">
+                                                                <div className="cell-content">
+                                                                    {editingId === dep.id ? (
+                                                                        <input
+                                                                            type="text"
+                                                                            value={editData.description}
+                                                                            onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                                                                            className="description-edit-input"
+                                                                        />
+                                                                    ) : (
+                                                                        <div className="description-display">
+                                                                            <span className="description-text">{dep.description || 'Sans description'}</span>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                            <td className="td-category">
+                                                                <div className="cell-content">
+                                                                    {editingId === dep.id ? (
+                                                                        <select
+                                                                            value={editData.categorie}
+                                                                            onChange={(e) => setEditData({ ...editData, categorie: e.target.value })}
+                                                                            className="category-edit-select"
+                                                                        >
+                                                                            <option value="">-- Choisir --</option>
+                                                                            {categories.map((cat) => (
+                                                                                <option key={cat.id} value={cat.id}>
+                                                                                    {cat.categorie}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
+                                                                    ) : (
+                                                                        <div className="category-display">
+                                                                            <div className="category-pill">
+                                                                                {dep?.iconName && <i className={dep.iconName}></i>}
+                                                                                <span>{dep.categorie || 'Non classé'}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                            <td className="td-date">
+                                                                <div className="cell-content">
+                                                                    {editingId === dep.id ? (
+                                                                        <input
+                                                                            type="date"
+                                                                            value={editData.dateTransaction}
+                                                                            onChange={(e) => setEditData({ ...editData, dateTransaction: e.target.value })}
+                                                                            className="date-edit-input"
+                                                                        />
+                                                                    ) : (
+                                                                        <div className="date-display">
+                                                                            <span className="date-value">
+                                                                                {new Date(dep.dateTransaction).toLocaleDateString('fr-FR')}
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                            <td className="td-actions">
+                                                                <div className="cell-content">
+                                                                    <div className="action-buttons-container">
+                                                                        {editingId === dep.id ? (
+                                                                            <>
+                                                                                <button
+                                                                                    onClick={() => handleEditSubmit(dep.id)}
+                                                                                    className="action-button save-button"
+                                                                                    title="Sauvegarder"
+                                                                                >
+                                                                                    <Check size={16} />
+                                                                                </button>
+                                                                                <button
+                                                                                    onClick={handleEditCancel}
+                                                                                    className="action-button cancel-button"
+                                                                                    title="Annuler"
+                                                                                >
+                                                                                    <X size={16} />
+                                                                                </button>
+                                                                            </>
+                                                                        ) : (
+                                                                            <>
+                                                                                <button
+                                                                                    className="action-button edit-button"
+                                                                                    onClick={() => handleEdit(dep)}
+                                                                                    title="Modifier cette dépense"
+                                                                                >
+                                                                                    <Edit size={16} />
+                                                                                </button>
+                                                                                <button
+                                                                                    className="action-button delete-button"
+                                                                                    onClick={() => handleDelete(dep.id)}
+                                                                                    title="Supprimer cette dépense"
+                                                                                >
+                                                                                    <Trash2 size={16} />
+                                                                                </button>
+                                                                            </>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    {/* Version mobile cards redesignées */}
+                                    <div className="mobile-expense-grid">
+                                        {displayedDepenses.map((dep, index) => (
+                                            <div
+                                                key={dep.id}
+                                                className={`expense-mobile-card ${editingId === dep.id ? 'card-editing' : ''}`}
+                                            >
+                                                <div className="card-header-section">
+                                                    <div className="card-id-badge">#{dep.id}</div>
+                                                    <div className={`card-amount ${Number(dep.montant) >= 0 ? 'amount-positive' : 'amount-negative'}`}>
+                                                        {editingId === dep.id ? (
+                                                            <input
+                                                                type="number"
+                                                                step="0.01"
+                                                                value={editData.montant}
+                                                                onChange={(e) => setEditData({ ...editData, montant: e.target.value })}
+                                                                className="mobile-amount-edit"
+                                                            />
+                                                        ) : (
+                                                            <span>{Number(dep.montant).toFixed(2)} €</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="card-content-section">
+                                                    <div className="card-field">
+                                                        <label>Description</label>
+                                                        <div className="field-value">
+                                                            {editingId === dep.id ? (
+                                                                <input
+                                                                    type="text"
+                                                                    value={editData.description}
+                                                                    onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                                                                    className="mobile-text-edit"
+                                                                />
+                                                            ) : (
+                                                                <span>{dep.description || 'Sans description'}</span>
                                                             )}
-                                                            {dep.categorie}
                                                         </div>
-                                                    )}
-                                                </td>
-                                                <td>
+                                                    </div>
+
+                                                    <div className="card-field">
+                                                        <label>Catégorie</label>
+                                                        <div className="field-value">
+                                                            {editingId === dep.id ? (
+                                                                <select
+                                                                    value={editData.categorie}
+                                                                    onChange={(e) => setEditData({ ...editData, categorie: e.target.value })}
+                                                                    className="mobile-select-edit"
+                                                                >
+                                                                    <option value="">-- Choisir --</option>
+                                                                    {categories.map((cat) => (
+                                                                        <option key={cat.id} value={cat.id}>
+                                                                            {cat.categorie}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            ) : (
+                                                                <div className="mobile-category-pill">
+                                                                    {dep?.iconName && <i className={dep.iconName}></i>}
+                                                                    <span>{dep.categorie || 'Non classé'}</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="card-field">
+                                                        <label>Date</label>
+                                                        <div className="field-value">
+                                                            {editingId === dep.id ? (
+                                                                <input
+                                                                    type="date"
+                                                                    value={editData.dateTransaction}
+                                                                    onChange={(e) => setEditData({ ...editData, dateTransaction: e.target.value })}
+                                                                    className="mobile-date-edit"
+                                                                />
+                                                            ) : (
+                                                                <span>{new Date(dep.dateTransaction).toLocaleDateString('fr-FR')}</span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="card-actions-section">
                                                     {editingId === dep.id ? (
-                                                        <input
-                                                            type="date"
-                                                            value={editData.dateTransaction}
-                                                            onChange={(e) => setEditData({ ...editData, dateTransaction: e.target.value })}
-                                                            className="edit-input"
-                                                        />
-                                                    ) : (
-                                                        <span className="date">
-                                                            {new Date(dep.dateTransaction).toLocaleDateString('fr-FR')}
-                                                        </span>
-                                                    )}
-                                                </td>
-                                                <td>
-                                                    {editingId === dep.id ? (
-                                                        <div className="action-buttons">
+                                                        <>
                                                             <button
                                                                 onClick={() => handleEditSubmit(dep.id)}
-                                                                className="btn btn-success btn-sm action-btn"
-                                                                title="Sauvegarder"
+                                                                className="mobile-action-btn save-btn"
+                                                                title="Sauver"
                                                             >
                                                                 <Check size={16} />
                                                             </button>
                                                             <button
                                                                 onClick={handleEditCancel}
-                                                                className="btn btn-secondary btn-sm action-btn"
+                                                                className="mobile-action-btn cancel-btn"
                                                                 title="Annuler"
                                                             >
                                                                 <X size={16} />
                                                             </button>
-                                                        </div>
+                                                        </>
                                                     ) : (
-                                                        <div className="action-buttons">
+                                                        <>
                                                             <button
-                                                                className="btn btn-primary btn-sm action-btn"
+                                                                className="mobile-action-btn edit-btn"
                                                                 onClick={() => handleEdit(dep)}
-                                                                title="Modifier cette dépense"
+                                                                title="Modifier"
                                                             >
                                                                 <Edit size={16} />
                                                             </button>
                                                             <button
-                                                                className="btn btn-danger btn-sm action-btn"
+                                                                className="mobile-action-btn delete-btn"
                                                                 onClick={() => handleDelete(dep.id)}
-                                                                title="Supprimer cette dépense"
+                                                                title="Supprimer"
                                                             >
                                                                 <Trash2 size={16} />
                                                             </button>
-                                                        </div>
+                                                        </>
                                                     )}
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </div>
                                         ))}
-                                        </tbody>
-                                    </table>
+                                    </div>
 
                                     {displayedDepenses.length === 0 && (
-                                        <div className="empty-state">
-                                            <Layers size={48} />
+                                        <div className="empty-state-new">
+                                            <div className="empty-icon">
+                                                <Layers size={64} />
+                                            </div>
                                             <h3>Aucune dépense trouvée</h3>
                                             <p>Aucune dépense ne correspond à vos critères de filtrage pour ce mois.</p>
                                         </div>
@@ -951,9 +1126,8 @@ export default function Budget() {
                                             </div>
 
                                             <div className="budget-card-footer">
-                                                <button className="view-budget-btn">
+                                                <button className="view-budget-btn" title="Consulter">
                                                     <Eye size={16} />
-                                                    Consulter
                                                 </button>
                                             </div>
                                         </div>
@@ -1002,9 +1176,9 @@ export default function Budget() {
                                                     setBudgetSearchTerm('');
                                                     setBudgetSearchYear('');
                                                 }}
+                                                title="Réinitialiser"
                                             >
                                                 <RefreshCw size={18} />
-                                                Réinitialiser
                                             </button>
                                         </div>
                                     </div>
@@ -1054,9 +1228,9 @@ export default function Budget() {
                                                                         setSelectedYear(budget.year);
                                                                         setActiveTab('dashboard');
                                                                     }}
+                                                                    title="Consulter"
                                                                 >
                                                                     <Eye size={14} />
-                                                                    Consulter
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -1203,20 +1377,21 @@ export default function Budget() {
                                     type="button"
                                     className="btn btn-outline"
                                     onClick={addLigneDepense}
+                                    title="Ajouter une ligne"
                                 >
                                     <Plus size={18} />
-                                    Ajouter une ligne
                                 </button>
                                 <div className="action-buttons">
                                     <button
                                         type="button"
                                         className="btn btn-secondary"
                                         onClick={() => setShowDepenseForm(false)}
+                                        title="Annuler"
                                     >
-                                        Annuler
+                                        <X size={18} />
                                     </button>
-                                    <button type="submit" className="btn btn-primary">
-                                        Enregistrer les dépenses
+                                    <button type="submit" className="btn btn-primary" title="Enregistrer les dépenses">
+                                        <Save size={18} />
                                     </button>
                                 </div>
                             </div>

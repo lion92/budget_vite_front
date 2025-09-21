@@ -951,8 +951,8 @@
 }
 
 .primary-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 8px 28px rgba(139, 92, 246, 0.3);
 }
 
 .secondary-btn {
@@ -965,7 +965,19 @@
 .secondary-btn:hover {
     background: var(--primary-50);
     border-color: var(--primary-500);
-    transform: translateY(-2px);
+    transform: translateY(-1px) translateZ(0);
+}
+
+/* États focus et active pour accessibilité tactile */
+.primary-btn:focus,
+.secondary-btn:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+}
+
+.primary-btn:active,
+.secondary-btn:active {
+    transform: translateY(0) translateZ(0);
 }
 
 .btn-icon {
@@ -1146,8 +1158,17 @@
 
 .retry-btn:hover {
     background: var(--error-600);
-    transform: translateY(-1px);
+    transform: translateY(-1px) translateZ(0);
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.retry-btn:focus {
+    outline: 2px solid var(--error-500);
+    outline-offset: 2px;
+}
+
+.retry-btn:active {
+    transform: translateY(0) translateZ(0);
 }
 
 /* Témoignages */
@@ -1221,37 +1242,77 @@
         margin: var(--spacing-xl) 0;
         padding: var(--spacing-lg);
     }
-    
+
     .feature-icon {
         font-size: 36px;
     }
-    
+
     .action-buttons {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .primary-btn, .secondary-btn {
         width: 100%;
         max-width: 280px;
         justify-content: center;
+        min-height: 48px;
+        -webkit-tap-highlight-color: transparent;
+        will-change: transform;
+        backface-visibility: hidden;
     }
-    
+
+    /* Optimisations tactiles pour mobile */
+    .primary-btn:hover,
+    .secondary-btn:hover {
+        transform: translateZ(0);
+    }
+
+    .primary-btn:active,
+    .secondary-btn:active {
+        transform: scale(0.98) translateZ(0);
+        transition: transform 0.1s ease;
+    }
+
+    .retry-btn {
+        min-height: 44px;
+        min-width: 120px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .retry-btn:hover {
+        transform: translateZ(0);
+    }
+
+    .retry-btn:active {
+        transform: scale(0.95) translateZ(0);
+    }
+
     .stats-section {
         grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         gap: var(--spacing-md);
         padding: var(--spacing-lg);
     }
-    
+
     .stat-number {
         font-size: var(--font-size-2xl);
     }
-    
+
     .new-badge {
         position: static;
         display: flex;
         justify-content: center;
         margin-bottom: var(--spacing-md);
+    }
+
+    /* Amélioration des messages d'erreur sur mobile */
+    .video-error {
+        padding: var(--spacing-lg);
+    }
+
+    .error-text {
+        font-size: var(--font-size-base);
+        line-height: var(--line-height-relaxed);
     }
 }
 
@@ -1259,13 +1320,217 @@
     .particle {
         display: none; /* Masquer les particules sur très petits écrans pour les performances */
     }
-    
+
     .feature-icon {
         font-size: 32px;
     }
-    
+
     .stats-section {
         grid-template-columns: 1fr;
         gap: var(--spacing-sm);
+    }
+
+    /* Optimisations supplémentaires pour très petits écrans */
+    .primary-btn, .secondary-btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: var(--font-size-sm);
+        min-height: 44px;
+    }
+
+    .retry-btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-sm);
+        min-height: 40px;
+        min-width: 100px;
+    }
+
+    /* Suppression des animations coûteuses sur très petits écrans */
+    .primary-btn:active,
+    .secondary-btn:active,
+    .retry-btn:active {
+        transform: translateZ(0);
+        animation: none;
+    }
+
+    /* Amélioration de la lisibilité des erreurs */
+    .error-icon {
+        font-size: 3rem;
+    }
+
+    .error-text {
+        font-size: var(--font-size-sm);
+        padding: 0 var(--spacing-md);
+    }
+}
+
+/* ================================================
+   OPTIMISATIONS SPÉCIFIQUES MOBILE - RESPONSIVE BUTTONS
+   ================================================ */
+
+/* Suppression de la surbrillance tactile sur tous les navigateurs mobiles */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Permettre la sélection du texte sur les éléments textuels */
+p, h1, h2, h3, h4, h5, h6, span, div[class*="text"], .testimonial-item {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Optimisations pour écrans tactiles */
+@media (hover: none) and (pointer: coarse) {
+    .primary-btn:hover,
+    .secondary-btn:hover,
+    .retry-btn:hover,
+    .about-link:hover,
+    .video-wrapper:hover {
+        transform: translateZ(0) !important;
+    }
+
+    .primary-btn:active,
+    .secondary-btn:active {
+        transform: scale(0.96) translateZ(0);
+        transition: transform 0.1s ease;
+    }
+
+    .retry-btn:active {
+        transform: scale(0.94) translateZ(0);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* Amélioration des messages de toast pour mobile */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: var(--z-tooltip);
+    max-width: calc(100vw - 40px);
+}
+
+.toast {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    box-shadow: var(--shadow-lg);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.toast.error {
+    border-left: 4px solid var(--error-500);
+    background: rgba(254, 242, 242, 0.95);
+}
+
+.toast.success {
+    border-left: 4px solid var(--success-500);
+    background: rgba(240, 253, 244, 0.95);
+}
+
+.toast.warning {
+    border-left: 4px solid var(--warning-500);
+    background: rgba(255, 251, 235, 0.95);
+}
+
+.toast.info {
+    border-left: 4px solid var(--info-500);
+    background: rgba(239, 246, 255, 0.95);
+}
+
+/* Mode sombre pour toasts */
+[data-theme="dark"] .toast,
+.dark-mode .toast {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .toast.error,
+.dark-mode .toast.error {
+    background: rgba(60, 20, 20, 0.95);
+}
+
+[data-theme="dark"] .toast.success,
+.dark-mode .toast.success {
+    background: rgba(20, 60, 20, 0.95);
+}
+
+[data-theme="dark"] .toast.warning,
+.dark-mode .toast.warning {
+    background: rgba(60, 45, 20, 0.95);
+}
+
+[data-theme="dark"] .toast.info,
+.dark-mode .toast.info {
+    background: rgba(20, 40, 60, 0.95);
+}
+
+/* Mobile responsive pour toasts */
+@media (max-width: 768px) {
+    .toast-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    .toast {
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-sm);
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .toast-container {
+        top: 5px;
+        right: 5px;
+        left: 5px;
+    }
+
+    .toast {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-xs);
+        min-height: 40px;
+        border-radius: var(--radius-sm);
+    }
+}
+
+/* Optimisations pour les performances sur mobile */
+@media (max-width: 768px) {
+    /* Simplifier les animations complexes */
+    .main-title span::after,
+    .title-underline,
+    .floating-particles,
+    .particle,
+    .btn-shine {
+        animation: none !important;
+    }
+
+    /* Réduire la complexité des filtres */
+    .content-box,
+    .features-carousel,
+    .testimonials-preview {
+        backdrop-filter: none;
+    }
+
+    /* Optimiser les transitions pour touch */
+    .primary-btn, .secondary-btn, .retry-btn {
+        transition: transform 0.15s ease, background-color 0.2s ease;
     }
 }

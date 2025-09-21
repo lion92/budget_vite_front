@@ -1,43 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Card, StatCard, FeatureCard } from './ui/Card';
 import { toast } from './ui/Toast';
+import { ExternalLink } from 'lucide-react';
 import './css/modern-dashboard.css';
 
 const ModernDashboard = () => {
-  const [stats, setStats] = useState([
-    {
-      title: "Budget Défini",
-      value: "---",
-      trend: "--",
-      trendDirection: "neutral",
-      icon: "💰",
-      description: "Aucun budget n'a encore été configuré. Commencez par définir votre budget mensuel dans la section Budget pour suivre vos finances."
-    },
-    {
-      title: "Dépenses Saisies",
-      value: "0€",
-      trend: "--",
-      trendDirection: "neutral",
-      icon: "💳",
-      description: "Aucune dépense enregistrée pour le moment. Utilisez le bouton 'Nouvelle Dépense' pour commencer à suivre vos sorties d'argent."
-    },
-    {
-      title: "Économies Calculées",
-      value: "---",
-      trend: "--",
-      trendDirection: "neutral",
-      icon: "💎",
-      description: "Les économies seront calculées automatiquement une fois que vous aurez défini un budget et saisi vos dépenses."
-    },
-    {
-      title: "Transactions",
-      value: "0",
-      trend: "--",
-      trendDirection: "neutral",
-      icon: "📊",
-      description: "Aucune transaction enregistrée. Commencez à saisir vos revenus et dépenses pour voir vos statistiques financières."
-    },
-  ]);
 
   const [quickActions] = useState([
     {
@@ -87,47 +54,8 @@ const ModernDashboard = () => {
             Votre application de gestion financière est prête ! Commencez par configurer votre premier budget.
           </p>
         </div>
-        <div className="header-actions slide-in-right">
-          <button
-            className="modern-btn modern-btn--primary"
-            onClick={() => toast.warning("Fonction à venir", {
-              description: "Les rapports financiers seront disponibles une fois que vous aurez saisi quelques transactions. Cette fonctionnalité est en cours de développement."
-            })}
-          >
-            <span>📊</span>
-            Rapports (Bientôt)
-          </button>
-          <button
-            className="modern-btn modern-btn--secondary"
-            onClick={() => toast.info("Mode Démo", {
-              description: "Vous découvrez l'interface en mode démonstration. Les paramètres seront accessibles dans la version complète de l'application."
-            })}
-          >
-            <span>⚙️</span>
-            Démo
-          </button>
-        </div>
       </div>
 
-      {/* Stats Cards */}
-      <section className="stats-section">
-        <div className="stats-grid stagger-animation">
-          {stats.map((stat, index) => (
-            <StatCard
-              key={index}
-              title={stat.title}
-              value={stat.value}
-              trend={stat.trend}
-              trendDirection={stat.trendDirection}
-              icon={stat.icon}
-              className="hover-lift"
-              onClick={() => toast.info(`${stat.title} - ${stat.value}`, {
-                description: stat.description
-              })}
-            />
-          ))}
-        </div>
-      </section>
 
       {/* Quick Actions */}
       <section className="quick-actions-section space-responsive-lg">
@@ -143,8 +71,9 @@ const ModernDashboard = () => {
                 <button
                   className="modern-btn modern-btn--outline"
                   onClick={action.action}
+                  title="Accéder"
                 >
-                  Accéder
+                  <ExternalLink size={18} />
                 </button>
               }
               className="hover-lift"
@@ -157,14 +86,6 @@ const ModernDashboard = () => {
       <section className="transactions-section">
         <div className="section-header">
           <h2 className="section-title">Historique des Transactions</h2>
-          <button
-            className="modern-btn modern-btn--ghost"
-            onClick={() => toast.info("Aucune transaction", {
-              description: "Vous n'avez encore aucune transaction enregistrée. Commencez par ajouter vos revenus et dépenses pour voir votre historique ici."
-            })}
-          >
-            Commencer →
-          </button>
         </div>
 
         <Card className="transactions-card slide-in-up">
@@ -178,14 +99,6 @@ const ModernDashboard = () => {
             <p style={{ marginBottom: 'var(--space-6)' }}>
               Vos transactions apparaîtront ici une fois que vous commencerez à utiliser l'application.
             </p>
-            <button
-              className="modern-btn modern-btn--outline"
-              onClick={() => toast.info("Première transaction", {
-                description: "Rendez-vous dans la section 'Catégories' pour créer vos catégories, puis dans 'Budget' pour configurer vos montants, et enfin utilisez 'Tâche' pour ajouter vos premières transactions."
-              })}
-            >
-              Comment commencer ?
-            </button>
           </div>
         </Card>
       </section>
