@@ -133,8 +133,9 @@ const DashTickets = () => {
                                 ...(activeTab === 'upload' ? styles.tabActive : {})
                             }}
                             onClick={() => setActiveTab('upload')}
+                            title="Analyser un Ticket"
                         >
-                            📤 Analyser un Ticket
+                            📤
                         </button>
                         <button
                             style={{
@@ -142,8 +143,9 @@ const DashTickets = () => {
                                 ...(activeTab === 'list' ? styles.tabActive : {})
                             }}
                             onClick={() => setActiveTab('list')}
+                            title={`Mes Tickets (${allTickets.length})`}
                         >
-                            📋 Mes Tickets ({allTickets.length})
+                            📋
                         </button>
                         <button
                             style={{
@@ -151,8 +153,9 @@ const DashTickets = () => {
                                 ...(activeTab === 'table' ? styles.tabActive : {})
                             }}
                             onClick={() => setActiveTab('table')}
+                            title={`Tableau Avancé (${allTickets.length})`}
                         >
-                            📊 Tableau Avancé ({allTickets.length})
+                            📊
                         </button>
                         <button
                             style={{
@@ -160,8 +163,9 @@ const DashTickets = () => {
                                 ...(activeTab === 'stats' ? styles.tabActive : {})
                             }}
                             onClick={() => setActiveTab('stats')}
+                            title="Statistiques"
                         >
-                            📊 Statistiques
+                            📊
                         </button>
                     </div>
                 </div>
@@ -351,13 +355,16 @@ const styles = {
         fontSize: '1rem',
         fontWeight: '500',
         cursor: 'pointer',
-        transition: 'all 0.3s ease',
+        transition: 'all 0.2s ease-in-out',
+        willChange: 'background-color, color, transform',
+        backfaceVisibility: 'hidden',
+        transform: 'translateZ(0)',
     },
     tabActive: {
         backgroundColor: '#3498db',
         color: 'white',
         fontWeight: '600',
-        transform: 'translateY(-2px)',
+        transform: 'translateZ(0)',
         boxShadow: '0 4px 15px rgba(52, 152, 219, 0.3)',
     },
 
@@ -367,6 +374,10 @@ const styles = {
         borderRadius: '16px',
         boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
         overflow: 'hidden',
+        position: 'relative',
+        willChange: 'contents',
+        backfaceVisibility: 'hidden',
+        transform: 'translateZ(0)',
     },
     uploadSection: {
         padding: '0',
@@ -396,10 +407,35 @@ if (typeof document !== 'undefined' && !document.querySelector('#dash-tickets-st
     .tab:hover:not(.tab-active) {
         background-color: #f8f9fa;
         color: #2c3e50;
+        transform: translateZ(0);
+    }
+
+    @media (max-width: 768px) {
+        .tab:hover:not(.tab-active) {
+            transform: translateZ(0);
+        }
+
+        .stat-card:hover {
+            transform: translateZ(0);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .merchant-item:hover {
+            transform: translateZ(0);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tab:hover:not(.tab-active),
+        .stat-card:hover,
+        .merchant-item:hover {
+            transform: translateZ(0);
+        }
     }
 
     .merchant-item:hover {
-        transform: translateX(5px);
+        transform: translateX(2px) translateZ(0);
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     `;

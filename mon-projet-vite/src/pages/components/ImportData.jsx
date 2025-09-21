@@ -374,7 +374,7 @@ export function ImportData({ onClose }) {
                                     onChange={handleFileUpload}
                                     style={{ display: 'none' }}
                                 />
-                                Choisir un fichier
+                                <Upload size={20} />
                             </label>
                         </div>
                     )}
@@ -427,15 +427,17 @@ export function ImportData({ onClose }) {
                                 <button
                                     onClick={() => {setFile(null); setParsedData(null);}}
                                     className="btn-secondary"
+                                    title="Changer de fichier"
                                 >
-                                    Changer de fichier
+                                    <FileText size={20} />
                                 </button>
                                 <button
                                     onClick={processImport}
                                     disabled={!columnMapping.description || !columnMapping.montant || importing}
                                     className="btn-primary"
+                                    title={importing ? 'Import en cours...' : 'Importer les données'}
                                 >
-                                    {importing ? 'Import en cours...' : 'Importer les données'}
+                                    {importing ? <div className="spinner"></div> : <Check size={20} />}
                                 </button>
                             </div>
                         </div>
@@ -475,8 +477,8 @@ export function ImportData({ onClose }) {
                                 </div>
                             )}
 
-                            <button onClick={onClose} className="btn-primary">
-                                Fermer
+                            <button onClick={onClose} className="btn-primary" title="Fermer">
+                                <X size={20} />
                             </button>
                         </div>
                     )}

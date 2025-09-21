@@ -245,6 +245,9 @@
   .modern-btn {
     min-height: 44px;
     font-size: var(--font-size-md);
+    -webkit-tap-highlight-color: transparent;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   .modern-btn--small {
@@ -255,6 +258,21 @@
   .modern-btn--large {
     min-height: 52px;
     padding: var(--spacing-lg) var(--spacing-xl);
+  }
+
+  /* Optimisations tactiles spécifiques */
+  .modern-btn--primary:hover:not(:disabled),
+  .modern-btn--secondary:hover:not(:disabled),
+  .modern-btn--success:hover:not(:disabled),
+  .modern-btn--danger:hover:not(:disabled),
+  .modern-btn--warning:hover:not(:disabled),
+  .modern-btn--info:hover:not(:disabled) {
+    transform: translateY(-1px) translateZ(0);
+  }
+
+  .modern-btn:active:not(:disabled) {
+    transform: scale(0.98) translateZ(0);
+    transition: transform 0.1s ease;
   }
 }
 
@@ -296,4 +314,30 @@
 [data-theme="dark"] .modern-btn--ghost:hover:not(:disabled),
 .dark-mode .modern-btn--ghost:hover:not(:disabled) {
   background: var(--surface-hover);
+}
+
+/* Optimisations pour écrans tactiles purs (sans hover) */
+@media (hover: none) and (pointer: coarse) {
+  .modern-btn--primary:hover:not(:disabled),
+  .modern-btn--secondary:hover:not(:disabled),
+  .modern-btn--success:hover:not(:disabled),
+  .modern-btn--danger:hover:not(:disabled),
+  .modern-btn--warning:hover:not(:disabled),
+  .modern-btn--info:hover:not(:disabled),
+  .modern-btn--outline:hover:not(:disabled),
+  .modern-btn--ghost:hover:not(:disabled) {
+    transform: translateZ(0) !important;
+  }
+
+  .modern-btn:active:not(:disabled) {
+    transform: scale(0.95) translateZ(0);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Réduire l'effet ripple sur mobile */
+  .modern-btn:active:not(:disabled) .modern-btn__ripple {
+    width: 200px;
+    height: 200px;
+    transition: width 0.3s, height 0.3s;
+  }
 }

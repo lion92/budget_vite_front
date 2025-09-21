@@ -1849,6 +1849,212 @@ body {
         gap: var(--space-xl);
     }
 
+    /* === TABLEAU MOBILE RESPONSIVE REFAIT === */
+    .table-container {
+        overflow-x: visible;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .modern-table {
+        display: none; /* Cacher le tableau classique sur mobile */
+    }
+
+    /* === DESIGN MOBILE SIMPLE ET PROPRE === */
+    .mobile-table-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0;
+    }
+
+    .mobile-expense-card {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-expense-card.editing {
+        border-color: #f59e0b;
+        background: #fffbeb;
+    }
+
+    /* === LIGNE DE BASE SIMPLE === */
+    .mobile-expense-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .mobile-expense-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .mobile-expense-row:first-child {
+        padding-top: 0;
+    }
+
+    .mobile-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #6b7280;
+        min-width: 80px;
+    }
+
+    .mobile-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #111827;
+        text-align: right;
+        flex: 1;
+    }
+
+    /* === MONTANT EN ÉVIDENCE === */
+    .mobile-amount-row {
+        background: #f8fafc;
+        margin: -16px -16px 16px -16px;
+        padding: 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .mobile-amount-value {
+        font-size: 24px;
+        font-weight: 800;
+        font-family: 'Courier New', monospace;
+    }
+
+    .mobile-amount-value.positive {
+        color: #059669;
+    }
+
+    .mobile-amount-value.negative {
+        color: #dc2626;
+    }
+
+    .mobile-id {
+        background: #667eea;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* === ACTIONS SIMPLIFIÉES === */
+    .mobile-actions-row {
+        margin: 16px -16px -16px -16px;
+        padding: 16px;
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .mobile-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .mobile-actions .action-btn {
+        flex: 1;
+        height: 40px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .mobile-actions .btn-primary {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .mobile-actions .btn-primary:hover {
+        background: #2563eb;
+    }
+
+    .mobile-actions .btn-danger {
+        background: #ef4444;
+        color: white;
+    }
+
+    .mobile-actions .btn-danger:hover {
+        background: #dc2626;
+    }
+
+    .mobile-actions .btn-success {
+        background: #10b981;
+        color: white;
+    }
+
+    .mobile-actions .btn-success:hover {
+        background: #059669;
+    }
+
+    .mobile-actions .btn-secondary {
+        background: #6b7280;
+        color: white;
+    }
+
+    .mobile-actions .btn-secondary:hover {
+        background: #4b5563;
+    }
+
+    /* === INPUTS SIMPLES === */
+    .mobile-edit-input,
+    .mobile-edit-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 16px;
+        background: #ffffff;
+        color: #111827;
+    }
+
+    .mobile-edit-input:focus,
+    .mobile-edit-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 1px #3b82f6;
+    }
+
+    /* État vide mobile */
+    .empty-state {
+        text-align: center;
+        padding: var(--space-3xl) var(--space-lg);
+        background: var(--bg-primary);
+        border-radius: var(--radius-lg);
+        border: 2px dashed var(--border);
+    }
+
+    .empty-state svg {
+        color: var(--text-tertiary);
+        margin-bottom: var(--space-lg);
+    }
+
+    .empty-state h3 {
+        color: var(--text-primary);
+        margin-bottom: var(--space-sm);
+        font-size: 1.125rem;
+    }
+
+    .empty-state p {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
     .page-title {
         font-size: 2rem;
     }
@@ -2305,7 +2511,7 @@ mark,
     border-radius: var(--radius-xl);
     padding: var(--space-xl);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease-in-out;
     color: white;
     display: flex;
     align-items: center;
@@ -2314,6 +2520,9 @@ mark,
     backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden;
+    will-change: transform, background-color, border-color;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .nav-item::before {
@@ -2334,15 +2543,20 @@ mark,
 .nav-item:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px) translateZ(0);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .nav-item.active {
     background: rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.6);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.nav-item:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
 }
 
 .nav-icon {
@@ -2401,6 +2615,13 @@ mark,
 
     .nav-item {
         padding: var(--space-lg);
+        transform: translateZ(0);
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+        transform: translateZ(0);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .nav-icon {
@@ -2424,20 +2645,41 @@ mark,
 
     .nav-item {
         padding: var(--space-md);
+        transform: translateZ(0);
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+        transform: translateZ(0);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .nav-subtitle {
         display: none;
+    }
+
+    .tab-content {
+        min-height: 300px;
+    }
+
+    .tab-panel {
+        animation: none;
     }
 }
 
 /* === CONTENU DES ONGLETS === */
 .tab-content {
     min-height: 400px;
+    position: relative;
+    z-index: 1;
 }
 
 .tab-panel {
-    animation: fadeInUp 0.4s ease-out;
+    animation: fadeInUp 0.3s ease-out;
+    opacity: 1;
+    transform: translateY(0);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
 }
 
 @keyframes fadeInUp {

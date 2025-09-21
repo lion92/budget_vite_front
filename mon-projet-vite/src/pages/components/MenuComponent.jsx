@@ -80,7 +80,6 @@ export default function MenuComponent(props) {
       { path: "/agenda", label: "Agenda", icon: Calendar, description: "Planning personnel" },
       { path: "/comptabilite", label: "Comptabilité", icon: Briefcase, description: "Espace comptable" },
       { path: "/graph", label: "Graphiques", icon: BarChart3, description: "Visualisations" },
-      { path: "/tickets", label: "Support", icon: MessageCircle, description: "Aide et support" },
     ]
   };
 
@@ -321,9 +320,9 @@ export default function MenuComponent(props) {
           <button
             className={`mobile-nav-item ${sidebarOpen ? 'active' : ''}`}
             onClick={toggleSidebar}
+            title="Menu"
           >
             <Menu size={20} />
-            <span>Menu</span>
           </button>
         </nav>
       )}

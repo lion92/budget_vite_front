@@ -101,7 +101,7 @@
 }
 
 .modern-btn--primary:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px) translateZ(0);
   box-shadow: var(--shadow-lg);
 }
 
@@ -114,7 +114,7 @@
 
 .modern-btn--secondary:hover {
   background: var(--glass-bg-hover);
-  transform: translateY(-2px);
+  transform: translateY(-1px) translateZ(0);
 }
 
 .modern-btn--outline {
@@ -223,7 +223,7 @@
 
 .transaction-item:hover {
   background: rgba(255, 255, 255, 0.8);
-  transform: translateX(4px);
+  transform: translateX(2px) translateZ(0);
 }
 
 .transaction-info {
@@ -390,6 +390,33 @@
     align-items: flex-start;
     gap: var(--space-3);
   }
+
+  /* Optimisations tactiles pour mobile */
+  .modern-btn {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .modern-btn--primary:hover,
+  .modern-btn--secondary:hover {
+    transform: translateZ(0);
+  }
+
+  .modern-btn:active {
+    transform: scale(0.98) translateZ(0);
+    transition: transform 0.1s ease;
+  }
+
+  .transaction-item:hover {
+    transform: translateZ(0);
+  }
+
+  .transaction-item:active {
+    transform: scale(0.99) translateZ(0);
+    transition: transform 0.1s ease;
+  }
 }
 
 @media (max-width: 480px) {
@@ -400,6 +427,7 @@
   .modern-btn {
     padding: var(--space-2) var(--space-4);
     font-size: var(--text-xs);
+    min-height: 42px;
   }
 
   .actions-grid {
@@ -409,6 +437,20 @@
   .transaction-meta {
     flex-direction: column;
     gap: var(--space-1);
+  }
+
+  /* Suppression des animations complexes sur très petits écrans */
+  .modern-btn:active,
+  .transaction-item:active {
+    transform: translateZ(0);
+    animation: none;
+  }
+
+  /* Réduction des effets de backdrop-filter pour les performances */
+  .modern-btn--secondary,
+  .transactions-card,
+  .chart-card {
+    backdrop-filter: none;
   }
 }
 
@@ -480,5 +522,34 @@
 
   .transaction-item:hover {
     transform: none;
+  }
+}
+
+/* Optimisations pour écrans tactiles purs (sans hover) */
+@media (hover: none) and (pointer: coarse) {
+  .modern-btn--primary:hover,
+  .modern-btn--secondary:hover,
+  .modern-btn--outline:hover,
+  .modern-btn--ghost:hover {
+    transform: translateZ(0) !important;
+  }
+
+  .modern-btn:active {
+    transform: scale(0.96) translateZ(0);
+    transition: transform 0.1s ease-out;
+  }
+
+  .transaction-item:hover {
+    transform: translateZ(0) !important;
+  }
+
+  .transaction-item:active {
+    transform: scale(0.98) translateZ(0);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Réduire les effets de brillance pour mobile */
+  .modern-btn::before {
+    display: none;
   }
 }
