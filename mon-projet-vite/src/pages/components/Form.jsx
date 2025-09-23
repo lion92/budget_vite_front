@@ -349,69 +349,65 @@ export default function Form(props) {
                         )}
                     </div>
 
-                    <form className="task-form" onSubmit={(e) => {
+                    <form className="modern-form" onSubmit={(e) => {
                         e.preventDefault();
                         idVal !== -1 ? modifier(e) : fetchCreer(e);
                     }}>
-                        <div className="form-grid">
-                            <div className="input-section">
-                                <label className="input-label" htmlFor="task-title">
-                                    <span className="label-icon">📋</span>
-                                    Titre de la tâche
-                                    <span className="required-asterisk">*</span>
+                        <div className="form-fields">
+                            <div className="field-group">
+                                <label htmlFor="task-title" className="field-label">
+                                    Titre de la tâche <span className="required">*</span>
                                 </label>
-                                <input
-                                    id="task-title"
-                                    className="input-field title-input"
-                                    placeholder="Ex: Finaliser le rapport mensuel"
-                                    value={titre}
-                                    onChange={(e) => Valuechange(e)}
-                                    required
-                                    autoComplete="off"
-                                    maxLength={100}
-                                />
-                                <div className="input-hint">
-                                    {titre.length}/100 caractères
+                                <div className="input-wrapper">
+                                    <input
+                                        id="task-title"
+                                        type="text"
+                                        className="modern-input"
+                                        placeholder="Entrez le titre de votre tâche"
+                                        value={titre}
+                                        onChange={(e) => Valuechange(e)}
+                                        required
+                                        autoComplete="off"
+                                        maxLength={100}
+                                    />
+                                    <div className="input-indicator"></div>
                                 </div>
+                                <span className="field-hint">{titre.length}/100 caractères</span>
                             </div>
 
-                            <div className="input-section">
-                                <label className="input-label" htmlFor="task-description">
-                                    <span className="label-icon">📄</span>
-                                    Description détaillée
+                            <div className="field-group">
+                                <label htmlFor="task-description" className="field-label">
+                                    Description
                                 </label>
-                                <textarea
-                                    id="task-description"
-                                    className="textarea-field description-input"
-                                    placeholder="Décrivez votre tâche en détail : objectifs, étapes, ressources nécessaires..."
-                                    value={valueInputDescription}
-                                    onChange={(e) => valueChangeDescription(e)}
-                                    rows="4"
-                                    maxLength={500}
-                                />
-                                <div className="input-hint">
-                                    {valueInputDescription.length}/500 caractères
+                                <div className="input-wrapper">
+                                    <textarea
+                                        id="task-description"
+                                        className="modern-textarea"
+                                        placeholder="Décrivez votre tâche (optionnel)"
+                                        value={valueInputDescription}
+                                        onChange={(e) => valueChangeDescription(e)}
+                                        rows="3"
+                                        maxLength={500}
+                                    />
+                                    <div className="input-indicator"></div>
                                 </div>
+                                <span className="field-hint">{valueInputDescription.length}/500 caractères</span>
                             </div>
                         </div>
 
-                        <div className="form-actions">
-                            <div className="primary-actions">
+                        <div className="form-footer">
+                            <div className="button-group">
                                 <button
                                     type="submit"
-                                    className={`btn ${idVal !== -1 ? 'btn-update' : 'btn-create'}`}
+                                    className={`btn-primary ${idVal !== -1 ? 'btn-update' : 'btn-create'}`}
                                     disabled={!titre.trim()}
                                 >
-                                    <span className="btn-icon">{idVal !== -1 ? '💾' : '➕'}</span>
-                                    <span className="btn-text">{idVal !== -1 ? 'Sauvegarder' : 'Créer la tâche'}</span>
+                                    {idVal !== -1 ? 'Modifier' : 'Créer'}
                                 </button>
-                            </div>
-
-                            {idVal !== -1 && (
-                                <div className="secondary-actions">
+                                {idVal !== -1 && (
                                     <button
                                         type="button"
-                                        className="btn btn-cancel"
+                                        className="btn-secondary"
                                         onClick={() => {
                                             setValue("");
                                             setDescription("");
@@ -419,11 +415,10 @@ export default function Form(props) {
                                             setEditingItem(null);
                                         }}
                                     >
-                                        <span className="btn-icon">↩️</span>
-                                        <span className="btn-text">Annuler</span>
+                                        Annuler
                                     </button>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </form>
                 </div>

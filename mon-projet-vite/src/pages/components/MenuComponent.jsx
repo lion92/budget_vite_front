@@ -18,7 +18,8 @@ import {
   BarChart3,
   MessageCircle,
   Sun,
-  Moon
+  Moon,
+  Receipt
 } from 'lucide-react';
 import './css/premium-menu.css';
 
@@ -72,13 +73,14 @@ export default function MenuComponent(props) {
       { path: "/categorie", label: "Catégories", icon: PieChart, description: "Organiser mes dépenses" },
       { path: "/allSpend", label: "Dépenses", icon: CreditCard, description: "Historique des dépenses" },
       { path: "/allSpendFilters", label: "Analyses", icon: BarChart3, description: "Analyses avancées" },
+      { path: "/analytics", label: "Graphiques", icon: TrendingUp, description: "Visualisation des dépenses", badge: "Nouveau" },
       { path: "/enveloppe", label: "Enveloppes", icon: Target, description: "Système d'enveloppes" },
-      { path: "/prediction", label: "Prévisions", icon: TrendingUp, description: "Prédictions financières", badge: "Nouveau" },
     ],
     tools: [
       { path: "/form", label: "Tâches", icon: FileText, description: "Gestion des tâches" },
       { path: "/agenda", label: "Agenda", icon: Calendar, description: "Planning personnel" },
       { path: "/comptabilite", label: "Comptabilité", icon: Briefcase, description: "Espace comptable" },
+      { path: "/factures", label: "Factures", icon: Receipt, description: "Gestion des factures" },
       { path: "/graph", label: "Graphiques", icon: BarChart3, description: "Visualisations" },
     ]
   };

@@ -10,12 +10,13 @@ import DashBoardTache from "./pages/components/DashBoardTache.jsx";
 import DashAllSpend from "./pages/components/DashAllSpend.jsx";
 import DashAllSpendFilters from "./pages/components/DashAllSpendFilters.jsx";
 import DashEnveloppe from "./pages/components/DashEnveloppe.jsx";
-import DashPrediction from "./pages/components/DashPrediction.jsx";
 import NotFound from "./pages/components/NotFound.jsx";
 import ResetPasswordForm from "./pages/components/ResetPasswordForm.jsx";
 import DashGraphBudget from "./pages/components/DashgraphBudget.jsx";
 import DashTickets from "./pages/components/DashTickets.jsx";
 import DashComptabilite from "./pages/components/DashComptabilite.jsx";
+import DashGraphAnalytics from "./pages/components/DashGraphAnalytics.jsx";
+import DashFactures from "./pages/components/DashFactures.jsx";
 import Demo from "./pages/Demo.jsx";
 
 function App() {
@@ -31,10 +32,11 @@ function App() {
                     <Route path="/allSpend" element={<DashAllSpend/>}/>
                     <Route path="/allSpendFilters" element={<DashAllSpendFilters/>}/>
                     <Route path="/enveloppe" element={<DashEnveloppe/>}/>
-                    <Route path="/prediction" element={<DashPrediction/>}/>
                     <Route path="/agenda" element={<DashBoardAgenda/>}/>
                     <Route path="/tickets" element={<DashTickets/>}/>
                     <Route path="/comptabilite" element={<DashComptabilite/>}/>
+                    <Route path="/analytics" element={<DashGraphAnalytics/>}/>
+                    <Route path="/factures" element={<DashFactures/>}/>
                     <Route path="/reset-password" element={<ResetPasswordForm />} />
                     <Route path="/graph" element={<DashGraphBudget/>} />
                     <Route path="/demo" element={<Demo />} />
