@@ -8,6 +8,7 @@ import './css/allSpend.css'; // Import du CSS
 
 const AllSpend = () => {
     const pdfRef = useRef();
+    const chartRef = useRef();
     const [budget, setBudget] = useState(0);
     const [budgetUsed, setBudgetUsed] = useState(0);
     const [budgetRemaining, setBudgetRemaining] = useState(0);
@@ -44,7 +45,13 @@ const AllSpend = () => {
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
         observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            // Détruire le graphique si il existe
+            if (chartRef.current) {
+                chartRef.current.destroy();
+            }
+        };
     }, [fetchDepenses, generateMonthlySummary, assignCategoryColors]);
 
     useEffect(() => {
@@ -208,7 +215,12 @@ const AllSpend = () => {
                 <section className="chart-section">
                     <h2 className="chart-title">Évolution des Dépenses</h2>
                     <div className="chart-container">
-                        <Bar data={chartData} options={chartOptions} />
+                        <Bar
+                            ref={chartRef}
+                            key={`allspend-chart-${Date.now()}`}
+                            data={chartData}
+                            options={chartOptions}
+                        />
                     </div>
                 </section>
 

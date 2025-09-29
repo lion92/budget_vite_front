@@ -9,7 +9,10 @@ Chart.register(ChartDataLabels);
 export default function BarGraph(props) {
     return (
         <div className="divCentrer">
-            <Bar data={props.data} />
+            <Bar
+                key={`bar-chart-${JSON.stringify(props.data?.labels)}`}
+                data={props.data}
+            />
         </div>
     );
 }

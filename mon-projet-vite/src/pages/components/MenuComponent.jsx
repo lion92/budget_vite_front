@@ -236,11 +236,17 @@ export default function MenuComponent(props) {
         <header className="top-bar">
           <div className="top-bar-left">
             <button
-              className="sidebar-toggle"
+              className="sidebar-toggle enhanced-toggle"
               onClick={toggleSidebar}
               aria-label={sidebarOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              title={sidebarOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
-              {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+              <div className="toggle-icon">
+                {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
+              </div>
+              <span className="toggle-text">
+                {sidebarOpen ? 'Fermer' : 'Menu'}
+              </span>
             </button>
             <div className="page-title">
               <h1>{props.title || 'Budget Manager'}</h1>
