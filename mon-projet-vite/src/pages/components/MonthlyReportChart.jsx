@@ -1,7 +1,7 @@
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
-import 'chart.js'; // ✅ pour chart.js@2
+import 'chart.js';
 
 import '../components/css/MonthlyReportChart.css';
 import useBudgetStore from "../../useBudgetStore";
@@ -9,6 +9,7 @@ import useBudgetStore from "../../useBudgetStore";
 const MonthlyReportChart = () => {
     const { revenus, depenses, fetchRevenus, fetchDepenses } = useBudgetStore();
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const chartRef = useRef();
 
     useEffect(() => {
         fetchRevenus();
@@ -28,7 +29,13 @@ const MonthlyReportChart = () => {
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
         observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            // Détruire le graphique si il existe
+            if (chartRef.current) {
+                chartRef.current.destroy();
+            }
+        };
     }, []);
 
     const chartData = useMemo(() => {
@@ -132,6 +139,8 @@ const MonthlyReportChart = () => {
         <div className="monthly-report">
             <h2>Bilan mensuel global (Graphique)</h2>
             <Bar
+                ref={chartRef}
+                key={`monthly-chart-${Date.now()}`}
                 data={chartData}
                 options={chartOptions}
                 height={400}

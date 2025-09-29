@@ -21,7 +21,7 @@ import Demo from "./pages/Demo.jsx";
 
 function App() {
     return (
-        <BrowserRouter future={{ v7_startTransition: true }}>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Routes>
                     <Route path="/" element={<DashBoardHello/>}/>
                     <Route path="/login" element={<DashLogin/>}/>

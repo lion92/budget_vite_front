@@ -142,9 +142,8 @@ const styles = {
     modal: {
         background: 'var(--background, white)',
         borderRadius: '20px',
-        maxWidth: '95vw',
         width: '100%',
-        maxWidth: '1200px',
+        maxWidth: 'min(95vw, 1200px)',
         maxHeight: '95vh',
         display: 'flex',
         flexDirection: 'column',

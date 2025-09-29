@@ -5,7 +5,11 @@ import Chart from 'chart.js/auto';
 export default function Graph(props) {
     return (
         <div className="divCentrer">
-            <Pie style={{width: '100%'}} data={props.data} />
+            <Pie
+                key={`pie-chart-${JSON.stringify(props.data?.labels)}`}
+                style={{width: '100%'}}
+                data={props.data}
+            />
         </div>
     );
 }
