@@ -20,7 +20,9 @@
       "Bash(netstat:*)",
       "Bash(npm run lint)",
       "Bash(npm run build:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(timeout 2 curl http://localhost:3004)",
+      "Bash(/dev/null)"
     ],
     "deny": [],
     "ask": []

@@ -211,12 +211,6 @@ body {
     opacity: 0.6;
 }
 
-.input-group label {
-    font-weight: 500;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-}
-
 /* === BARRE D'ACTIONS RÉORGANISÉE === */
 .actions-toolbar, .toolbar {
     display: flex;
@@ -1386,6 +1380,7 @@ body {
     z-index: 1000;
     padding: var(--space-lg);
     animation: fadeIn 0.3s ease-out;
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -1400,13 +1395,13 @@ body {
     animation: slideInUp 0.4s ease-out;
     transform-origin: center;
     width: 100%;
-    min-width: 600px;
+    min-width: 0;
 }
 
 .modal-content.expense-form-modal {
     max-width: 95vw;
-    width: 1200px;
-    min-width: 900px;
+    width: min(1200px, 95vw);
+    min-width: 0;
     max-height: 90vh;
     overflow: hidden;
     display: flex;
@@ -1419,6 +1414,8 @@ body {
     min-width: 800px;
     max-height: 90vh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-content.revenue-form-modal {
@@ -1429,6 +1426,35 @@ body {
 
 .modal-body {
     padding: var(--space-xl);
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--bg-secondary);
+}
+
+/* Webkit scrollbar styling pour modal-body */
+.modal-body::-webkit-scrollbar {
+    width: 12px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    margin: 4px 0;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: var(--radius-md);
+    transition: background 0.3s ease;
+    border: 2px solid var(--bg-secondary);
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+    border-color: var(--bg-tertiary);
 }
 
 .modal-header {
@@ -1439,8 +1465,7 @@ body {
     border-bottom: 1px solid var(--border);
     background: var(--bg-secondary);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    position: sticky;
-    top: 0;
+    flex-shrink: 0;
     z-index: 1;
 }
 
@@ -1508,30 +1533,8 @@ body {
     flex-direction: column;
     gap: var(--space-2xl);
     margin-bottom: var(--space-3xl);
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: var(--space-sm);
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) var(--bg-secondary);
 }
 
-.form-rows::-webkit-scrollbar {
-    width: 8px;
-}
-
-.form-rows::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-    border-radius: var(--radius-sm);
-}
-
-.form-rows::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: var(--radius-sm);
-}
-
-.form-rows::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-dark);
-}
 
 .depense-row, .expense-row {
     background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
@@ -2171,9 +2174,6 @@ body {
         min-height: 50px;
     }
 
-    .form-rows {
-        max-height: 50vh;
-    }
 
     .expense-row {
         padding: var(--space-lg);
@@ -2200,6 +2200,7 @@ body {
     .modal-overlay {
         padding: var(--space-md);
     }
+
 }
 
 @media (max-width: 480px) {
@@ -2472,16 +2473,16 @@ mark,
     border: 0;
 }
 
-/* === NAVIGATION MODERNE === */
+/* === NAVIGATION MODERNE COMPACTE === */
 .modern-navigation-container {
-    margin-bottom: var(--space-3xl);
+    margin-bottom: var(--space-lg);
 }
 
 .modern-nav {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-xl);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: var(--radius-xl);
+    padding: var(--space-sm);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15);
     position: relative;
     overflow: hidden;
 }
@@ -2498,31 +2499,35 @@ mark,
 }
 
 .nav-menu {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--space-lg);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
     position: relative;
     z-index: 1;
+    justify-content: center;
 }
 
 .nav-item {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-xl);
-    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    padding: var(--space-sm) var(--space-md);
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     color: white;
     display: flex;
     align-items: center;
-    gap: var(--space-lg);
-    text-align: left;
+    justify-content: center;
+    gap: var(--space-xs);
+    text-align: center;
     backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden;
     will-change: transform, background-color, border-color;
     backface-visibility: hidden;
     transform: translateZ(0);
+    min-width: auto;
+    flex: 0 1 auto;
 }
 
 .nav-item::before {
@@ -2543,15 +2548,15 @@ mark,
 .nav-item:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-1px) translateZ(0);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .nav-item.active {
     background: rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.6);
-    transform: translateY(-2px) translateZ(0);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .nav-item:focus {
@@ -2564,16 +2569,16 @@ mark,
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-lg);
-    transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
 }
 
 .nav-item.active .nav-icon {
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
 }
 
 .nav-content {
@@ -2606,46 +2611,94 @@ mark,
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Responsive pour navigation moderne */
-@media (max-width: 768px) {
+/* Responsive pour navigation moderne compacte */
+@media (max-width: 1024px) {
     .nav-menu {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
+        gap: var(--space-xs);
     }
 
     .nav-item {
-        padding: var(--space-lg);
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.875rem;
+    }
+
+    .nav-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .modern-nav {
+        padding: var(--space-xs);
+    }
+
+    .nav-menu {
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        justify-content: flex-start;
+        gap: var(--space-xs);
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: var(--space-xs);
+    }
+
+    .nav-menu::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .nav-menu::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-sm);
+    }
+
+    .nav-menu::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: var(--radius-sm);
+    }
+
+    .nav-item {
+        padding: var(--space-xs) var(--space-sm);
         transform: translateZ(0);
+        flex-shrink: 0;
+        font-size: 0.8rem;
+    }
+
+    .nav-icon {
+        width: 24px;
+        height: 24px;
     }
 
     .nav-item:hover,
     .nav-item.active {
-        transform: translateZ(0);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-icon {
-        width: 40px;
-        height: 40px;
+        transform: scale(1.02);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
 
     .nav-title {
-        font-size: 1rem;
+        font-size: 0.875rem;
     }
 
     .nav-subtitle {
-        font-size: 0.8rem;
+        display: none;
     }
 }
 
 @media (max-width: 480px) {
     .modern-nav {
-        padding: var(--space-lg);
+        padding: var(--space-xs);
     }
 
     .nav-item {
-        padding: var(--space-md);
-        transform: translateZ(0);
+        padding: var(--space-xs);
+        min-width: 48px;
+    }
+
+    .nav-icon {
+        width: 20px;
+        height: 20px;
     }
 
     .nav-item:hover,
@@ -3132,41 +3185,6 @@ mark,
     }
 }
 
-/* === BOUTON IMPORT === */
-.btn-import {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-md) var(--space-xl);
-    background: var(--gradient-success);
-    color: var(--text-inverse);
-    border: none;
-    border-radius: var(--radius-lg);
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.btn-import:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-    background: linear-gradient(135deg, #38b2ac 0%, #319795 100%);
-}
-
-.btn-import:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
-}
-
-.toolbar .btn-import {
-    flex: 1;
-    justify-content: center;
-    min-width: max-content;
-}
 
 /* === BOUTON TABLEAU === */
 .btn-table {
@@ -3351,4 +3369,74 @@ mark,
     .modern-table .action-btn[title]:hover::before {
         display: none;
     }
+}
+
+/* === STYLES POUR REACT-DATEPICKER DANS LA MODALE === */
+.expense-form .react-datepicker-wrapper {
+    width: 100%;
+}
+
+.expense-form .react-datepicker__input-container input {
+    width: 100%;
+    padding: var(--space-lg) var(--space-xl);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    min-height: 48px;
+    cursor: pointer;
+}
+
+.expense-form .react-datepicker__input-container input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.expense-form .react-datepicker__input-container input::placeholder {
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+/* Amélioration du popup du datepicker */
+.react-datepicker-popper {
+    z-index: 9999 !important;
+}
+
+.react-datepicker {
+    font-family: inherit;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.react-datepicker__header {
+    background: var(--primary);
+    border-bottom: none;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding-top: var(--space-lg);
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+    color: white;
+    font-weight: 600;
+}
+
+.react-datepicker__day--selected {
+    background-color: var(--primary);
+    font-weight: 600;
+}
+
+.react-datepicker__day--keyboard-selected {
+    background-color: var(--primary-dark);
+}
+
+.react-datepicker__day:hover {
+    background-color: rgba(102, 126, 234, 0.2);
 }

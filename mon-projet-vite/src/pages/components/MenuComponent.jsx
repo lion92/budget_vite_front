@@ -26,9 +26,6 @@ import './css/premium-menu.css';
 // Composants utilitaires importés
 import CookieConsent from "./cookie_bandeau.jsx";
 import Notifications from "./Notification";
-import { Depenses } from "./Depenses.jsx";
-import { Revenues } from "../../Revenues.jsx";
-import BaniereLetchi from "./BaniereLetchi.jsx";
 import ChatBotAction from "./ChatBotAction.jsx";
 
 export default function MenuComponent(props) {
@@ -267,13 +264,6 @@ export default function MenuComponent(props) {
         <div className="page-content">
           <CookieConsent />
 
-          {isAuthenticated && (
-            <div className="widgets-container">
-              <BaniereLetchi />
-              <Depenses />
-              <Revenues />
-            </div>
-          )}
 
           <div className="main-content">
             {props.contenue}

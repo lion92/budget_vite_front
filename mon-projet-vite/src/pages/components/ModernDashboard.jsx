@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, StatCard, FeatureCard } from './ui/Card';
 import { toast } from './ui/Toast';
-import { ExternalLink } from 'lucide-react';
 import './css/modern-dashboard.css';
 
 const ModernDashboard = () => {
@@ -67,15 +66,6 @@ const ModernDashboard = () => {
               title={action.title}
               description={action.description}
               icon={action.icon}
-              action={
-                <button
-                  className="modern-btn modern-btn--outline"
-                  onClick={action.action}
-                  title="Accéder"
-                >
-                  <ExternalLink size={18} />
-                </button>
-              }
               className="hover-lift"
             />
           ))}
