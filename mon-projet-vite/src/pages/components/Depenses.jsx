@@ -1,22 +1,31 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import useBudgetStore from "../../useBudgetStore";
 import DatePicker from "react-datepicker";
-import { FilePlus, Upload, Table } from "lucide-react";
+import "react-datepicker/dist/react-datepicker.css";
+import { FilePlus } from "lucide-react";
 import "./css/budget_style.css";
+import "./css/depense-modal.css";
 import { useNotify } from "./Notification";
-import { ImportData } from "./ImportData";
-import ExpenseTable from "./ExpenseTable";
-import EnhancedExpenseTable from "./EnhancedExpenseTable";
 
 export function Depenses() {
     const [depensesForm, setDepensesForm] = useState([{ description: "", montant: 0, categorie: "", date: new Date() }]);
     const [isRecurrent, setIsRecurrent] = useState(false);
     const [recurrenceMonths, setRecurrenceMonths] = useState(1);
     const [showDepenseForm, setShowDepenseForm] = useState(false);
-    const [showImportModal, setShowImportModal] = useState(false);
-    const [showExpenseTable, setShowExpenseTable] = useState(false);
     const notify = useNotify();
     const bilanRef = useRef();
+
+    // Gérer le scroll du body quand le modal est ouvert
+    useEffect(() => {
+        if (showDepenseForm) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [showDepenseForm]);
 
     const {
         depenses,
@@ -89,29 +98,34 @@ export function Depenses() {
                 <button onClick={() => setShowDepenseForm(true)}>
                     <FilePlus /> Ajouter des dépenses
                 </button>
-                <button onClick={() => setShowImportModal(true)} className="btn-import">
-                    <Upload /> Importer des données
-                </button>
             </div>
 
             {showDepenseForm && (
-                <div className="modal-overlay">
-                    <div className="modal-content expense-form-modal">
-                        <div className="modal-header">
+                <div className="depense-modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowDepenseForm(false)}>
+                    <div className="depense-modal" style={{maxHeight: '600px', display: 'flex', flexDirection: 'column'}}>
+                        <div className="depense-modal-header" style={{flexShrink: 0}}>
                             <h3>💰 Ajouter des dépenses</h3>
-                            <button type="button" className="close-btn" onClick={() => setShowDepenseForm(false)}>✕</button>
+                            <button type="button" className="depense-modal-close" onClick={() => setShowDepenseForm(false)}>✕</button>
                         </div>
-                        <div className="modal-body">
-                            <form onSubmit={handleCreate} className="expense-form">
-                                <div className="form-rows">
+
+                        <div className="depense-modal-body" style={{
+                            height: '500px',
+                            overflowY: 'scroll',
+                            overflowX: 'hidden',
+                            padding: '30px',
+                            backgroundColor: '#ffffff',
+                            border: '2px solid red'
+                        }}>
+                            <form onSubmit={handleCreate} className="depense-form" style={{minHeight: '600px'}}>
+                                <div className="depense-list" style={{minHeight: '400px'}}>
                                     {depensesForm.map((dep, index) => (
-                                        <div key={index} className="expense-row">
-                                            <div className="row-header">
-                                                <span className="row-number">Dépense #{index + 1}</span>
+                                        <div key={index} className="depense-item">
+                                            <div className="depense-item-header">
+                                                <span className="depense-item-number">Dépense #{index + 1}</span>
                                                 {depensesForm.length > 1 && (
                                                     <button
                                                         type="button"
-                                                        className="btn-danger btn-sm"
+                                                        className="depense-item-remove"
                                                         onClick={() => removeLigneDepense(index)}
                                                         title="Supprimer cette ligne"
                                                     >
@@ -119,16 +133,19 @@ export function Depenses() {
                                                     </button>
                                                 )}
                                             </div>
-                                            <div className="form-grid">
-                                                <div className="input-group">
+
+                                            <div className="depense-fields">
+                                                <div className="depense-field">
                                                     <label>Description</label>
                                                     <input
+                                                        type="text"
                                                         placeholder="Description de la dépense"
                                                         value={dep.description}
                                                         onChange={(e) => updateDepenseField(index, "description", e.target.value)}
                                                     />
                                                 </div>
-                                                <div className="input-group">
+
+                                                <div className="depense-field">
                                                     <label>Montant (€)</label>
                                                     <input
                                                         type="text"
@@ -147,7 +164,8 @@ export function Depenses() {
                                                         }}
                                                     />
                                                 </div>
-                                                <div className="input-group">
+
+                                                <div className="depense-field">
                                                     <label>Catégorie</label>
                                                     <select
                                                         value={dep.categorie}
@@ -157,7 +175,8 @@ export function Depenses() {
                                                         {categories?.map(c => <option key={c.id} value={c.id}>{c.categorie}</option>)}
                                                     </select>
                                                 </div>
-                                                <div className="input-group">
+
+                                                <div className="depense-field">
                                                     <label>Date</label>
                                                     <DatePicker
                                                         selected={dep.date}
@@ -171,17 +190,19 @@ export function Depenses() {
                                     ))}
                                 </div>
 
-                                <div className="recurrente-options">
-                                    <label>
+                                <div className="depense-recurrent">
+                                    <div className="depense-recurrent-check">
                                         <input
                                             type="checkbox"
+                                            id="recurrent-checkbox"
                                             checked={isRecurrent}
                                             onChange={(e) => setIsRecurrent(e.target.checked)}
                                         />
-                                        <span>Dépense récurrente</span>
-                                    </label>
+                                        <label htmlFor="recurrent-checkbox">🔄 Dépense récurrente</label>
+                                    </div>
+
                                     {isRecurrent && (
-                                        <div className="recurrence-config">
+                                        <div className="depense-recurrent-config">
                                             <label htmlFor="recurrence-months">Nombre de mois :</label>
                                             <input
                                                 id="recurrence-months"
@@ -199,18 +220,16 @@ export function Depenses() {
                                     )}
                                 </div>
 
-                                <div className="form-actions">
-                                    <div className="action-buttons">
-                                        <button type="button" className="btn-success" onClick={addLigneDepense}>
-                                            ➕ Ajouter une ligne
-                                        </button>
-                                        <button type="submit" className="btn-primary btn-lg">
-                                            💾 Enregistrer les dépenses
-                                        </button>
-                                        <button type="button" className="btn-secondary" onClick={() => setShowDepenseForm(false)}>
-                                            ❌ Annuler
-                                        </button>
-                                    </div>
+                                <div className="depense-actions">
+                                    <button type="button" className="depense-btn depense-btn-add" onClick={addLigneDepense}>
+                                        ➕ Ajouter une ligne
+                                    </button>
+                                    <button type="submit" className="depense-btn depense-btn-save">
+                                        💾 Enregistrer les dépenses
+                                    </button>
+                                    <button type="button" className="depense-btn depense-btn-cancel" onClick={() => setShowDepenseForm(false)}>
+                                        ❌ Annuler
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -218,25 +237,6 @@ export function Depenses() {
                 </div>
             )}
 
-            {showImportModal && (
-                <ImportData onClose={() => setShowImportModal(false)} />
-            )}
-
-            {showExpenseTable && (
-                <div className="modal-overlay">
-                    <div className="modal-content expense-table-modal enhanced-modal">
-                        <div className="modal-header">
-                            <h2>Gestion avancée des dépenses</h2>
-                            <button onClick={() => setShowExpenseTable(false)} className="close-btn">
-                                ✕
-                            </button>
-                        </div>
-                        <div className="expense-table-wrapper">
-                            <EnhancedExpenseTable />
-                        </div>
-                    </div>
-                </div>
-            )}
         </>
     );
 }
