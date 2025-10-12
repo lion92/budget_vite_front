@@ -14,6 +14,16 @@
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="googlebot" content="index, follow" />
 
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SSXZR1S3E0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SSXZR1S3E0');
+  </script>
+
   <!-- Canonical URL -->
   <link rel="canonical" href="https://gestiontaches.krissclotilde.com/" />
 
@@ -117,7 +127,7 @@
   <!-- Security Headers - CSP corrigé -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com;
     style-src 'self' 'unsafe-inline'
       https://cdnjs.cloudflare.com
       https://fonts.googleapis.com
@@ -133,6 +143,8 @@
       http://localhost:3004
       http://localhost:3010
       http://host.docker.internal:3010
+      https://www.google-analytics.com
+      https://analytics.google.com
       wss: ws:;
     frame-src 'self'
       https://www.youtube.com
