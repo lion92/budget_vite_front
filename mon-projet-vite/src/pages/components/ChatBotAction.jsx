@@ -73,6 +73,7 @@ export default function ChatBotAction({ notify = () => {} }) {
     useEffect(() => {
         fetchCategories();
         askActionType();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {

@@ -39,7 +39,7 @@ const BeginnerDashboard = ({ userProfile, expenses = [], budgets = [], onboardin
         }, 10000);
 
         return () => clearInterval(tipInterval);
-    }, []);
+    }, [tips.length]);
 
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();

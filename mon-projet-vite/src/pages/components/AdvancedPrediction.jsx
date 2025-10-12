@@ -93,14 +93,15 @@ const AdvancedPrediction = () => {
             let predictedRevenue = 0;
 
             switch (algorithmType) {
-                case 'average':
+                case 'average': {
                     const avgExpense = sortedMonths.reduce((sum, month) => sum + monthlyData[month].expenses, 0) / sortedMonths.length;
                     const avgRevenue = sortedMonths.reduce((sum, month) => sum + monthlyData[month].revenues, 0) / sortedMonths.length;
                     predictedExpense = avgExpense;
                     predictedRevenue = avgRevenue;
                     break;
+                }
 
-                case 'trend':
+                case 'trend': {
                     // Régression linéaire simple
                     const expenseValues = sortedMonths.map(month => monthlyData[month].expenses);
                     const revenueValues = sortedMonths.map(month => monthlyData[month].revenues);
@@ -124,8 +125,9 @@ const AdvancedPrediction = () => {
                     predictedExpense = expenseSlope * (n + i - 1) + expenseIntercept;
                     predictedRevenue = revenueSlope * (n + i - 1) + revenueIntercept;
                     break;
+                }
 
-                case 'seasonal':
+                case 'seasonal': {
                     // Moyenne des mêmes mois des années précédentes
                     const monthIndex = futureMonth.getMonth();
                     const sameMonths = sortedMonths.filter(month => {
@@ -141,6 +143,7 @@ const AdvancedPrediction = () => {
                         predictedRevenue = sortedMonths.reduce((sum, month) => sum + monthlyData[month].revenues, 0) / sortedMonths.length;
                     }
                     break;
+                }
             }
 
             results.push({

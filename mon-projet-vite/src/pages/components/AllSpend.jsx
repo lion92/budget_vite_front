@@ -48,8 +48,9 @@ const AllSpend = () => {
         return () => {
             observer.disconnect();
             // Détruire le graphique si il existe
-            if (chartRef.current) {
-                chartRef.current.destroy();
+            const currentChart = chartRef.current;
+            if (currentChart) {
+                currentChart.destroy();
             }
         };
     }, [fetchDepenses, generateMonthlySummary, assignCategoryColors]);

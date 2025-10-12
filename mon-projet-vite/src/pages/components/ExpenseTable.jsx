@@ -7,7 +7,9 @@ import {
     getPaginationRowModel,
     flexRender,
 } from '@tanstack/react-table';
-import { Edit3, Check, X, Download, FileText, Trash2, DollarSign } from 'lucide-react';
+import { Edit3, Check, X, Download, FileText, Trash2, DollarSign, Calendar } from 'lucide-react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -32,6 +34,12 @@ const ExpenseTable = () => {
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 20,
+    });
+
+    // Filtres de date
+    const [dateRange, setDateRange] = useState({
+        startDate: null,
+        endDate: null,
     });
 
     const updateDepense = useBudgetStore((state) => state.updateDepense);
@@ -309,7 +317,18 @@ const ExpenseTable = () => {
                 );
             },
             enableSorting: true,
-            enableColumnFilter: false,
+            enableColumnFilter: true,
+            filterFn: (row, columnId, filterValue) => {
+                const rowDate = new Date(row.getValue(columnId));
+
+                // Si on utilise la recherche par texte
+                if (typeof filterValue === 'string') {
+                    const formattedDate = formatDate(row.getValue(columnId)).toLowerCase();
+                    return formattedDate.includes(filterValue.toLowerCase());
+                }
+
+                return true;
+            },
         },
         {
             id: 'actions',
@@ -362,8 +381,41 @@ const ExpenseTable = () => {
         },
     ], [editingId, editData, categories]);
 
+    // Filtre par plage de dates
+    const filteredExpenses = useMemo(() => {
+        if (!dateRange.startDate && !dateRange.endDate) {
+            return expenses;
+        }
+
+        return expenses.filter(expense => {
+            const expenseDate = new Date(expense.dateTransaction);
+
+            if (dateRange.startDate && dateRange.endDate) {
+                const start = new Date(dateRange.startDate);
+                start.setHours(0, 0, 0, 0);
+                const end = new Date(dateRange.endDate);
+                end.setHours(23, 59, 59, 999);
+                return expenseDate >= start && expenseDate <= end;
+            }
+
+            if (dateRange.startDate) {
+                const start = new Date(dateRange.startDate);
+                start.setHours(0, 0, 0, 0);
+                return expenseDate >= start;
+            }
+
+            if (dateRange.endDate) {
+                const end = new Date(dateRange.endDate);
+                end.setHours(23, 59, 59, 999);
+                return expenseDate <= end;
+            }
+
+            return true;
+        });
+    }, [expenses, dateRange]);
+
     const table = useReactTable({
-        data: expenses,
+        data: filteredExpenses,
         columns,
         state: {
             sorting,
@@ -438,6 +490,124 @@ const ExpenseTable = () => {
                         <Download size={16} />
                         Exporter PDF
                     </button>
+                </div>
+            </div>
+
+            {/* Filtres de date */}
+            <div className="date-filter-container" style={{
+                padding: '20px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                borderRadius: '12px',
+                marginBottom: '20px',
+                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '20px',
+                    flexWrap: 'wrap'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Calendar size={20} color="white" />
+                        <span style={{ color: 'white', fontWeight: '600', fontSize: '16px' }}>
+                            Filtrer par période :
+                        </span>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            <label style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', fontWeight: '500' }}>
+                                Date de début
+                            </label>
+                            <DatePicker
+                                selected={dateRange.startDate}
+                                onChange={(date) => setDateRange({ ...dateRange, startDate: date })}
+                                selectsStart
+                                startDate={dateRange.startDate}
+                                endDate={dateRange.endDate}
+                                placeholderText="Sélectionner..."
+                                dateFormat="dd/MM/yyyy"
+                                isClearable
+                                className="date-picker-input"
+                                style={{
+                                    padding: '8px 12px',
+                                    borderRadius: '8px',
+                                    border: '2px solid rgba(255,255,255,0.3)',
+                                    background: 'white',
+                                    fontSize: '14px'
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            <label style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', fontWeight: '500' }}>
+                                Date de fin
+                            </label>
+                            <DatePicker
+                                selected={dateRange.endDate}
+                                onChange={(date) => setDateRange({ ...dateRange, endDate: date })}
+                                selectsEnd
+                                startDate={dateRange.startDate}
+                                endDate={dateRange.endDate}
+                                minDate={dateRange.startDate}
+                                placeholderText="Sélectionner..."
+                                dateFormat="dd/MM/yyyy"
+                                isClearable
+                                className="date-picker-input"
+                                style={{
+                                    padding: '8px 12px',
+                                    borderRadius: '8px',
+                                    border: '2px solid rgba(255,255,255,0.3)',
+                                    background: 'white',
+                                    fontSize: '14px'
+                                }}
+                            />
+                        </div>
+
+                        {(dateRange.startDate || dateRange.endDate) && (
+                            <button
+                                onClick={() => setDateRange({ startDate: null, endDate: null })}
+                                style={{
+                                    padding: '8px 16px',
+                                    background: 'rgba(255,255,255,0.2)',
+                                    border: '2px solid rgba(255,255,255,0.4)',
+                                    borderRadius: '8px',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    fontWeight: '600',
+                                    fontSize: '14px',
+                                    marginTop: 'auto',
+                                    transition: 'all 0.3s ease',
+                                    backdropFilter: 'blur(10px)'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.target.style.background = 'rgba(255,255,255,0.3)';
+                                    e.target.style.transform = 'scale(1.05)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.background = 'rgba(255,255,255,0.2)';
+                                    e.target.style.transform = 'scale(1)';
+                                }}
+                            >
+                                ✕ Réinitialiser les dates
+                            </button>
+                        )}
+                    </div>
+
+                    {(dateRange.startDate || dateRange.endDate) && (
+                        <div style={{
+                            marginLeft: 'auto',
+                            padding: '8px 16px',
+                            background: 'rgba(255,255,255,0.15)',
+                            borderRadius: '8px',
+                            color: 'white',
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            backdropFilter: 'blur(10px)'
+                        }}>
+                            📊 {filteredExpenses.length} dépense{filteredExpenses.length !== 1 ? 's' : ''} dans la période
+                        </div>
+                    )}
                 </div>
             </div>
 

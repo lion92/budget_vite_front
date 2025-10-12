@@ -29,7 +29,9 @@ export default [
         Intl: 'readonly',
         FormData: 'readonly',
         MutationObserver: 'readonly',
-        getComputedStyle: 'readonly'
+        getComputedStyle: 'readonly',
+        Blob: 'readonly',
+        process: 'readonly'
       },
       parserOptions: {
         ecmaVersion: 'latest',

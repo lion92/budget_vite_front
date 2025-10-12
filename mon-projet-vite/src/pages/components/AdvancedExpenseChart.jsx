@@ -81,28 +81,31 @@ const AdvancedExpenseChart = () => {
                 case 'day':
                     key = date.toLocaleDateString('fr-FR');
                     break;
-                case 'week':
+                case 'week': {
                     const weekStart = new Date(date);
                     weekStart.setDate(date.getDate() - date.getDay());
                     key = `Semaine du ${weekStart.toLocaleDateString('fr-FR')}`;
                     break;
+                }
                 case 'month':
                     key = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
                     break;
-                case 'quarter':
+                case 'quarter': {
                     const quarter = Math.floor(date.getMonth() / 3) + 1;
                     key = `T${quarter} ${date.getFullYear()}`;
                     break;
+                }
                 case 'year':
                     key = date.getFullYear().toString();
                     break;
-                case 'category':
+                case 'category': {
                     // Utiliser le nom de catégorie correct
                     const category = categories.find(cat =>
                         cat.id === d.categorie || cat.categorie === d.categorie
                     );
                     key = category ? category.categorie : (d.categorie || 'Non catégorisé');
                     break;
+                }
                 default:
                     key = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
             }
@@ -121,7 +124,7 @@ const AdvancedExpenseChart = () => {
         });
 
         return grouped;
-    }, [depenses, startDate, endDate, selectedCategories, groupBy, minAmount, maxAmount]);
+    }, [depenses, startDate, endDate, selectedCategories, groupBy, minAmount, maxAmount, categories]);
 
     // Données pour les graphiques
     const chartData = useMemo(() => {
@@ -364,8 +367,8 @@ const AdvancedExpenseChart = () => {
         }
     };
 
-    // Fonction pour forcer la re-création du graphique avec délai
-    const forceChartRefresh = () => {
+    // Fonction pour forcer la re-création du graphique avec délai (useCallback pour stabilité)
+    const forceChartRefresh = React.useCallback(() => {
         console.log('Début du refresh du graphique...');
         destroyAllCharts();
 
@@ -377,12 +380,12 @@ const AdvancedExpenseChart = () => {
                 return newKey;
             });
         }, 200); // Délai de 200ms pour s'assurer du nettoyage
-    };
+    }, []); // Pas de dépendances car destroyAllCharts et setChartKey sont stables
 
     // Effets pour forcer le refresh quand les paramètres changent
     useEffect(() => {
         forceChartRefresh();
-    }, [chartType, groupBy]);
+    }, [chartType, groupBy, forceChartRefresh]);
 
     useEffect(() => {
         // Petit délai pour les changements de catégories
@@ -390,7 +393,7 @@ const AdvancedExpenseChart = () => {
             forceChartRefresh();
         }, 100);
         return () => clearTimeout(timeout);
-    }, [selectedCategories.length]);
+    }, [selectedCategories.length, forceChartRefresh]);
 
     // Cleanup lors du démontage du composant
     useEffect(() => {

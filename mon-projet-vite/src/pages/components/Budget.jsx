@@ -78,7 +78,7 @@ export default function Budget() {
         fetchDepenses();
         fetchCategories();
         fetchRevenus();
-    }, []);
+    }, [fetchDepenses, fetchCategories, fetchRevenus]);
 
     // Réinitialiser l'affichage quand on change de mois/année
     useEffect(() => {
