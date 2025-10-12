@@ -90,6 +90,18 @@ export default function Budget() {
         setFilterDate('');
     }, [selectedMonth, selectedYear]);
 
+    // Gérer le scroll du body quand le modal est ouvert
+    useEffect(() => {
+        if (showDepenseForm) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [showDepenseForm]);
+
     // Fonctions utilitaires
     const updateDepenseField = (index, field, value) => {
         const updated = [...depensesForm];
@@ -1284,118 +1296,162 @@ export default function Budget() {
             )}
 
             {showDepenseForm && (
-                <div className="modal-overlay">
-                    <div className="modal-content expense-form-modal">
-                        <div className="modal-header">
-                            <h3>Ajouter des dépenses</h3>
-                            <button
-                                className="close-btn"
-                                onClick={() => setShowDepenseForm(false)}
-                            >
+                <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowDepenseForm(false)} style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '20px',
+                    overflow: 'hidden'
+                }}>
+                    <div className="modal-content expense-form-modal" style={{
+                        maxHeight: '80vh',
+                        width: '100%',
+                        maxWidth: '1200px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        background: 'white',
+                        borderRadius: '12px',
+                        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+                        overflow: 'hidden'
+                    }}>
+                        <div className="modal-header" style={{
+                            flexShrink: 0,
+                            padding: '20px 30px',
+                            borderBottom: '2px solid #e2e8f0',
+                            background: '#f7fafc',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
+                            <h3 style={{margin: 0, fontSize: '1.5rem', fontWeight: 600, color: '#2d3748'}}>💰 Ajouter des dépenses</h3>
+                            <button type="button" className="close-btn" onClick={() => setShowDepenseForm(false)} style={{
+                                background: 'none',
+                                border: 'none',
+                                fontSize: '1.5rem',
+                                cursor: 'pointer',
+                                color: '#718096',
+                                padding: '5px 10px'
+                            }}>
                                 <X size={20} />
                             </button>
                         </div>
 
-                        <form onSubmit={handleCreate} className="expense-form">
-                            <div className="form-rows">
-                                {depensesForm.map((dep, index) => (
-                                    <div key={index} className="expense-row">
-                                        <div className="row-header">
-                                            <span className="row-number">Dépense #{index + 1}</span>
-                                            {depensesForm.length > 1 && (
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-danger btn-sm"
-                                                    onClick={() => removeLigneDepense(index)}
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
-                                            )}
+                        <div className="modal-body" style={{
+                            flex: 1,
+                            overflowY: 'auto',
+                            overflowX: 'hidden',
+                            padding: '30px',
+                            backgroundColor: '#ffffff',
+                            minHeight: 0
+                        }}>
+                            <form onSubmit={handleCreate} className="expense-form">
+                                <div className="form-rows">
+                                    {depensesForm.map((dep, index) => (
+                                        <div key={index} className="expense-row">
+                                            <div className="row-header">
+                                                <span className="row-number">Dépense #{index + 1}</span>
+                                                {depensesForm.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-danger btn-sm"
+                                                        onClick={() => removeLigneDepense(index)}
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            <div className="form-grid">
+                                                <div className="input-group">
+                                                    <label>Description</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Ex: Courses alimentaires"
+                                                        value={dep.description}
+                                                        onChange={(e) => updateDepenseField(index, "description", e.target.value)}
+                                                        className="modern-input"
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label>Montant (€)</label>
+                                                    <input
+                                                        type="number"
+                                                        step="0.01"
+                                                        min="0"
+                                                        placeholder="0.00"
+                                                        value={dep.montant}
+                                                        onChange={(e) => updateDepenseField(index, "montant", e.target.value)}
+                                                        onBlur={(e) => {
+                                                            let val = parseFloat(e.target.value);
+                                                            if (isNaN(val)) val = 0;
+                                                            else val = parseFloat(val.toFixed(2));
+                                                            updateDepenseField(index, "montant", val);
+                                                        }}
+                                                        className="modern-input"
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label>Catégorie</label>
+                                                    <select
+                                                        value={dep.categorie}
+                                                        onChange={(e) => updateDepenseField(index, "categorie", e.target.value)}
+                                                        className="modern-select"
+                                                    >
+                                                        <option value="">-- Choisir une catégorie --</option>
+                                                        {categories?.map(c => (
+                                                            <option key={c.id} value={c.id}>{c.categorie}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label>Date</label>
+                                                    <DatePicker
+                                                        selected={dep.date}
+                                                        onChange={(date) => updateDepenseField(index, "date", date)}
+                                                        dateFormat="dd/MM/yyyy"
+                                                        className="modern-input"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
+                                    ))}
+                                </div>
 
-                                        <div className="form-grid">
-                                            <div className="input-group">
-                                                <label>Description</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Ex: Courses alimentaires"
-                                                    value={dep.description}
-                                                    onChange={(e) => updateDepenseField(index, "description", e.target.value)}
-                                                    className="modern-input"
-                                                />
-                                            </div>
-
-                                            <div className="input-group">
-                                                <label>Montant (€)</label>
-                                                <input
-                                                    type="number"
-                                                    step="0.01"
-                                                    min="0"
-                                                    placeholder="0.00"
-                                                    value={dep.montant}
-                                                    onChange={(e) => updateDepenseField(index, "montant", e.target.value)}
-                                                    onBlur={(e) => {
-                                                        let val = parseFloat(e.target.value);
-                                                        if (isNaN(val)) val = 0;
-                                                        else val = parseFloat(val.toFixed(2));
-                                                        updateDepenseField(index, "montant", val);
-                                                    }}
-                                                    className="modern-input"
-                                                />
-                                            </div>
-
-                                            <div className="input-group">
-                                                <label>Catégorie</label>
-                                                <select
-                                                    value={dep.categorie}
-                                                    onChange={(e) => updateDepenseField(index, "categorie", e.target.value)}
-                                                    className="modern-select"
-                                                >
-                                                    <option value="">-- Choisir une catégorie --</option>
-                                                    {categories?.map(c => (
-                                                        <option key={c.id} value={c.id}>{c.categorie}</option>
-                                                    ))}
-                                                </select>
-                                            </div>
-
-                                            <div className="input-group">
-                                                <label>Date</label>
-                                                <DatePicker
-                                                    selected={dep.date}
-                                                    onChange={(date) => updateDepenseField(index, "date", date)}
-                                                    dateFormat="dd/MM/yyyy"
-                                                    className="modern-input"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="form-actions">
-                                <button
-                                    type="button"
-                                    className="btn btn-outline"
-                                    onClick={addLigneDepense}
-                                    title="Ajouter une ligne"
-                                >
-                                    <Plus size={18} />
-                                </button>
-                                <div className="action-buttons">
+                                <div className="form-actions">
                                     <button
                                         type="button"
-                                        className="btn btn-secondary"
-                                        onClick={() => setShowDepenseForm(false)}
-                                        title="Annuler"
+                                        className="btn btn-outline"
+                                        onClick={addLigneDepense}
+                                        title="Ajouter une ligne"
                                     >
-                                        <X size={18} />
+                                        <Plus size={18} />
                                     </button>
-                                    <button type="submit" className="btn btn-primary" title="Enregistrer les dépenses">
-                                        <Save size={18} />
-                                    </button>
+                                    <div className="action-buttons">
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            onClick={() => setShowDepenseForm(false)}
+                                            title="Annuler"
+                                        >
+                                            <X size={18} />
+                                        </button>
+                                        <button type="submit" className="btn btn-primary" title="Enregistrer les dépenses">
+                                            <Save size={18} />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             )}

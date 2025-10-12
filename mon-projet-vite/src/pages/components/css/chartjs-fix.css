@@ -1,0 +1,35 @@
+/* Simple Chart.js v4 stabilization */
+
+/* Chart containers */
+.chart-container,
+.divCentrer {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0); /* Force GPU acceleration */
+}
+
+/* Canvas elements - prevent dynamic repositioning */
+canvas {
+    display: block !important;
+    max-width: 100% !important;
+    height: auto !important;
+    transform: translateZ(0) !important; /* Force GPU layer */
+}
+
+/* Disable problematic Chart.js monitors */
+.chartjs-size-monitor {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    z-index: -1 !important;
+}
+
+/* Stabilize chart wrapper */
+.static-chart-wrapper {
+    contain: layout style paint !important;
+}

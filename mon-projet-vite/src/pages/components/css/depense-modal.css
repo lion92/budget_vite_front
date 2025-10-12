@@ -1,0 +1,381 @@
+/* ========================================
+   MODALE D'AJOUT DE DÉPENSES - VERSION SIMPLIFIÉE
+   ======================================== */
+
+/* Overlay - fond sombre derrière la modale */
+.depense-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Container principal de la modale */
+.depense-modal {
+    background: white;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    margin: auto;
+}
+
+/* Header de la modale */
+.depense-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 2px solid #e2e8f0;
+    background: #f7fafc;
+    border-radius: 12px 12px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.depense-modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.depense-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #718096;
+    padding: 5px 10px;
+    transition: color 0.2s;
+}
+
+.depense-modal-close:hover {
+    color: #2d3748;
+}
+
+/* Body de la modale - SCROLL SIMPLE */
+.depense-modal-body {
+    padding: 30px !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/* Style de la scrollbar */
+.depense-modal-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.depense-modal-body::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 5px;
+}
+
+.depense-modal-body::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 5px;
+}
+
+.depense-modal-body::-webkit-scrollbar-thumb:hover {
+    background: #5a67d8;
+}
+
+/* Formulaire */
+.depense-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Liste des dépenses */
+.depense-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Une ligne de dépense */
+.depense-item {
+    background: linear-gradient(145deg, #f7fafc 0%, #ffffff 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.depense-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.depense-item-number {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #667eea;
+}
+
+.depense-item-remove {
+    background: linear-gradient(135deg, #f56565 0%, #fc8181 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.depense-item-remove:hover {
+    transform: scale(1.1);
+}
+
+/* Grille des champs */
+.depense-fields {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr;
+    gap: 20px;
+    align-items: end;
+}
+
+/* Groupe de champ (label + input) */
+.depense-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.depense-field label {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
+}
+
+.depense-field input,
+.depense-field select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: #2d3748;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    min-height: 48px;
+}
+
+.depense-field input:focus,
+.depense-field select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.depense-field input::placeholder {
+    color: #cbd5e0;
+    font-style: italic;
+}
+
+/* DatePicker */
+.depense-field .react-datepicker-wrapper {
+    width: 100%;
+}
+
+.depense-field .react-datepicker__input-container input {
+    cursor: pointer;
+}
+
+/* Options récurrentes */
+.depense-recurrent {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, #f7fafc 100%);
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.depense-recurrent-check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.depense-recurrent-check input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.depense-recurrent-check label {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #2d3748;
+    cursor: pointer;
+    margin: 0;
+}
+
+.depense-recurrent-config {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-left: 32px;
+}
+
+.depense-recurrent-config label {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.depense-recurrent-config input {
+    width: 120px;
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: #2d3748;
+    font-size: 1rem;
+}
+
+/* Actions */
+.depense-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 25px;
+    background: linear-gradient(145deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 12px;
+    flex-wrap: wrap;
+}
+
+.depense-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.depense-btn-add {
+    background: linear-gradient(135deg, #48bb78 0%, #38b2ac 100%);
+    color: white;
+}
+
+.depense-btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+}
+
+.depense-btn-save {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+}
+
+.depense-btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.depense-btn-cancel {
+    background: #edf2f7;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
+}
+
+.depense-btn-cancel:hover {
+    background: #e2e8f0;
+    color: #2d3748;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .depense-modal {
+        max-width: 95vw;
+        max-height: 85vh;
+    }
+
+    .depense-modal-header {
+        padding: 15px 20px;
+    }
+
+    .depense-modal-body {
+        padding: 20px;
+    }
+
+    .depense-fields {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .depense-item {
+        padding: 20px;
+    }
+
+    .depense-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .depense-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .depense-modal-overlay {
+        padding: 10px;
+    }
+
+    .depense-modal {
+        max-width: 98vw;
+        max-height: 95vh;
+    }
+
+    .depense-modal-header h3 {
+        font-size: 1.25rem;
+    }
+
+    .depense-modal-body {
+        padding: 15px;
+    }
+
+    .depense-item {
+        padding: 15px;
+    }
+
+    .depense-recurrent-config {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 0;
+        gap: 8px;
+    }
+
+    .depense-recurrent-config input {
+        width: 100%;
+    }
+}
