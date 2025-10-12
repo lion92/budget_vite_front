@@ -1,0 +1,95 @@
+/* =========================================
+   CORRECTIONS POUR LES PROBLÈMES D'HOVER
+   ========================================= */
+
+/* Solution simple et efficace pour éviter que les éléments disparaissent au survol */
+
+/* 1. Règle de base - tous les éléments restent visibles au hover */
+* {
+    transition: all 0.2s ease;
+}
+
+*:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 2. Corrections spécifiques pour les éléments interactifs */
+button:hover,
+.btn:hover,
+.but1:hover,
+.card-btn:hover,
+a:hover,
+input:hover,
+select:hover,
+textarea:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+}
+
+/* 3. Corrections pour les éléments de navigation */
+.nav-item:hover,
+.nav-link:hover,
+.mobile-nav-item:hover,
+li:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* 4. Corrections pour les cartes et conteneurs */
+.card:hover,
+.container:hover,
+.sidebar:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* 5. Exceptions pour les overlays qui doivent pouvoir être transparents */
+.overlay,
+.modal-overlay,
+.mobile-overlay {
+    opacity: inherit;
+    visibility: inherit;
+}
+
+/* 6. Désactiver les animations problématiques au hover */
+*:hover[class*="fade"],
+*:hover[class*="slide"],
+*:hover[class*="animate"] {
+    animation: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 7. Corrections pour mobile */
+@media (max-width: 768px) {
+    *:hover,
+    *:focus,
+    *:active {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+}
+
+/* 8. Corrections pour les pseudo-éléments */
+*:hover::before,
+*:hover::after {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 9. Protection contre les styles inline problématiques */
+*[style*="opacity: 0"]:hover,
+*[style*="visibility: hidden"]:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 10. Dernière ligne de défense pour garantir la visibilité */
+html *:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+}

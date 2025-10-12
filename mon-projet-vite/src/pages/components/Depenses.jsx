@@ -101,23 +101,61 @@ export function Depenses() {
             </div>
 
             {showDepenseForm && (
-                <div className="depense-modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowDepenseForm(false)}>
-                    <div className="depense-modal" style={{maxHeight: '600px', display: 'flex', flexDirection: 'column'}}>
-                        <div className="depense-modal-header" style={{flexShrink: 0}}>
-                            <h3>💰 Ajouter des dépenses</h3>
-                            <button type="button" className="depense-modal-close" onClick={() => setShowDepenseForm(false)}>✕</button>
+                <div className="depense-modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowDepenseForm(false)} style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '20px',
+                    overflow: 'hidden'
+                }}>
+                    <div className="depense-modal" style={{
+                        maxHeight: '80vh',
+                        width: '100%',
+                        maxWidth: '1200px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        background: 'white',
+                        borderRadius: '12px',
+                        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+                        overflow: 'hidden'
+                    }}>
+                        <div className="depense-modal-header" style={{
+                            flexShrink: 0,
+                            padding: '20px 30px',
+                            borderBottom: '2px solid #e2e8f0',
+                            background: '#f7fafc',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
+                            <h3 style={{margin: 0, fontSize: '1.5rem', fontWeight: 600, color: '#2d3748'}}>💰 Ajouter des dépenses</h3>
+                            <button type="button" className="depense-modal-close" onClick={() => setShowDepenseForm(false)} style={{
+                                background: 'none',
+                                border: 'none',
+                                fontSize: '1.5rem',
+                                cursor: 'pointer',
+                                color: '#718096',
+                                padding: '5px 10px'
+                            }}>✕</button>
                         </div>
 
                         <div className="depense-modal-body" style={{
-                            height: '500px',
-                            overflowY: 'scroll',
+                            flex: 1,
+                            overflowY: 'auto',
                             overflowX: 'hidden',
                             padding: '30px',
                             backgroundColor: '#ffffff',
-                            border: '2px solid red'
+                            minHeight: 0
                         }}>
-                            <form onSubmit={handleCreate} className="depense-form" style={{minHeight: '600px'}}>
-                                <div className="depense-list" style={{minHeight: '400px'}}>
+                            <form onSubmit={handleCreate} className="depense-form">
+                                <div className="depense-list">
                                     {depensesForm.map((dep, index) => (
                                         <div key={index} className="depense-item">
                                             <div className="depense-item-header">
