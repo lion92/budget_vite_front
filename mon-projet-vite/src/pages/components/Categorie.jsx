@@ -193,21 +193,6 @@ export function Categorie({ activeView = 'manage' }) {
         "assurance": { icon: "fa-solid fa-file-contract", color: "#6b7280" },
     };
 
-    useEffect(() => {
-        fetchAPI();
-
-        // Écouter l'événement pour changer d'onglet
-        const handleSwitchTab = () => {
-            setCurrentView('create');
-        };
-
-        window.addEventListener('switchToCreateTab', handleSwitchTab);
-
-        return () => {
-            window.removeEventListener('switchToCreateTab', handleSwitchTab);
-        };
-    }, []);
-
     const fetchAPI = useCallback(async () => {
         const jwt = localStorage.getItem("jwt") || "";
         const userId = parseInt(localStorage.getItem("utilisateur") || "0", 10);
@@ -227,6 +212,21 @@ export function Categorie({ activeView = 'manage' }) {
 
         setCategorieCard(withIcons);
     }, []);
+
+    useEffect(() => {
+        fetchAPI();
+
+        // Écouter l'événement pour changer d'onglet
+        const handleSwitchTab = () => {
+            setCurrentView('create');
+        };
+
+        window.addEventListener('switchToCreateTab', handleSwitchTab);
+
+        return () => {
+            window.removeEventListener('switchToCreateTab', handleSwitchTab);
+        };
+    }, [fetchAPI]);
 
     const fetchDelete = useCallback(async (id) => {
         const jwt = localStorage.getItem("jwt") || "";

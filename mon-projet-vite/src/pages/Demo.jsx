@@ -385,45 +385,50 @@ const Demo = () => {
         </div>
     );
 
-    const renderTables = () => {
+    // Composant séparé pour les tableaux (nécessaire pour useReactTable)
+    const DemoTable = ({ data, columns }) => {
         const table = useReactTable({
-            data: tableData,
-            columns: tableColumns,
+            data,
+            columns,
             getCoreRowModel: getCoreRowModel(),
         });
 
         return (
-            <div className="demo-section">
-                <h2 className="demo-section-title">Tableaux Modernes</h2>
-                <Card title="Transactions Récentes" className="demo-table-card">
-                    <table className="modern-table">
-                        <thead>
-                            {table.getHeaderGroups().map(headerGroup => (
-                                <tr key={headerGroup.id}>
-                                    {headerGroup.headers.map(header => (
-                                        <th key={header.id}>
-                                            {flexRender(header.column.columnDef.header, header.getContext())}
-                                        </th>
-                                    ))}
-                                </tr>
-                            ))}
-                        </thead>
-                        <tbody>
-                            {table.getRowModel().rows.map(row => (
-                                <tr key={row.id}>
-                                    {row.getVisibleCells().map(cell => (
-                                        <td key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </Card>
-            </div>
+            <Card title="Transactions Récentes" className="demo-table-card">
+                <table className="modern-table">
+                    <thead>
+                        {table.getHeaderGroups().map(headerGroup => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map(header => (
+                                    <th key={header.id}>
+                                        {flexRender(header.column.columnDef.header, header.getContext())}
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody>
+                        {table.getRowModel().rows.map(row => (
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map(cell => (
+                                    <td key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </Card>
         );
     };
+
+    const renderTables = () => (
+        <div className="demo-section">
+            <h2 className="demo-section-title">Tableaux Modernes</h2>
+            <DemoTable data={tableData} columns={tableColumns} />
+        </div>
+    );
 
     const renderContent = () => {
         switch(activeDemo) {

@@ -824,7 +824,7 @@ export default function TaskManager() {
                                             </div>
                                         ))}
                                     </div>
-                                </>)
+                                </>
                             ) : (
                                 <div className="table-empty">
                                     <div className="empty-state">

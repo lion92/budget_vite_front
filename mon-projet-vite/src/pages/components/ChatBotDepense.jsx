@@ -58,7 +58,7 @@ export default function ChatBotDepense({ addDepense = null, notify = () => {} })
                 setStep("montant");
                 break;
 
-            case "montant":
+            case "montant": {
                 if (!/^\d+(\.\d{0,2})?$/.test(input)) {
                     sendBotMessage("Veuillez entrer un montant valide (ex : 12.50). Maximum 2 chiffres après la virgule.");
                     return;
@@ -74,6 +74,7 @@ export default function ChatBotDepense({ addDepense = null, notify = () => {} })
                     setStep("done");
                 }
                 break;
+            }
 
             default:
                 break;
