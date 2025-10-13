@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import lien from './lien';
 import { useTicketActions } from '../../useTicketStore';
 
@@ -176,9 +177,9 @@ const TicketModal = ({ ticket, isOpen, onClose }) => {
 
     if (!isOpen || !localTicket) return null;
 
-    return (
-        <div style={styles.overlay} onClick={handleBackdropClick}>
-            <div style={styles.modal}>
+    const modalContent = (
+        <div style={styles.overlay} onClick={handleBackdropClick} className="ticket-modal-overlay">
+            <div style={styles.modal} className="ticket-modal-content">
                 {/* Header */}
                 <div style={styles.header}>
                     <div style={styles.headerContent}>
@@ -376,6 +377,9 @@ const TicketModal = ({ ticket, isOpen, onClose }) => {
             </div>
         </div>
     );
+
+    // Utiliser un portail React pour monter la modale directement dans le body
+    return createPortal(modalContent, document.body);
 };
 
 const styles = {
@@ -385,23 +389,29 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        zIndex: 999999,
+        overflowY: 'auto',
+        overflowX: 'hidden',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1000,
-        padding: '1rem',
+        padding: '20px',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
     },
     modal: {
         backgroundColor: '#ffffff',
         borderRadius: '16px',
-        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
-        maxWidth: '90vw',
-        maxHeight: '90vh',
-        width: '1000px',
+        boxShadow: '0 25px 80px rgba(0, 0, 0, 0.4)',
+        maxWidth: '1000px',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
+        margin: 'auto',
+        position: 'relative',
+        maxHeight: '90vh',
+        animation: 'modalSlideIn 0.3s ease-out',
     },
     header: {
         display: 'flex',
@@ -442,7 +452,8 @@ const styles = {
     content: {
         flex: 1,
         padding: '2rem',
-        overflow: 'auto',
+        overflowY: 'auto',
+        overflowX: 'hidden',
     },
     mainInfo: {
         marginBottom: '2rem',
@@ -575,7 +586,9 @@ const styles = {
         border: '1px solid #e9ecef',
         padding: '1rem',
         minHeight: '300px',
-        overflow: 'auto',
+        maxHeight: '400px',
+        overflowY: 'auto',
+        overflowX: 'hidden',
     },
     ocrText: {
         fontSize: '0.85rem',
@@ -681,6 +694,43 @@ if (typeof document !== 'undefined' && !document.querySelector('#ticket-modal-st
     styleSheet.id = 'ticket-modal-styles';
     styleSheet.type = "text/css";
     styleSheet.innerText = `
+    /* Force la modale à être au-dessus de tout */
+    .ticket-modal-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 999999 !important;
+        isolation: isolate;
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    .ticket-modal-content {
+        position: relative !important;
+        z-index: 1000000 !important;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -716,16 +766,45 @@ if (typeof document !== 'undefined' && !document.querySelector('#ticket-modal-st
         background-color: #c0392b;
     }
 
+    /* Custom scrollbar styles */
+    *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    /* Firefox scrollbar */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+    }
+
     @media (max-width: 768px) {
-        .two-columns {
-            grid-template-columns: 1fr !important;
+        .ticket-modal-overlay {
+            padding: 10px !important;
         }
 
-        .modal {
-            width: 95vw !important;
-            height: 95vh !important;
-            max-width: none !important;
-            max-height: none !important;
+        .ticket-modal-content {
+            max-height: 95vh !important;
+            width: calc(100% - 20px) !important;
+            margin: 10px auto !important;
+        }
+
+        .two-columns {
+            grid-template-columns: 1fr !important;
         }
 
         .info-grid {
@@ -739,6 +818,25 @@ if (typeof document !== 'undefined' && !document.querySelector('#ticket-modal-st
         .content {
             padding: 1rem !important;
         }
+    }
+
+    @media (max-width: 480px) {
+        .ticket-modal-overlay {
+            padding: 5px !important;
+            align-items: flex-start !important;
+        }
+
+        .ticket-modal-content {
+            max-height: calc(100vh - 10px) !important;
+            width: calc(100% - 10px) !important;
+            margin: 5px auto !important;
+            border-radius: 12px !important;
+        }
+    }
+
+    /* Désactiver le scroll du body quand la modale est ouverte */
+    body:has(.ticket-modal-overlay) {
+        overflow: hidden !important;
     }
     `;
     document.head.appendChild(styleSheet);

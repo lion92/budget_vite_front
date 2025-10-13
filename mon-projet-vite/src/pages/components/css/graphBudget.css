@@ -812,6 +812,33 @@
     }
 }
 
+/* === CUSTOM SCROLLBAR FOR CHARTS === */
+.chart-card ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.chart-card ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.chart-card ::-webkit-scrollbar-thumb {
+    background: var(--border-dark);
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+}
+
+.chart-card ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Firefox scrollbar */
+.chart-card * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-dark) var(--bg-secondary);
+}
+
 /* === PRINT STYLES === */
 @media print {
     .dashboard-container {

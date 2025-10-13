@@ -4,6 +4,44 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./css/chat.css";
 import useBudgetStore from "../../useBudgetStore";
 
+const iconOptions = [
+    { label: "🍽️ Nourriture", value: "fa-solid fa-utensils" },
+    { label: "🚗 Transport", value: "fa-solid fa-car" },
+    { label: "🏠 Logement", value: "fa-solid fa-house" },
+    { label: "❤️ Santé", value: "fa-solid fa-heart" },
+    { label: "🛒 Courses", value: "fa-solid fa-cart-shopping" },
+    { label: "🎓 Éducation", value: "fa-solid fa-graduation-cap" },
+    { label: "🎬 Loisirs", value: "fa-solid fa-film" },
+    { label: "👕 Vêtements", value: "fa-solid fa-shirt" },
+    { label: "⚡ Énergie", value: "fa-solid fa-bolt" },
+    { label: "💧 Eau", value: "fa-solid fa-droplet" },
+    { label: "📱 Téléphone", value: "fa-solid fa-mobile-screen" },
+    { label: "🌐 Internet", value: "fa-solid fa-globe" },
+    { label: "🎁 Cadeaux", value: "fa-solid fa-gift" },
+    { label: "🎄 Fêtes", value: "fa-solid fa-tree" },
+    { label: "🏋️ Sport", value: "fa-solid fa-dumbbell" },
+    { label: "🛠️ Réparations", value: "fa-solid fa-screwdriver-wrench" },
+    { label: "🍼 Enfants", value: "fa-solid fa-baby" },
+    { label: "🎵 Musique", value: "fa-solid fa-music" },
+    { label: "✈️ Voyage", value: "fa-solid fa-plane" },
+    { label: "🐶 Animaux", value: "fa-solid fa-dog" },
+    { label: "📚 Livres", value: "fa-solid fa-book" },
+    { label: "🧼 Hygiène", value: "fa-solid fa-soap" },
+    { label: "📺 Abonnements", value: "fa-solid fa-tv" },
+    { label: "🏦 Banque", value: "fa-solid fa-building-columns" },
+    { label: "📅 Impôts", value: "fa-solid fa-calendar-days" },
+    { label: "🚿 Entretien", value: "fa-solid fa-broom" },
+    { label: "🖥️ Électronique", value: "fa-solid fa-computer" },
+    { label: "🎮 Jeux", value: "fa-solid fa-gamepad" },
+    { label: "👩‍⚕️ Médical", value: "fa-solid fa-stethoscope" },
+    { label: "🍷 Sorties", value: "fa-solid fa-wine-glass" },
+];
+
+const getIconEmoji = (iconValue) => {
+    const icon = iconOptions.find(opt => opt.value === iconValue);
+    return icon ? icon.label.split(' ')[0] : "📁";
+};
+
 export default function ChatBotDepense({ addDepense = null, notify = () => {} }) {
     // ✅ notify par défaut = fonction vide
     const { categories, fetchCategories, addDepense: storeAddDepense } = useBudgetStore();
@@ -138,23 +176,92 @@ export default function ChatBotDepense({ addDepense = null, notify = () => {} })
                 ))}
 
                 {step === "categorie" && (
-                    <div className="chat-bubble bot category-buttons">
-                        {categories.map(cat => (
-                            <button key={cat.id} onClick={() => handleCategorySelect(cat.id, cat.categorie)}>
-                                {cat.categorie}
-                            </button>
-                        ))}
+                    <div className="chat-bubble bot">
+                        <p style={{ marginBottom: "12px", fontWeight: "500" }}>Choisissez une catégorie :</p>
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                            maxHeight: "250px",
+                            overflowY: "auto",
+                            padding: "10px",
+                            border: "1px solid #ddd",
+                            borderRadius: "6px",
+                            backgroundColor: "#f9f9f9"
+                        }}>
+                            {categories.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => handleCategorySelect(cat.id, cat.categorie)}
+                                    className="category-button"
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "12px",
+                                        padding: "14px 18px",
+                                        border: "2px solid #ddd",
+                                        borderRadius: "10px",
+                                        background: "white",
+                                        cursor: "pointer",
+                                        fontSize: "16px",
+                                        textAlign: "left",
+                                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        minHeight: "56px",
+                                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.08)"
+                                    }}
+                                >
+                                    {cat.iconName && (
+                                        <span style={{
+                                            fontSize: "20px",
+                                            minWidth: "25px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }}>
+                                            {getIconEmoji(cat.iconName)}
+                                        </span>
+                                    )}
+                                    <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+                                        <span style={{ fontWeight: "500", color: "#333" }}>{cat.categorie}</span>
+                                        {cat.budgetDebutMois && (
+                                            <span style={{ fontSize: "12px", color: "#666" }}>
+                                                Budget: {cat.budgetDebutMois}€
+                                            </span>
+                                        )}
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 )}
 
                 {step === "date" && (
                     <div className="chat-bubble bot">
+                        <p style={{ marginBottom: "12px", fontWeight: "500" }}>Sélectionnez une date :</p>
                         <DatePicker
                             selected={pendingDate}
                             onChange={(date) => setPendingDate(date)}
                             dateFormat="dd/MM/yyyy"
+                            inline
                         />
-                        <button onClick={handleValidateDate}>Valider la date</button>
+                        <button
+                            onClick={handleValidateDate}
+                            disabled={submitting}
+                            style={{
+                                width: "100%",
+                                marginTop: "12px",
+                                padding: "12px",
+                                backgroundColor: submitting ? "#ccc" : "#4caf50",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "8px",
+                                fontSize: "16px",
+                                fontWeight: "600",
+                                cursor: submitting ? "not-allowed" : "pointer"
+                            }}
+                        >
+                            {submitting ? "⏳ En cours..." : "✅ Valider la date"}
+                        </button>
                     </div>
                 )}
 

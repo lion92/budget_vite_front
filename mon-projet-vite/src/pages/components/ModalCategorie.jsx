@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Plus, Settings, Search, Filter } from 'lucide-react';
 import { Categorie } from "./Categorie.jsx";
 
@@ -43,19 +44,21 @@ const ModalCategorie = ({ onClose }) => {
         };
     }, [handleKeyDown]);
 
-    return (
+    const modalContent = (
         <div
             style={{
                 ...styles.overlay,
                 opacity: isAnimating ? 0 : 1
             }}
             onClick={handleOverlayClick}
+            className="portal-modal-overlay"
         >
             <div
                 style={{
                     ...styles.modal,
                     transform: isAnimating ? 'translateY(20px) scale(0.95)' : 'translateY(0) scale(1)'
                 }}
+                className="portal-modal-content"
             >
                 <div style={styles.header}>
                     <div style={styles.headerContent}>
@@ -121,6 +124,8 @@ const ModalCategorie = ({ onClose }) => {
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 };
 
 const styles = {
@@ -130,14 +135,16 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        backdropFilter: 'blur(16px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '1rem',
-        zIndex: 1000,
+        padding: '20px',
+        zIndex: 999999,
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        overflowY: 'auto',
     },
     modal: {
         background: 'var(--background, white)',
