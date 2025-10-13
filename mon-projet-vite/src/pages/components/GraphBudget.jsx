@@ -483,29 +483,41 @@ const GraphBudget = () => {
                         Dépenses par catégorie
                     </h3>
                     {calculatedData.pieData.length > 0 ? (
-                        <ResponsiveContainer width="100%" height={350}>
-                            <PieChart>
-                                <Pie
-                                    data={calculatedData.pieData}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={60}
-                                    outerRadius={120}
-                                    paddingAngle={2}
-                                    dataKey="value"
-                                >
-                                    {calculatedData.pieData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                                    ))}
-                                </Pie>
-                                <Tooltip content={<PieTooltip />} />
-                                <Legend
-                                    verticalAlign="bottom"
-                                    height={36}
-                                    iconType="circle"
-                                />
-                            </PieChart>
-                        </ResponsiveContainer>
+                        <div style={{
+                            maxHeight: '450px',
+                            overflowY: calculatedData.pieData.length > 8 ? 'auto' : 'visible',
+                            overflowX: 'hidden',
+                            paddingRight: calculatedData.pieData.length > 8 ? '8px' : '0'
+                        }}>
+                            <ResponsiveContainer width="100%" height={Math.max(350, calculatedData.pieData.length > 8 ? 500 : 350)}>
+                                <PieChart>
+                                    <Pie
+                                        data={calculatedData.pieData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={60}
+                                        outerRadius={120}
+                                        paddingAngle={2}
+                                        dataKey="value"
+                                    >
+                                        {calculatedData.pieData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<PieTooltip />} />
+                                    <Legend
+                                        verticalAlign="bottom"
+                                        height={calculatedData.pieData.length > 8 ? Math.min(calculatedData.pieData.length * 20, 200) : 36}
+                                        iconType="circle"
+                                        wrapperStyle={{
+                                            paddingTop: '10px',
+                                            maxHeight: '200px',
+                                            overflowY: 'auto'
+                                        }}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
                     ) : (
                         <div className="no-data-message">
                             <p>📊 Aucune donnée de catégorie disponible</p>

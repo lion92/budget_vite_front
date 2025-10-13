@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './css/accueil.css'
 import { toast } from './ui';
 import { RefreshCw } from 'lucide-react';
+import QuickAddFAB from './QuickAddFAB';
+import QuickAddModal from './QuickAddModal';
 
 
 const Helloword = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
     const [videoError, setVideoError] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState('expense');
 
 
     useEffect(() => {
@@ -26,8 +30,31 @@ const Helloword = () => {
         toast.error('Impossible de charger la vidéo. Veuillez réessayer plus tard.');
     };
 
+    const handleAddExpense = () => {
+        setModalType('expense');
+        setIsModalOpen(true);
+    };
+
+    const handleAddRevenue = () => {
+        setModalType('revenue');
+        setIsModalOpen(true);
+    };
+
     return (
         <>
+            {/* Bouton flottant d'accès rapide */}
+            <QuickAddFAB
+                onAddExpense={handleAddExpense}
+                onAddRevenue={handleAddRevenue}
+            />
+
+            {/* Modal d'ajout rapide */}
+            <QuickAddModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                type={modalType}
+            />
+
             <div className={`welcome-container ${isVisible ? 'animate-in' : ''}`}>
 
                 <div className="content-box">

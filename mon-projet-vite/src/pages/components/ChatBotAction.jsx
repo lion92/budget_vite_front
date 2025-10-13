@@ -349,13 +349,6 @@ export default function ChatBotAction({ notify = () => {} }) {
             <div
                 className="chat-window"
                 ref={chatWindowRef}
-                style={{
-                    maxHeight: "400px",
-                    overflowY: "auto",
-                    padding: "10px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px"
-                }}
             >
                 {messages.map((msg, idx) => (
                     <div key={idx} className={`chat-bubble ${msg.from}`}>
@@ -381,29 +374,21 @@ export default function ChatBotAction({ notify = () => {} }) {
                                 <button
                                     key={cat.id}
                                     onClick={() => handleCategorySelect(cat.id, cat.categorie)}
+                                    className="category-button"
                                     style={{
                                         display: "flex",
                                         alignItems: "center",
                                         gap: "12px",
-                                        padding: "12px 16px",
-                                        border: "1px solid #ccc",
-                                        borderRadius: "6px",
+                                        padding: "14px 18px",
+                                        border: "2px solid #ddd",
+                                        borderRadius: "10px",
                                         background: "white",
                                         cursor: "pointer",
-                                        fontSize: "15px",
+                                        fontSize: "16px",
                                         textAlign: "left",
-                                        transition: "all 0.2s ease",
-                                        minHeight: "50px"
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.target.style.backgroundColor = "#e8f5e8";
-                                        e.target.style.borderColor = "#4caf50";
-                                        e.target.style.transform = "translateY(-1px)";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.target.style.backgroundColor = "white";
-                                        e.target.style.borderColor = "#ccc";
-                                        e.target.style.transform = "translateY(0)";
+                                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                        minHeight: "56px",
+                                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.08)"
                                     }}
                                 >
                                     {cat.iconName && (
@@ -511,13 +496,30 @@ export default function ChatBotAction({ notify = () => {} }) {
 
                 {step === "date" && (
                     <div className="chat-bubble bot">
+                        <p style={{ marginBottom: "12px", fontWeight: "500" }}>Sélectionnez une date :</p>
                         <DatePicker
                             selected={pendingDate}
                             onChange={setPendingDate}
                             dateFormat="dd/MM/yyyy"
+                            inline
                         />
-                        <button onClick={handleValidateDate} disabled={submitting}>
-                            {submitting ? "En cours..." : "Valider la date"}
+                        <button
+                            onClick={handleValidateDate}
+                            disabled={submitting}
+                            style={{
+                                width: "100%",
+                                marginTop: "12px",
+                                padding: "12px",
+                                backgroundColor: submitting ? "#ccc" : "#4caf50",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "8px",
+                                fontSize: "16px",
+                                fontWeight: "600",
+                                cursor: submitting ? "not-allowed" : "pointer"
+                            }}
+                        >
+                            {submitting ? "⏳ En cours..." : "✅ Valider la date"}
                         </button>
                     </div>
                 )}
