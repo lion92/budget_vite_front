@@ -35,12 +35,12 @@ const AdvancedSearch = ({
         onFilter(newFilters);
     }, [filters, onFilter]);
 
-    // Gestion des catégories multiples
-    const toggleCategory = useCallback((categoryId) => {
+    // Gestion des catégories multiples (utilise les noms au lieu des IDs)
+    const toggleCategory = useCallback((categoryName) => {
         const currentCategories = filters.categories;
-        const updatedCategories = currentCategories.includes(categoryId)
-            ? currentCategories.filter(id => id !== categoryId)
-            : [...currentCategories, categoryId];
+        const updatedCategories = currentCategories.includes(categoryName)
+            ? currentCategories.filter(name => name !== categoryName)
+            : [...currentCategories, categoryName];
 
         updateFilter('categories', updatedCategories);
     }, [filters.categories, updateFilter]);
@@ -158,8 +158,22 @@ const AdvancedSearch = ({
                                 <span className="filter-value">{filter.value}</span>
                                 {filter.key !== 'search' && (
                                     <button
-                                        onClick={() => updateFilter(filter.key, '')}
+                                        onClick={() => {
+                                            // Gérer différemment selon le type de filtre
+                                            if (filter.key === 'categories') {
+                                                updateFilter(filter.key, []);
+                                            } else if (filter.key === 'dateRange') {
+                                                updateFilter(filter.key, { from: null, to: null });
+                                            } else if (filter.key === 'categoryName') {
+                                                updateFilter(filter.key, []);
+                                            } else if (filter.key === 'montant' || filter.key === 'amountRange') {
+                                                updateFilter(filter.key, { min: '', max: '' });
+                                            } else {
+                                                updateFilter(filter.key, '');
+                                            }
+                                        }}
                                         className="remove-filter-btn"
+                                        title="Supprimer ce filtre"
                                     >
                                         <X size={12} />
                                     </button>
@@ -200,24 +214,89 @@ const AdvancedSearch = ({
                                 <Tag size={16} />
                                 Catégories
                             </h4>
-                            <div className="categories-filter">
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '8px',
+                                maxHeight: '250px',
+                                overflowY: 'auto',
+                                padding: '4px'
+                            }}>
                                 {categories.map(category => (
                                     <label
                                         key={category.id}
-                                        className={`category-checkbox ${filters.categories.includes(category.id) ? 'checked' : ''}`}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            padding: '10px 12px',
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            backgroundColor: filters.categories.includes(category.categorie)
+                                                ? 'rgba(102, 126, 234, 0.15)'
+                                                : 'transparent',
+                                            border: filters.categories.includes(category.categorie)
+                                                ? '2px solid #667eea'
+                                                : '2px solid transparent',
+                                            transition: 'all 0.2s ease',
+                                            ':hover': {
+                                                backgroundColor: 'rgba(102, 126, 234, 0.08)'
+                                            }
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (!filters.categories.includes(category.categorie)) {
+                                                e.currentTarget.style.backgroundColor = 'rgba(102, 126, 234, 0.08)';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (!filters.categories.includes(category.categorie)) {
+                                                e.currentTarget.style.backgroundColor = 'transparent';
+                                            }
+                                        }}
                                     >
                                         <input
                                             type="checkbox"
-                                            checked={filters.categories.includes(category.id)}
-                                            onChange={() => toggleCategory(category.id)}
+                                            checked={filters.categories.includes(category.categorie)}
+                                            onChange={() => toggleCategory(category.categorie)}
+                                            style={{
+                                                width: '18px',
+                                                height: '18px',
+                                                cursor: 'pointer',
+                                                accentColor: '#667eea'
+                                            }}
                                         />
-                                        <span className="category-name">{category.categorie}</span>
-                                        <span className="category-count">
-                                            {/* Vous pouvez ajouter le count ici */}
+                                        {category.iconName && (
+                                            <i
+                                                className={category.iconName}
+                                                style={{
+                                                    color: category.color || '#667eea',
+                                                    fontSize: '16px',
+                                                    minWidth: '16px'
+                                                }}
+                                            ></i>
+                                        )}
+                                        <span style={{
+                                            flex: 1,
+                                            fontWeight: filters.categories.includes(category.categorie) ? '600' : '500',
+                                            color: '#5b21b6',
+                                            fontSize: '15px',
+                                            lineHeight: '1.4'
+                                        }}>
+                                            {category.categorie}
                                         </span>
                                     </label>
                                 ))}
                             </div>
+                            {categories.length === 0 && (
+                                <div style={{
+                                    padding: '20px',
+                                    textAlign: 'center',
+                                    color: '#64748b',
+                                    fontSize: '14px'
+                                }}>
+                                    Aucune catégorie disponible
+                                </div>
+                            )}
                         </div>
 
                         {/* Filtre par plage de dates */}

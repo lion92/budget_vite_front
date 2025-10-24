@@ -22,7 +22,9 @@
       "Bash(npm run build:*)",
       "Bash(find:*)",
       "Bash(timeout 2 curl http://localhost:3004)",
-      "Bash(/dev/null)"
+      "Bash(/dev/null)",
+      "Bash(git rm:*)",
+      "Bash(del srcpagescomponentsChatBotDepense.jsx srcpagescomponentscsschat.css)"
     ],
     "deny": [],
     "ask": []

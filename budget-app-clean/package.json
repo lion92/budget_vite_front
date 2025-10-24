@@ -1,0 +1,32 @@
+{
+  "name": "budget-app-clean",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Application de gestion de budget moderne et épurée",
+  "author": "Votre Nom",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.0",
+    "zustand": "^4.5.0",
+    "axios": "^1.7.0",
+    "chart.js": "^4.5.0",
+    "react-chartjs-2": "^5.3.0",
+    "lucide-react": "^0.511.0",
+    "react-toastify": "^11.0.5",
+    "react-datepicker": "^8.3.0",
+    "jspdf": "^2.5.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.5.2",
+    "vite": "^6.3.5"
+  }
+}

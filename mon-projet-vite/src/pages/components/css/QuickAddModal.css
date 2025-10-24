@@ -1,0 +1,321 @@
+/* Modal rapide d'ajout */
+.quick-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justifyContent: center;
+    padding: 20px;
+    overflowY: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.quick-modal {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    z-index: 1000000;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    margin: auto;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .quick-modal-overlay {
+        padding: 10px;
+    }
+
+    .quick-modal {
+        width: calc(100% - 20px);
+        max-height: 95vh;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-modal-overlay {
+        padding: 5px;
+        align-items: flex-start;
+    }
+
+    .quick-modal {
+        width: calc(100% - 10px);
+        max-height: calc(100vh - 10px);
+        margin: 5px auto;
+    }
+}
+
+/* Header */
+.quick-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.quick-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.quick-modal-title h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+@media (max-width: 768px) {
+    .quick-modal-title h2 {
+        font-size: 1.25rem;
+    }
+}
+
+.quick-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-modal-close:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+.quick-modal-close:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Form */
+.quick-modal-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.quick-modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.quick-modal-field label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.9375rem;
+}
+
+.quick-modal-field input,
+.quick-modal-field select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: #ffffff;
+    color: #000000;
+}
+
+.quick-modal-field input:hover:not(:disabled),
+.quick-modal-field select:hover:not(:disabled) {
+    border-color: #9ca3af;
+    background: #f9fafb;
+}
+
+.quick-modal-field input:focus,
+.quick-modal-field select:focus {
+    outline: none;
+    border-color: #7c3aed;
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.quick-modal-field input:disabled,
+.quick-modal-field select:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.quick-modal-field input[type="number"] {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Actions */
+.quick-modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+}
+
+.quick-modal-btn {
+    flex: 1;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quick-modal-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.quick-modal-btn-cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.quick-modal-btn-cancel:hover:not(:disabled) {
+    background: #e5e7eb;
+}
+
+.quick-modal-btn-submit {
+    color: white;
+}
+
+.quick-modal-btn-submit.expense {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.quick-modal-btn-submit.expense:hover:not(:disabled) {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.quick-modal-btn-submit.revenue {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.quick-modal-btn-submit.revenue:hover:not(:disabled) {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+@media (max-width: 768px) {
+    .quick-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .quick-modal-btn {
+        width: 100%;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .quick-modal {
+        background: #1f2937;
+    }
+
+    .quick-modal-header {
+        border-bottom-color: #374151;
+    }
+
+    .quick-modal-title h2 {
+        color: white;
+    }
+
+    .quick-modal-close {
+        color: #9ca3af;
+    }
+
+    .quick-modal-close:hover {
+        background: #374151;
+        color: white;
+    }
+
+    .quick-modal-field label {
+        color: #d1d5db;
+    }
+
+    .quick-modal-field input,
+    .quick-modal-field select {
+        background: #374151;
+        border-color: #4b5563;
+        color: white;
+    }
+
+    .quick-modal-field input:disabled,
+    .quick-modal-field select:disabled {
+        background: #2d3748;
+    }
+
+    .quick-modal-btn-cancel {
+        background: #374151;
+        color: #d1d5db;
+    }
+
+    .quick-modal-btn-cancel:hover:not(:disabled) {
+        background: #4b5563;
+    }
+}
+
+/* Animation de chargement */
+.quick-modal-btn:disabled {
+    position: relative;
+}
+
+.quick-modal-btn:disabled::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}

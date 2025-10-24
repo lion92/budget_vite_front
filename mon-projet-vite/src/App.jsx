@@ -17,6 +17,8 @@ import DashTickets from "./pages/components/DashTickets.jsx";
 import DashComptabilite from "./pages/components/DashComptabilite.jsx";
 import DashGraphAnalytics from "./pages/components/DashGraphAnalytics.jsx";
 import DashFactures from "./pages/components/DashFactures.jsx";
+import DashProfile from "./pages/components/DashProfile.jsx";
+import DashSettings from "./pages/components/DashSettings.jsx";
 import Demo from "./pages/Demo.jsx";
 
 function App() {
@@ -37,6 +39,8 @@ function App() {
                     <Route path="/comptabilite" element={<DashComptabilite/>}/>
                     <Route path="/analytics" element={<DashGraphAnalytics/>}/>
                     <Route path="/factures" element={<DashFactures/>}/>
+                    <Route path="/profile" element={<DashProfile/>}/>
+                    <Route path="/settings" element={<DashSettings/>}/>
                     <Route path="/reset-password" element={<ResetPasswordForm />} />
                     <Route path="/graph" element={<DashGraphBudget/>} />
                     <Route path="/demo" element={<Demo />} />

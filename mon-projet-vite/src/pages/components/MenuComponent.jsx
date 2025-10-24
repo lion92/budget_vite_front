@@ -26,13 +26,11 @@ import './css/premium-menu.css';
 // Composants utilitaires importés
 import CookieConsent from "./cookie_bandeau.jsx";
 import Notifications from "./Notification";
-import ChatBotAction from "./ChatBotAction.jsx";
 
 export default function MenuComponent(props) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("jwt"));
-  const [showChatBot, setShowChatBot] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('utilisateur') || '{}'));
 
@@ -79,6 +77,10 @@ export default function MenuComponent(props) {
       { path: "/comptabilite", label: "Comptabilité", icon: Briefcase, description: "Espace comptable" },
       { path: "/factures", label: "Factures", icon: Receipt, description: "Gestion des factures" },
       { path: "/graph", label: "Graphiques", icon: BarChart3, description: "Visualisations" },
+    ],
+    settings: [
+      { path: "/profile", label: "Mon Profil", icon: User, description: "Gérer mon compte" },
+      { path: "/settings", label: "Paramètres", icon: Settings, description: "Configuration" },
     ]
   };
 
@@ -192,6 +194,7 @@ export default function MenuComponent(props) {
                 {renderNavSection("Principal", navigationSections.dashboard, "dashboard")}
                 {renderNavSection("Finance", navigationSections.finance, "finance")}
                 {renderNavSection("Outils", navigationSections.tools, "tools")}
+                {renderNavSection("Paramètres", navigationSections.settings, "settings")}
               </>
             ) : (
               renderNavSection("Connexion", publicLinks, "auth")
@@ -201,7 +204,7 @@ export default function MenuComponent(props) {
           {/* Footer */}
           {isAuthenticated && (
             <div className="sidebar-footer">
-              <div className="user-profile">
+              <NavLink to="/profile" className="user-profile" onClick={handleLinkClick}>
                 <div className="user-avatar">
                   <User size={20} />
                 </div>
@@ -214,14 +217,14 @@ export default function MenuComponent(props) {
                   </span>
                   <span className="user-role">Gestionnaire</span>
                 </div>
-                <button
-                  className="logout-btn"
-                  onClick={handleLogout}
-                  title="Déconnexion"
-                >
-                  <LogOut size={18} />
-                </button>
-              </div>
+              </NavLink>
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+                title="Déconnexion"
+              >
+                <LogOut size={18} />
+              </button>
             </div>
           )}
         </div>
@@ -271,32 +274,6 @@ export default function MenuComponent(props) {
         </div>
       </main>
 
-      {/* Chat Bubble */}
-      <button
-        className="chat-bubble"
-        onClick={() => setShowChatBot(!showChatBot)}
-        aria-label="Ouvrir le chat"
-      >
-        <MessageCircle size={24} />
-      </button>
-
-      {/* Chat Panel */}
-      {showChatBot && (
-        <div className="chat-panel">
-          <div className="chat-header">
-            <h3>Assistant</h3>
-            <button
-              className="chat-close"
-              onClick={() => setShowChatBot(false)}
-            >
-              <X size={18} />
-            </button>
-          </div>
-          <div className="chat-content">
-            <ChatBotAction />
-          </div>
-        </div>
-      )}
 
       {/* Mobile Bottom Navigation */}
       {isMobile && (
