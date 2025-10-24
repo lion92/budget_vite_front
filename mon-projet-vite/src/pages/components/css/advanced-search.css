@@ -352,8 +352,14 @@
 
 .category-name {
     flex: 1;
-    color: var(--search-text);
+    color: #5b21b6; /* Violet foncé */
     font-weight: 500;
+}
+
+/* Mode sombre - violet plus clair pour meilleure visibilité */
+[data-theme="dark"] .category-name,
+.dark-mode .category-name {
+    color: #a78bfa; /* Violet clair pour mode sombre */
 }
 
 .category-count {

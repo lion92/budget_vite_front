@@ -1,0 +1,9 @@
+/* Modal styles are already defined in global.css */
+/* This file is for any ticket-specific modal styles if needed */
+
+.form-input[type="textarea"],
+textarea.form-input {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}

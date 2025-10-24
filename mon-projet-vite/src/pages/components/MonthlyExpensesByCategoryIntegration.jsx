@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import lien from './lien';
 
 const MonthlyExpensesByCategory = () => {
+    const navigate = useNavigate();
     const [listDesDepense, setListDesDepense] = useState([]);
+
+    // Vérification de la disponibilité de navigate
+    useEffect(() => {
+        if (!navigate) {
+            console.error('Navigate is not available. Make sure the component is wrapped in a Router.');
+        } else {
+            console.log('Navigate is available and ready to use.');
+        }
+    }, [navigate]);
     const [monthlySummary, setMonthlySummary] = useState({});
     const [categoryColors, setCategoryColors] = useState({});
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -138,6 +149,21 @@ const MonthlyExpensesByCategory = () => {
 
     const handleDeselectAllCategories = () => {
         setSelectedCategories([]);
+    };
+
+    const handleMonthClick = (month) => {
+        console.log('handleMonthClick appelé avec le mois:', month);
+        try {
+            // Encoder le nom du mois pour l'URL
+            const encodedMonth = encodeURIComponent(month);
+            console.log('Mois encodé:', encodedMonth);
+            console.log('Navigation vers:', `/allSpendFilters?month=${encodedMonth}`);
+            // Naviguer vers la page des dépenses avec le filtre de mois
+            navigate(`/allSpendFilters?month=${encodedMonth}`);
+            console.log('Navigation effectuée avec succès');
+        } catch (error) {
+            console.error('Erreur lors de la navigation:', error);
+        }
     };
 
     return (
@@ -346,16 +372,37 @@ const MonthlyExpensesByCategory = () => {
                                 marginBottom: "8px",
                                 color: isDarkMode ? "#f0f6fc" : "#000000"
                             }}>Résumé par mois</h3>
+                            <p style={{
+                                fontSize: "14px",
+                                color: isDarkMode ? "#8b949e" : "#6B7280",
+                                marginBottom: "12px",
+                                fontStyle: "italic"
+                            }}>💡 Cliquez sur un mois pour voir ses dépenses détaillées</p>
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "16px" }}>
                                 {months.map(month => {
                                     const { total, categories: monthCategories } = monthlySummary[month];
                                     return (
-                                        <div key={month} style={{
-                                            border: `1px solid ${isDarkMode ? '#30363d' : '#e2e8f0'}`,
-                                            borderRadius: "8px",
-                                            padding: "12px",
-                                            backgroundColor: isDarkMode ? "#161b22" : "transparent"
-                                        }}>
+                                        <div
+                                            key={month}
+                                            onClick={() => handleMonthClick(month)}
+                                            style={{
+                                                border: `1px solid ${isDarkMode ? '#30363d' : '#e2e8f0'}`,
+                                                borderRadius: "8px",
+                                                padding: "12px",
+                                                backgroundColor: isDarkMode ? "#161b22" : "transparent",
+                                                cursor: "pointer",
+                                                transition: "all 0.2s ease",
+                                                boxShadow: isDarkMode ? "0 1px 3px rgba(0,0,0,0.3)" : "0 1px 3px rgba(0,0,0,0.1)"
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.transform = "translateY(-2px)";
+                                                e.currentTarget.style.boxShadow = isDarkMode ? "0 4px 8px rgba(0,0,0,0.4)" : "0 4px 8px rgba(0,0,0,0.15)";
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = "translateY(0)";
+                                                e.currentTarget.style.boxShadow = isDarkMode ? "0 1px 3px rgba(0,0,0,0.3)" : "0 1px 3px rgba(0,0,0,0.1)";
+                                            }}
+                                        >
                                             <h4 style={{
                                                 marginBottom: "8px",
                                                 color: isDarkMode ? "#f0f6fc" : "#000000",

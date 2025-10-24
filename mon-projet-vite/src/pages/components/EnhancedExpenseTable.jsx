@@ -11,13 +11,14 @@ import AdvancedSearch from './AdvancedSearch.jsx';
 import lien from './lien';
 import './css/enhanced-expense-table.css';
 
-const EnhancedExpenseTable = () => {
+const EnhancedExpenseTable = ({ initialMonthFilter = null }) => {
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingId, setEditingId] = useState(null);
     const [viewMode, setViewMode] = useState('table'); // 'table' ou 'cards'
     const [selectedExpenses, setSelectedExpenses] = useState([]);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+    const [monthFilter, setMonthFilter] = useState(initialMonthFilter);
     const [editData, setEditData] = useState({
         montant: "",
         description: "",
@@ -31,17 +32,34 @@ const EnhancedExpenseTable = () => {
     const categories = useBudgetStore((state) => state.categories);
     const fetchCategories = useBudgetStore((state) => state.fetchCategories);
 
-    // Enrichissement des données avec les informations de catégorie
+    // Enrichissement des données avec les informations de catégorie et mois
     const enrichedExpenses = useMemo(() => {
         return expenses.map(expense => {
             const category = categories.find(c => c.id === expense.categorie || c.categorie === expense.categorie);
+            const date = new Date(expense.dateTransaction);
+            const monthYear = date.toLocaleString("fr-FR", { month: "long", year: "numeric" });
+
+            // Créer une date du premier jour du mois pour le tri
+            const monthYearDate = new Date(date.getFullYear(), date.getMonth(), 1);
+
             return {
                 ...expense,
                 categoryName: category?.categorie || expense.categorie,
-                categoryColor: category?.color || '#667eea'
+                categoryColor: category?.color || '#667eea',
+                monthYear: monthYear,
+                monthYearDate: monthYearDate.toISOString()
             };
         });
     }, [expenses, categories]);
+
+    // Appliquer le filtre de mois si fourni
+    const monthFilteredExpenses = useMemo(() => {
+        if (!monthFilter) return enrichedExpenses;
+
+        return enrichedExpenses.filter(expense => {
+            return expense.monthYear === monthFilter;
+        });
+    }, [enrichedExpenses, monthFilter]);
 
     // Configuration de la recherche
     const searchFields = useMemo(() => ['description', 'categorie', 'montant'], []);
@@ -51,11 +69,20 @@ const EnhancedExpenseTable = () => {
         activeFilters,
         setSearchTerm,
         updateFilter,
-        clearAllFilters
+        clearAllFilters,
+        updateSort,
+        sortConfig
     } = useAdvancedSearch({
-        data: enrichedExpenses,
+        data: monthFilteredExpenses,
         searchFields
     });
+
+    // Mettre à jour le filtre de mois quand initialMonthFilter change
+    useEffect(() => {
+        if (initialMonthFilter !== null) {
+            setMonthFilter(initialMonthFilter);
+        }
+    }, [initialMonthFilter]);
 
     // Configuration de la pagination
     const {
@@ -110,9 +137,9 @@ const EnhancedExpenseTable = () => {
     const handleAdvancedFilter = useCallback((filters) => {
         const processedFilters = {};
 
-        // Traitement des catégories
+        // Traitement des catégories (utilise categoryName au lieu de categorie)
         if (filters.categories && filters.categories.length > 0) {
-            processedFilters.categorie = filters.categories;
+            processedFilters.categoryName = filters.categories;
         }
 
         // Traitement des dates
@@ -288,7 +315,43 @@ const EnhancedExpenseTable = () => {
             {/* Header avec statistiques */}
             <div className="expense-header">
                 <div className="header-info">
-                    <h1 className="table-title">💰 Gestion des Dépenses</h1>
+                    <h1 className="table-title">
+                        💰 Gestion des Dépenses
+                        {monthFilter && (
+                            <span style={{
+                                marginLeft: '12px',
+                                fontSize: '16px',
+                                fontWeight: 'normal',
+                                color: '#667eea',
+                                backgroundColor: '#667eea20',
+                                padding: '4px 12px',
+                                borderRadius: '20px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px'
+                            }}>
+                                📅 {monthFilter}
+                                <button
+                                    onClick={() => {
+                                        setMonthFilter(null);
+                                        window.history.pushState({}, '', '/allSpendFilters');
+                                    }}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        color: '#667eea',
+                                        cursor: 'pointer',
+                                        padding: '2px',
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}
+                                    title="Supprimer le filtre de mois"
+                                >
+                                    ✕
+                                </button>
+                            </span>
+                        )}
+                    </h1>
                     <div className="expense-stats">
                         <div className="stat-card">
                             <div className="stat-label">Total affiché</div>
@@ -384,10 +447,32 @@ const EnhancedExpenseTable = () => {
                                             />
                                         </th>
                                         <th>ID</th>
-                                        <th>Montant</th>
+                                        <th
+                                            className="sortable"
+                                            onClick={() => updateSort('montant')}
+                                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                                        >
+                                            Montant
+                                            {sortConfig?.key === 'montant' && (
+                                                <span style={{ marginLeft: '6px', fontSize: '12px' }}>
+                                                    {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                                                </span>
+                                            )}
+                                        </th>
                                         <th>Description</th>
                                         <th>Catégorie</th>
-                                        <th>Date</th>
+                                        <th
+                                            className="sortable"
+                                            onClick={() => updateSort('monthYearDate')}
+                                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                                        >
+                                            Date
+                                            {sortConfig?.key === 'monthYearDate' && (
+                                                <span style={{ marginLeft: '6px', fontSize: '12px' }}>
+                                                    {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                                                </span>
+                                            )}
+                                        </th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>

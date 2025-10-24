@@ -143,7 +143,7 @@ const QuickAddModal = ({ isOpen, onClose, type = 'expense' }) => {
 
     const modalContent = (
         <div className="quick-modal-overlay portal-modal-overlay" onClick={handleClose}>
-            <div className="quick-modal portal-modal-content">
+            <div className="quick-modal portal-modal-content" onClick={(e) => e.stopPropagation()}>
                         {/* Header */}
                         <div className="quick-modal-header">
                             <div className="quick-modal-title">

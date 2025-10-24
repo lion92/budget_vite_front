@@ -7,9 +7,38 @@ const createSafeOptions = (type) => {
         responsive: true,
         maintainAspectRatio: false,
         animation: false,
+        animations: false,
+        transitions: {
+            active: {
+                animation: {
+                    duration: 0
+                }
+            }
+        },
         plugins: {
             legend: {
-                display: true
+                display: true,
+                position: 'top'
+            },
+            tooltip: {
+                enabled: true,
+                mode: 'nearest',
+                intersect: true,
+                position: 'nearest',
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed.y !== null) {
+                            label += context.parsed.y.toFixed(2) + ' €';
+                        } else if (context.parsed !== null) {
+                            label += context.parsed.toFixed(2) + ' €';
+                        }
+                        return label;
+                    }
+                }
             }
         }
     };
@@ -18,11 +47,22 @@ const createSafeOptions = (type) => {
     if (type !== 'pie' && type !== 'doughnut') {
         baseOptions.scales = {
             x: {
-                display: true
+                display: true,
+                grid: {
+                    display: true
+                }
             },
             y: {
                 display: true,
-                beginAtZero: true
+                beginAtZero: true,
+                grid: {
+                    display: true
+                },
+                ticks: {
+                    callback: function(value) {
+                        return value.toFixed(0) + ' €';
+                    }
+                }
             }
         };
         baseOptions.elements = {
@@ -74,11 +114,17 @@ const NativeChart = ({ type, data, options, onError }) => {
         // Détruire l'ancien graphique s'il existe
         if (chartRef.current) {
             try {
+                // Arrêter toutes les animations en cours
+                if (chartRef.current.stop) {
+                    chartRef.current.stop();
+                }
+                // Détruire le graphique
                 chartRef.current.destroy();
                 chartRef.current = null;
                 console.log('Ancien graphique détruit');
             } catch (e) {
                 console.warn('Erreur destruction ancien graphique:', e);
+                chartRef.current = null;
             }
         }
 
@@ -89,8 +135,16 @@ const NativeChart = ({ type, data, options, onError }) => {
             // Vérifier si un graphique existe déjà pour ce canvas
             const existingChart = Chart.getChart(canvas);
             if (existingChart) {
-                existingChart.destroy();
-                console.log('Graphique existant détruit');
+                try {
+                    // Arrêter toutes les animations en cours
+                    if (existingChart.stop) {
+                        existingChart.stop();
+                    }
+                    existingChart.destroy();
+                    console.log('Graphique existant détruit');
+                } catch (e) {
+                    console.warn('Erreur destruction graphique existant:', e);
+                }
             }
 
             // Utiliser des options sûres et simples
@@ -135,10 +189,15 @@ const NativeChart = ({ type, data, options, onError }) => {
         return () => {
             if (chartRef.current) {
                 try {
+                    // Arrêter toutes les animations avant de détruire
+                    if (chartRef.current.stop) {
+                        chartRef.current.stop();
+                    }
                     chartRef.current.destroy();
                     chartRef.current = null;
                 } catch (e) {
                     console.warn('Erreur cleanup NativeChart:', e);
+                    chartRef.current = null;
                 }
             }
         };

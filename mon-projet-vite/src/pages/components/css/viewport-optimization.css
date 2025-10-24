@@ -1,0 +1,107 @@
+/* Optimisation de l'affichage sans trop de scroll */
+
+/* Assure que le viewport utilise toute la hauteur disponible */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Optimise le container principal de l'application */
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Optimise l'affichage de la zone de contenu principal */
+.premium-app {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.premium-main {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rend le top-bar collant et optimisé */
+.top-bar {
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Optimise la zone de contenu pour qu'elle prenne l'espace disponible */
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - var(--topbar-height));
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) transparent;
+}
+
+.page-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.page-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.page-content::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.page-content::-webkit-scrollbar-thumb:hover {
+  opacity: 1;
+}
+
+/* Optimise le contenu intérieur */
+.main-content {
+  min-height: fit-content;
+  height: auto;
+  max-height: none;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .page-content {
+    max-height: calc(100vh - var(--topbar-height) - var(--mobile-nav-height));
+    padding-bottom: calc(var(--mobile-nav-height) + 0.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content {
+    max-height: calc(100vh - 60px - var(--mobile-nav-height));
+    padding-bottom: calc(var(--mobile-nav-height) + 0.25rem);
+  }
+}
+
+/* Ajustements pour les cartes et composants */
+.card, .chart-container, .table-container {
+  max-height: 100%;
+  overflow: auto;
+}
+
+/* Smooth scrolling pour une meilleure expérience */
+.page-content,
+.main-content {
+  scroll-behavior: smooth;
+}
+
+/* Réduit les marges excessives pour le contenu */
+.main-content > *:first-child {
+  margin-top: 0;
+}
+
+.main-content > *:last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,174 @@
+/* Bouton flottant d'accès rapide (FAB) */
+.quick-add-fab-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .quick-add-fab-container {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Overlay semi-transparent */
+.quick-add-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+}
+
+/* Bouton principal */
+.quick-add-fab {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4),
+                0 8px 24px rgba(124, 58, 237, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1001;
+}
+
+.quick-add-fab:hover {
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.5),
+                0 12px 32px rgba(124, 58, 237, 0.3);
+    transform: translateY(-2px);
+}
+
+.quick-add-fab:active {
+    transform: translateY(0);
+}
+
+.quick-add-fab--open {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4),
+                0 8px 24px rgba(239, 68, 68, 0.2);
+}
+
+@media (max-width: 768px) {
+    .quick-add-fab {
+        width: 56px;
+        height: 56px;
+    }
+}
+
+/* Actions du menu */
+.quick-add-action {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: all;
+}
+
+.quick-add-action-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
+                0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.quick-add-action-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3),
+                0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.quick-add-action-btn:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .quick-add-action-btn {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* Label des actions */
+.quick-add-action-label {
+    background: white;
+    color: #1f2937;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .quick-add-action-label {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+}
+
+/* Animation pulse pour attirer l'attention au chargement */
+@keyframes fab-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4),
+                    0 8px 24px rgba(124, 58, 237, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(124, 58, 237, 0.5),
+                    0 12px 32px rgba(124, 58, 237, 0.3);
+    }
+}
+
+.quick-add-fab {
+    animation: fab-pulse 2s ease-in-out 3;
+}
+
+/* Désactiver l'animation après quelques secondes */
+.quick-add-fab.no-pulse {
+    animation: none;
+}
+
+/* Accessibilité : focus visible */
+.quick-add-fab:focus-visible,
+.quick-add-action-btn:focus-visible {
+    outline: 3px solid #7c3aed;
+    outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .quick-add-action-label {
+        background: #1f2937;
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+}
