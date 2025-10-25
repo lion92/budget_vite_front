@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Application de gestion de budget moderne et épurée",
+  "homepage": "https://gestiontaches.krissclotilde.com",
   "author": "Votre Nom",
   "scripts": {
     "dev": "vite",

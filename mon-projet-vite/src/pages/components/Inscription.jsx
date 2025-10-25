@@ -94,15 +94,36 @@ const Inscription = () => {
                 body: JSON.stringify({ nom: nom.trim(), prenom: prenom.trim(), email, password })
             });
 
-            const data = await response.json().catch(() => ({}));
+            console.log('📊 [Inscription] Statut HTTP:', response.status, 'OK:', response.ok);
+
+            // Essayer de parser le JSON, sinon lire comme texte
+            const contentType = response.headers.get('content-type');
+            let data;
+
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json().catch(() => ({}));
+            } else {
+                const text = await response.text();
+                console.log('📝 [Inscription] Réponse texte du serveur:', text);
+                // Si c'est "ok", c'est que l'inscription a réussi
+                if (text === 'ok' && (response.status === 200 || response.status === 201)) {
+                    data = { success: true };
+                } else {
+                    data = { message: text };
+                }
+            }
+
             console.log('📝 [Inscription] Réponse reçue du serveur:', data);
-            
-            if (response.ok) {
+            console.log('🔍 [Inscription] Vérification - data.jwt:', !!data.jwt, 'data.id:', data.id, 'data.success:', data.success);
+
+            // L'API signup peut renvoyer soit { id, email, nom, prenom, jwt } soit juste "ok"
+            // On vérifie les différents cas de succès
+            if ((data.jwt && data.id) || data.success || (response.ok && !data.message)) {
                 console.log('✅ [Inscription] Inscription réussie!');
                 setIsSuccess(true);
                 setInscriptionMessage("Inscription réussie ! Vérifiez votre email pour activer votre compte.");
                 showNotification("success", "Inscription réussie ! Vérifiez vos emails.");
-                
+
                 // Reset form
                 console.log('🧹 [Inscription] Nettoyage du formulaire après inscription réussie');
                 setNom("");
@@ -113,8 +134,15 @@ const Inscription = () => {
                 setPrenomError("");
                 setEmailError("");
                 setPasswordError("");
+            } else if (!response.ok) {
+                console.log('❌ [Inscription] Erreur serveur lors de l\'inscription:', response.status);
+                setIsSuccess(false);
+                const errorMsg = data.message || `Erreur serveur: ${response.status}`;
+                setInscriptionMessage(errorMsg);
+                showNotification("error", errorMsg);
             } else {
-                console.log('❌ [Inscription] Échec de l\'inscription - Statut:', response.status, '- Message:', data.message);
+                console.log('❌ [Inscription] Échec de l\'inscription - Données manquantes');
+                console.log('📊 [Inscription] Données reçues:', JSON.stringify(data));
                 setIsSuccess(false);
                 const errorMsg = data.message || "Une erreur est survenue. Veuillez réessayer.";
                 setInscriptionMessage(errorMsg);

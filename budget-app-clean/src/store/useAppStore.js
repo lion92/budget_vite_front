@@ -87,20 +87,36 @@ const useAppStore = create((set, get) => ({
   register: async (userData) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch('https://www.krisscode.fr/connection/inscription', {
+      const response = await fetch('https://www.krisscode.fr/connection/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
       });
 
+      // Essayer de parser le JSON, sinon lire comme texte
+      const contentType = response.headers.get('content-type');
+      let data;
+
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json().catch(() => ({}));
+      } else {
+        const text = await response.text();
+        // Si c'est "ok" avec statut 200/201, c'est un succès
+        if (text === 'ok' && (response.status === 200 || response.status === 201)) {
+          set({ isLoading: false });
+          return true;
+        } else {
+          data = { message: text };
+        }
+      }
+
       if (!response.ok) {
-        set({ error: 'Erreur lors de l\'inscription', isLoading: false });
+        set({ error: data.message || 'Erreur lors de l\'inscription', isLoading: false });
         return false;
       }
 
-      const data = await response.json();
-
-      if (data.success || data.message?.includes('succès')) {
+      // L'API peut renvoyer { id, email, nom, prenom, jwt } ou { success: true }
+      if (data.success || data.jwt || data.message?.includes('succès')) {
         set({ isLoading: false });
         return true;
       }
