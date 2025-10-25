@@ -149,21 +149,19 @@ const Connection = () => {
                 return;
             }
 
-            if (data.message && !data.success) {
+            console.log('📊 [Connection] Données reçues:', data);
+
+            // L'API login renvoie { status, success, message, id, email, nom, prenom, jwt }
+            // Si success est false, afficher le message d'erreur
+            if (data.success === false || data.message) {
                 console.log('❌ [Connection] Échec de connexion:', data.message);
                 setMessageLog(data.message);
-                showNotification(data.message.includes("email") ? "warning" : "error", data.message);
+                showNotification("error", data.message);
                 return;
             }
 
-            if (!data.jwt) {
-                console.log('❌ [Connection] JWT manquant dans la réponse du serveur');
-                setMessageLog("JWT manquant dans la réponse");
-                showNotification("error", "JWT manquant dans la réponse");
-                return;
-            }
-
-            if (!isNaN(data?.id)) {
+            // Si success est true et qu'on a jwt et id, c'est bon
+            if (data.success && data.jwt && !isNaN(data?.id)) {
                 console.log('✅ [Connection] Connexion réussie! ID utilisateur:', data.id);
                 console.log('💾 [Connection] Sauvegarde du JWT et de l\'ID utilisateur dans localStorage');
                 localStorage.setItem("utilisateur", data.id);
@@ -173,9 +171,9 @@ const Connection = () => {
                 showNotification("success", "Connexion réussie");
                 window.location.reload();
             } else {
-                console.log('❌ [Connection] Identifiants incorrects - ID utilisateur invalide');
-                setMessageLog("Identifiants incorrects");
-                showNotification("error", "Identifiants incorrects");
+                console.log('❌ [Connection] Réponse invalide - Données manquantes');
+                setMessageLog("Erreur de connexion");
+                showNotification("error", "Erreur de connexion");
             }
         } catch (error) {
             console.log('❌ [Connection] Erreur lors de la connexion:', error);

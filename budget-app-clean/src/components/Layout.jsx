@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Home, TrendingUp, PieChart, Receipt, FileText, DollarSign, Tag,
-  Settings, LogOut, Menu, X, User
+  Settings, LogOut, Menu, X, User, Calendar
 } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import './Layout.css';
@@ -20,11 +20,10 @@ const Layout = ({ children }) => {
 
   const navItems = [
     { path: '/', icon: Home, label: 'Accueil' },
-    { path: '/expenses', icon: Receipt, label: 'Dépenses' },
+    { path: '/monthly-expenses', icon: Calendar, label: 'Dépenses du mois' },
+    { path: '/expenses', icon: Receipt, label: 'Toutes les dépenses' },
     { path: '/revenues', icon: TrendingUp, label: 'Revenus' },
     { path: '/categories', icon: Tag, label: 'Catégories' },
-    { path: '/tickets', icon: FileText, label: 'Tickets' },
-    { path: '/invoices', icon: FileText, label: 'Factures' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -55,14 +54,6 @@ const Layout = ({ children }) => {
         </nav>
 
         <div className="sidebar-footer">
-          <Link
-            to="/settings"
-            className={`nav-item ${isActive('/settings') ? 'active' : ''}`}
-            onClick={() => setSidebarOpen(false)}
-          >
-            <Settings size={20} />
-            <span>Paramètres</span>
-          </Link>
           <button className="nav-item logout-btn" onClick={handleLogout}>
             <LogOut size={20} />
             <span>Déconnexion</span>
@@ -81,8 +72,7 @@ const Layout = ({ children }) => {
           <div className="header-right">
             {user && (
               <div className="user-info">
-                <User size={20} />
-                <span>{user.email || user.name}</span>
+
               </div>
             )}
           </div>

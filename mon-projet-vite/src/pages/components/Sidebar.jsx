@@ -25,8 +25,6 @@ function Sidebar(props) {
         { path: "/allSpend", label: "Dépenses", icon: "💳" },
         { path: "/enveloppe", label: "Enveloppes", icon: "📦" },
         { path: "/prediction", label: "Prédictions", icon: "📈" },
-        { path: "/tickets", label: "Tickets", icon: "🧾" },
-        { path: "/comptabilite", label: "Comptabilité", icon: "📋" },
         { path: "/agenda", label: "Agenda", icon: "📅" },
     ];
 

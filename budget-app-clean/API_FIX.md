@@ -19,7 +19,7 @@ POST /auth/register
 ### ✅ Nouveau (correct)
 ```
 POST /connection/login
-POST /connection/inscription
+POST /connection/signup
 ```
 
 ---
@@ -50,7 +50,7 @@ login: async (email, password) => {
 #### Inscription corrigée
 ```javascript
 register: async (userData) => {
-  const response = await fetch('https://www.krisscode.fr/connection/inscription', {
+  const response = await fetch('https://www.krisscode.fr/connection/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(userData)

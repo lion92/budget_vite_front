@@ -6,10 +6,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import Expenses from './pages/Expenses';
+import MonthlyExpenses from './pages/MonthlyExpenses';
 import Revenues from './pages/Revenues';
 import Categories from './pages/Categories';
-import Tickets from './pages/Tickets';
-import Invoices from './pages/Invoices';
 import useAppStore from './store/useAppStore';
 
 // Protected Route Component
@@ -66,6 +65,14 @@ function App() {
           }
         />
         <Route
+          path="/monthly-expenses"
+          element={
+            <ProtectedRoute>
+              <MonthlyExpenses />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/expenses"
           element={
             <ProtectedRoute>
@@ -89,23 +96,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/tickets"
-          element={
-            <ProtectedRoute>
-              <Tickets />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/invoices"
-          element={
-            <ProtectedRoute>
-              <Invoices />
-            </ProtectedRoute>
-          }
-        />
-
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
