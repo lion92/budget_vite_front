@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Home, TrendingUp, PieChart, Receipt, FileText, DollarSign, Tag,
-  Settings, LogOut, Menu, X, User, Calendar
+  Settings, LogOut, Menu, X, User, Calendar, BarChart3
 } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import './Layout.css';
@@ -20,10 +20,12 @@ const Layout = ({ children }) => {
 
   const navItems = [
     { path: '/', icon: Home, label: 'Accueil' },
+    { path: '/analytics', icon: BarChart3, label: 'Analytique' },
     { path: '/monthly-expenses', icon: Calendar, label: 'Dépenses du mois' },
     { path: '/expenses', icon: Receipt, label: 'Toutes les dépenses' },
     { path: '/revenues', icon: TrendingUp, label: 'Revenus' },
     { path: '/categories', icon: Tag, label: 'Catégories' },
+    { path: '/tickets', icon: FileText, label: 'Tickets & Reçus' },
   ];
 
   const isActive = (path) => location.pathname === path;

@@ -113,12 +113,62 @@
   height: 200px;
   overflow: hidden;
   background-color: var(--bg-tertiary);
+  position: relative;
+  cursor: pointer;
 }
 
 .ticket-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: var(--transition);
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: var(--transition);
+  color: white;
+  font-weight: 500;
+}
+
+.ticket-image:hover .image-overlay {
+  opacity: 1;
+}
+
+.ticket-image:hover img {
+  transform: scale(1.05);
+}
+
+.no-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--text-tertiary);
+  background-color: var(--bg-tertiary);
+}
+
+.no-image-placeholder svg {
+  opacity: 0.5;
+}
+
+.no-image-placeholder span {
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .ticket-info {
@@ -174,12 +224,56 @@
   border-top: 1px solid var(--border-color);
 }
 
+/* Ticket Details List */
+.ticket-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  flex: 1;
+  word-break: break-word;
+}
+
+.detail-value.amount {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--primary);
+}
+
 .ticket-actions {
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   border-top: 1px solid var(--border-color);
   background-color: var(--bg-tertiary);
+}
+
+.btn-icon.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-icon.btn-primary:hover {
+  background-color: var(--primary-dark);
 }
 
 /* Loading & Empty States */
@@ -238,9 +332,27 @@
   .ticket-header {
     flex-direction: column;
     gap: 0.5rem;
+    align-items: flex-start;
   }
 
   .ticket-amount {
     margin-left: 0;
+  }
+
+  .detail-item {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .detail-label {
+    min-width: auto;
+  }
+
+  .ticket-actions {
+    justify-content: space-between;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }

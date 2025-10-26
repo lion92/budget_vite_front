@@ -11,7 +11,10 @@
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(xargs:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(taskkill:*)",
+      "Bash(del Layout.jsx)",
+      "Bash(ren:*)"
     ],
     "deny": [],
     "ask": []

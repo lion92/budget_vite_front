@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Search, Filter } from 'lucide-react';
+import { Plus, Search, Filter, Calendar } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import ExpenseTable from '../components/ExpenseTable';
 import ExpenseModal from '../components/ExpenseModal';
@@ -17,6 +17,8 @@ const Expenses = () => {
     setSearchTerm,
     selectedCategories,
     setSelectedCategories,
+    dateRange,
+    setDateRange,
     resetFilters,
   } = useAppStore();
 
@@ -25,6 +27,9 @@ const Expenses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [localStartDate, setLocalStartDate] = useState('');
+  const [localEndDate, setLocalEndDate] = useState('');
+  const [searchField, setSearchField] = useState('all'); // 'all', 'description', 'category'
 
   useEffect(() => {
     if (userId) {
@@ -33,7 +38,50 @@ const Expenses = () => {
     }
   }, [userId]);
 
-  const filteredExpenses = getFilteredExpenses();
+  // Filtrage personnalisé avec choix du champ de recherche
+  const getCustomFilteredExpenses = () => {
+    let filtered = [...expenses];
+
+    // Search term avec choix du champ
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter((expense) => {
+        if (searchField === 'description') {
+          return expense.description?.toLowerCase().includes(term);
+        } else if (searchField === 'category') {
+          return expense.categorie?.toLowerCase().includes(term);
+        } else {
+          // 'all' - recherche dans description et catégorie
+          return expense.description?.toLowerCase().includes(term) ||
+                 expense.categorie?.toLowerCase().includes(term);
+        }
+      });
+    }
+
+    // Categories
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((expense) =>
+        selectedCategories.includes(expense.categorie)
+      );
+    }
+
+    // Date range
+    if (dateRange.start || dateRange.end) {
+      filtered = filtered.filter((expense) => {
+        const expenseDate = new Date(expense.dateTransaction);
+        const start = dateRange.start ? new Date(dateRange.start) : null;
+        const end = dateRange.end ? new Date(dateRange.end) : null;
+
+        if (start && expenseDate < start) return false;
+        if (end && expenseDate > end) return false;
+        return true;
+      });
+    }
+
+    return filtered;
+  };
+
+  const filteredExpenses = getCustomFilteredExpenses();
   const totalFiltered = filteredExpenses.reduce(
     (sum, exp) => sum + parseFloat(exp.montant || 0),
     0
@@ -57,6 +105,18 @@ const Expenses = () => {
     }
   };
 
+  const handleDateChange = (type, value) => {
+    if (type === 'start') {
+      setLocalStartDate(value);
+      setDateRange({ ...dateRange, start: value ? new Date(value) : null });
+    } else {
+      setLocalEndDate(value);
+      setDateRange({ ...dateRange, end: value ? new Date(value) : null });
+    }
+  };
+
+  const hasActiveFilters = searchTerm || selectedCategories.length > 0 || dateRange.start || dateRange.end;
+
   return (
     <div className="expenses-page">
       <div className="page-header flex items-center justify-between">
@@ -73,15 +133,30 @@ const Expenses = () => {
       <div className="card mb-4">
         <div className="card-body">
           <div className="filters-bar">
-            <div className="search-box">
-              <Search size={20} />
-              <input
-                type="text"
-                placeholder="Rechercher une dépense..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
+            <div className="search-container">
+              <div className="search-box">
+                <Search size={20} />
+                <input
+                  type="text"
+                  placeholder={
+                    searchField === 'description' ? 'Rechercher par description...' :
+                    searchField === 'category' ? 'Rechercher par catégorie...' :
+                    'Rechercher une dépense...'
+                  }
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+              <select
+                value={searchField}
+                onChange={(e) => setSearchField(e.target.value)}
+                className="search-field-select"
+              >
+                <option value="all">Tout</option>
+                <option value="description">Description</option>
+                <option value="category">Catégorie</option>
+              </select>
             </div>
 
             <button
@@ -92,8 +167,12 @@ const Expenses = () => {
               Filtres
             </button>
 
-            {(searchTerm || selectedCategories.length > 0) && (
-              <button className="btn btn-outline" onClick={resetFilters}>
+            {hasActiveFilters && (
+              <button className="btn btn-outline" onClick={() => {
+                resetFilters();
+                setLocalStartDate('');
+                setLocalEndDate('');
+              }}>
                 Réinitialiser
               </button>
             )}
@@ -101,18 +180,50 @@ const Expenses = () => {
 
           {showFilters && (
             <div className="filters-panel">
-              <h4>Catégories</h4>
-              <div className="category-filters">
-                {categories.map((cat) => (
-                  <label key={cat.id} className="category-filter-item">
+              <div className="filter-section">
+                <h4>
+                  <Calendar size={16} />
+                  Filtrer par date
+                </h4>
+                <div className="date-filters">
+                  <div className="date-input-group">
+                    <label>Date de début</label>
                     <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(cat.categorie)}
-                      onChange={() => handleCategoryToggle(cat.categorie)}
+                      type="date"
+                      value={localStartDate}
+                      onChange={(e) => handleDateChange('start', e.target.value)}
+                      className="date-input"
                     />
-                    <span>{cat.categorie}</span>
-                  </label>
-                ))}
+                  </div>
+                  <div className="date-input-group">
+                    <label>Date de fin</label>
+                    <input
+                      type="date"
+                      value={localEndDate}
+                      onChange={(e) => handleDateChange('end', e.target.value)}
+                      className="date-input"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="filter-section">
+                <h4>
+                  <Filter size={16} />
+                  Catégories
+                </h4>
+                <div className="category-filters">
+                  {categories.map((cat) => (
+                    <label key={cat.id} className="category-filter-item">
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(cat.categorie)}
+                        onChange={() => handleCategoryToggle(cat.categorie)}
+                      />
+                      <span>{cat.categorie}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           )}

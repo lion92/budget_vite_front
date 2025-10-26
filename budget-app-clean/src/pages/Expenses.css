@@ -13,9 +13,16 @@
   flex-wrap: wrap;
 }
 
-.search-box {
+.search-container {
   flex: 1;
   min-width: 300px;
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.search-box {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -24,6 +31,30 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-secondary);
+}
+
+.search-field-select {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 140px;
+}
+
+.search-field-select:hover {
+  border-color: var(--primary);
+  background-color: white;
+}
+
+.search-field-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  background-color: white;
 }
 
 .search-input {
@@ -45,6 +76,51 @@
   font-size: 0.938rem;
   margin-bottom: 1rem;
   color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section:last-child {
+  margin-bottom: 0;
+}
+
+.date-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.date-input-group label {
+  font-size: 0.813rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.date-input {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background-color: white;
 }
 
 .category-filters {
@@ -85,8 +161,13 @@
 }
 
 @media (max-width: 768px) {
-  .search-box {
+  .search-container {
     min-width: 100%;
+    flex-direction: column;
+  }
+
+  .search-field-select {
+    width: 100%;
   }
 
   .filters-bar {
@@ -95,6 +176,10 @@
   }
 
   .category-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .date-filters {
     grid-template-columns: 1fr;
   }
 }

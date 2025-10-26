@@ -13,10 +13,54 @@ const Tickets = () => {
   const [dragActive, setDragActive] = useState(false);
   const [editingTicket, setEditingTicket] = useState(null);
   const [viewingImage, setViewingImage] = useState(null);
+  const [imageUrls, setImageUrls] = useState({});
 
   useEffect(() => {
     fetchTickets();
   }, []);
+
+  // Charger les images des tickets via l'API
+  useEffect(() => {
+    const loadTicketImages = async () => {
+      const newImageUrls = {};
+
+      for (const ticket of tickets) {
+        if (ticket.id && ticket.imagePath && !imageUrls[ticket.id]) {
+          try {
+            const response = await fetch(`https://www.krisscode.fr/ticket/image/${ticket.id}`, {
+              method: 'GET',
+              headers: {
+                'Accept': 'image/*',
+              },
+            });
+
+            if (response.ok) {
+              const blob = await response.blob();
+              const url = URL.createObjectURL(blob);
+              newImageUrls[ticket.id] = url;
+            }
+          } catch (error) {
+            console.error(`Erreur lors du chargement de l'image du ticket ${ticket.id}:`, error);
+          }
+        }
+      }
+
+      if (Object.keys(newImageUrls).length > 0) {
+        setImageUrls(prev => ({ ...prev, ...newImageUrls }));
+      }
+    };
+
+    if (tickets.length > 0) {
+      loadTicketImages();
+    }
+
+    // Cleanup: révoquer les URLs d'objet lors du démontage
+    return () => {
+      Object.values(imageUrls).forEach(url => {
+        URL.revokeObjectURL(url);
+      });
+    };
+  }, [tickets]);
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -89,13 +133,16 @@ const Tickets = () => {
   };
 
   const handleViewImage = (ticket) => {
-    setViewingImage({
-      url: ticket.imageUrl,
-      info: {
-        commercant: ticket.commercant || ticket.merchant,
-        montant: ticket.montant || ticket.amount
-      }
-    });
+    const imageUrl = imageUrls[ticket.id];
+    if (imageUrl) {
+      setViewingImage({
+        url: imageUrl,
+        info: {
+          commercant: ticket.commercant || ticket.merchant,
+          montant: ticket.montant || ticket.amount
+        }
+      });
+    }
   };
 
   const getTotalTickets = () => {
@@ -190,13 +237,28 @@ const Tickets = () => {
             </div>
           ) : (
             <div className="tickets-grid">
-              {tickets.map((ticket) => (
-                <div key={ticket.id} className="ticket-card">
-                  {ticket.imageUrl && (
-                    <div className="ticket-image">
-                      <img src={ticket.imageUrl} alt="Ticket" />
+              {tickets.map((ticket) => {
+                // Utiliser l'URL d'image chargée depuis l'API
+                const imageUrl = imageUrls[ticket.id];
+
+                return (
+                  <div key={ticket.id} className="ticket-card">
+                    <div className="ticket-image" onClick={imageUrl ? () => handleViewImage(ticket) : undefined}>
+                      {imageUrl ? (
+                        <>
+                          <img src={imageUrl} alt="Ticket" />
+                          <div className="image-overlay">
+                            <Eye size={24} />
+                            <span>Voir l'image</span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="no-image-placeholder">
+                          <FileText size={48} />
+                          <span>Pas d'image</span>
+                        </div>
+                      )}
                     </div>
-                  )}
                   <div className="ticket-info">
                     <div className="ticket-header">
                       <h4>{ticket.commercant || ticket.merchant || 'Commerçant inconnu'}</h4>
@@ -204,22 +266,41 @@ const Tickets = () => {
                         {formatCurrency(ticket.montant || ticket.amount || 0)}
                       </span>
                     </div>
-                    <div className="ticket-meta">
-                      <span className="ticket-date">
-                        📅 {formatDate(ticket.dateTransaction || ticket.date)}
-                      </span>
+
+                    <div className="ticket-details-list">
+                      <div className="detail-item">
+                        <span className="detail-label">📅 Date:</span>
+                        <span className="detail-value">
+                          {formatDate(ticket.dateTransaction || ticket.date)}
+                        </span>
+                      </div>
+
+                      <div className="detail-item">
+                        <span className="detail-label">💰 Montant:</span>
+                        <span className="detail-value amount">
+                          {formatCurrency(ticket.montant || ticket.amount || 0)}
+                        </span>
+                      </div>
+
                       {ticket.categorie && (
-                        <span className="ticket-category">{ticket.categorie}</span>
+                        <div className="detail-item">
+                          <span className="detail-label">🏷️ Catégorie:</span>
+                          <span className="ticket-category">{ticket.categorie}</span>
+                        </div>
+                      )}
+
+                      {(ticket.description || ticket.extractedText) && (
+                        <div className="detail-item">
+                          <span className="detail-label">📝 Description:</span>
+                          <span className="detail-value">
+                            {ticket.description || ticket.extractedText}
+                          </span>
+                        </div>
                       )}
                     </div>
-                    {ticket.extractedText && (
-                      <div className="ticket-details">
-                        <p className="text-sm text-secondary">{ticket.extractedText}</p>
-                      </div>
-                    )}
                   </div>
                   <div className="ticket-actions">
-                    {ticket.imageUrl && (
+                    {imageUrl && (
                       <button
                         className="btn-icon"
                         onClick={() => handleViewImage(ticket)}
@@ -229,9 +310,9 @@ const Tickets = () => {
                       </button>
                     )}
                     <button
-                      className="btn-icon"
+                      className="btn-icon btn-primary"
                       onClick={() => setEditingTicket(ticket)}
-                      title="Modifier"
+                      title="Modifier le prix et la date"
                     >
                       <Edit size={16} />
                     </button>
@@ -244,7 +325,8 @@ const Tickets = () => {
                     </button>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

@@ -9,6 +9,8 @@ import Expenses from './pages/Expenses';
 import MonthlyExpenses from './pages/MonthlyExpenses';
 import Revenues from './pages/Revenues';
 import Categories from './pages/Categories';
+import Analytics from './pages/Analytics';
+import Tickets from './pages/TicketsPage';
 import useAppStore from './store/useAppStore';
 
 // Protected Route Component
@@ -65,6 +67,14 @@ function App() {
           }
         />
         <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/monthly-expenses"
           element={
             <ProtectedRoute>
@@ -93,6 +103,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Categories />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tickets"
+          element={
+            <ProtectedRoute>
+              <Tickets />
             </ProtectedRoute>
           }
         />

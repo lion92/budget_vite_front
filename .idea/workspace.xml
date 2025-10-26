@@ -4,19 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="correction du nan">
-      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/allSpend.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/inscription.css" afterDir="false" />
+    <list default="true" id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="nouveau projet">
+      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpend.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpend.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpendFilters.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/AllSpendFilters.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Budget.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/GraphBudget.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Inscription.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/Inscription.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/connection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/connection.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/budget_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/budget_style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/graphBudget.css" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/graphBudget.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/useBudgetStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/useBudgetStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/components/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/components/Layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/components/TicketModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/components/TicketModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/pages/Auth.css" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/pages/Auth.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/pages/Categories.css" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/pages/Categories.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/pages/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/pages/Home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/pages/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/pages/Tickets.css" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/pages/Tickets.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/budget-app-clean/src/pages/Tickets.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/budget-app-clean/src/pages/Tickets.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/ticket-table.css" beforeDir="false" afterPath="$PROJECT_DIR$/mon-projet-vite/src/pages/components/css/ticket-table.css" afterDir="false" />
+    </list>
+    <list id="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" name="Changes4" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,12 +35,87 @@
         <option value="JavaScript File" />
         <option value="JSX File" />
         <option value="CSS File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="SOFT" />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/.idea/workspace.xml">
+      <ranges>
+        <range start1="6" end1="9" start2="6" end2="23" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="10" end1="19" start2="24" end2="24" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="31" end1="31" start2="36" end2="37" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="38" end1="38" start2="44" end2="117" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="52" end1="52" start2="131" end2="132" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="54" end1="54" start2="134" end2="135" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="83" end1="83" start2="164" end2="165" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="99" end1="100" start2="181" end2="219" changelist="a8ef5254-5f32-4e95-a70f-6d642403bdf6" />
+        <range start1="101" end1="102" start2="220" end2="221" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="103" end1="106" start2="222" end2="225" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="107" end1="108" start2="226" end2="227" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="109" end1="110" start2="228" end2="229" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="111" end1="114" start2="230" end2="233" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="115" end1="116" start2="234" end2="235" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="117" end1="118" start2="236" end2="237" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="119" end1="122" start2="238" end2="241" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="123" end1="124" start2="242" end2="243" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="125" end1="126" start2="244" end2="245" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="127" end1="130" start2="246" end2="249" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="131" end1="132" start2="250" end2="251" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="133" end1="134" start2="252" end2="253" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="135" end1="138" start2="254" end2="257" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="139" end1="140" start2="258" end2="259" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="141" end1="142" start2="260" end2="261" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="143" end1="146" start2="262" end2="265" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="147" end1="148" start2="266" end2="267" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="149" end1="150" start2="268" end2="269" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="151" end1="154" start2="270" end2="273" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="155" end1="156" start2="274" end2="275" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="157" end1="158" start2="276" end2="277" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="159" end1="162" start2="278" end2="281" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="163" end1="164" start2="282" end2="283" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="165" end1="166" start2="284" end2="285" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="167" end1="170" start2="286" end2="289" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="171" end1="172" start2="290" end2="291" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="173" end1="174" start2="292" end2="293" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="175" end1="178" start2="294" end2="297" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="179" end1="180" start2="298" end2="299" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="181" end1="182" start2="300" end2="301" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="183" end1="186" start2="302" end2="305" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="187" end1="188" start2="306" end2="307" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="189" end1="190" start2="308" end2="309" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="191" end1="194" start2="310" end2="313" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="195" end1="196" start2="314" end2="315" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="197" end1="198" start2="316" end2="317" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="199" end1="202" start2="318" end2="321" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="203" end1="204" start2="322" end2="323" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="205" end1="206" start2="324" end2="325" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="207" end1="210" start2="326" end2="329" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="211" end1="212" start2="330" end2="331" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="213" end1="214" start2="332" end2="333" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="215" end1="218" start2="334" end2="337" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="219" end1="220" start2="338" end2="339" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="221" end1="222" start2="340" end2="341" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="223" end1="226" start2="342" end2="345" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="227" end1="228" start2="346" end2="347" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="229" end1="230" start2="348" end2="349" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="231" end1="234" start2="350" end2="353" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="235" end1="236" start2="354" end2="355" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="237" end1="238" start2="356" end2="357" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="239" end1="242" start2="358" end2="361" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="243" end1="244" start2="362" end2="363" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="245" end1="246" start2="364" end2="365" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="247" end1="250" start2="366" end2="369" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="251" end1="252" start2="370" end2="371" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="253" end1="254" start2="372" end2="613" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="264" end1="265" start2="623" end2="636" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+        <range start1="272" end1="285" start2="643" end2="669" changelist="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" />
+      </ranges>
+    </file>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -50,8 +131,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/kriss/IdeaProjects/budget_vite_js/mon-projet-vite/src/pages/components/css&quot;,
@@ -81,6 +164,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="a8ef5254-5f32-4e95-a70f-6d642403bdf6" name="Changes" comment="" />
+      <changelist id="f1c5f7f0-f5b8-4523-86f6-5d444eee116d" name="Changes4" comment="" />
       <created>1750460319118</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -97,7 +181,44 @@
       <workItem from="1752232470902" duration="2974000" />
       <workItem from="1752316960494" duration="7661000" />
       <workItem from="1752430516676" duration="4033000" />
-      <workItem from="1757401256588" duration="3823000" />
+      <workItem from="1757401256588" duration="8500000" />
+      <workItem from="1757580232825" duration="1165000" />
+      <workItem from="1757687965465" duration="3484000" />
+      <workItem from="1757700655662" duration="2129000" />
+      <workItem from="1757742925221" duration="7631000" />
+      <workItem from="1757780470303" duration="49193000" />
+      <workItem from="1758109728189" duration="616000" />
+      <workItem from="1758124242313" duration="17574000" />
+      <workItem from="1758217406831" duration="1927000" />
+      <workItem from="1758240425500" duration="9909000" />
+      <workItem from="1758277358776" duration="577000" />
+      <workItem from="1758283935903" duration="4020000" />
+      <workItem from="1758351263447" duration="18569000" />
+      <workItem from="1758428755152" duration="14437000" />
+      <workItem from="1758558591766" duration="1526000" />
+      <workItem from="1758611830775" duration="6308000" />
+      <workItem from="1758689055516" duration="29000" />
+      <workItem from="1758791870274" duration="4000000" />
+      <workItem from="1759073339921" duration="2583000" />
+      <workItem from="1759221972756" duration="638000" />
+      <workItem from="1759251803684" duration="2050000" />
+      <workItem from="1759540220887" duration="1786000" />
+      <workItem from="1759543856235" duration="27000" />
+      <workItem from="1759570212484" duration="594000" />
+      <workItem from="1759593454943" duration="1529000" />
+      <workItem from="1759669712184" duration="530000" />
+      <workItem from="1759679461670" duration="582000" />
+      <workItem from="1759722471340" duration="593000" />
+      <workItem from="1759751005839" duration="596000" />
+      <workItem from="1760093816654" duration="4738000" />
+      <workItem from="1760250547793" duration="11581000" />
+      <workItem from="1760430557419" duration="2270000" />
+      <workItem from="1760539398737" duration="1686000" />
+      <workItem from="1760601101401" duration="1000" />
+      <workItem from="1760609798937" duration="4372000" />
+      <workItem from="1760620627880" duration="1344000" />
+      <workItem from="1761130648761" duration="731000" />
+      <workItem from="1761315100217" duration="16631000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
