@@ -1,6 +1,14 @@
 import { create } from 'zustand';
 import { api } from '../services/api';
 
+const BASE = 'https://www.krisscode.fr';
+
+// Helper : headers JSON + JWT
+const jsonHeaders = () => ({
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+});
+
 const useAppStore = create((set, get) => ({
   // ========================================
   // STATE
@@ -8,13 +16,17 @@ const useAppStore = create((set, get) => ({
   user: null,
   token: localStorage.getItem('jwt'),
 
-  expenses: [],
+  expenses:   [],
   categories: [],
-  revenues: [],
-  tickets: [],
+  revenues:   [],
+  tickets:    [],
 
   isLoading: false,
   error: null,
+
+  // Cache timestamps (ms) — évite les refetch inutiles à la navigation
+  _lastFetched: { expenses: 0, categories: 0, revenues: 0 },
+  CACHE_TTL: 30_000, // 30 secondes
 
   // Filters & Search
   searchTerm: '',
@@ -23,15 +35,15 @@ const useAppStore = create((set, get) => ({
   amountRange: { min: null, max: null },
 
   // ========================================
-  // AUTH ACTIONS
+  // AUTH
   // ========================================
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch('https://www.krisscode.fr/connection/login', {
+      const response = await fetch(`${BASE}/connection/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -54,165 +66,160 @@ const useAppStore = create((set, get) => ({
       if (data.id) {
         localStorage.setItem('jwt', data.jwt);
         localStorage.setItem('utilisateur', data.id);
-
-        set({
-          token: data.jwt,
-          user: { id: data.id, email },
-          isLoading: false
-        });
+        set({ token: data.jwt, user: { id: data.id, email }, isLoading: false });
         return true;
       }
 
       set({ error: 'Données utilisateur invalides', isLoading: false });
       return false;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur de connexion au serveur', isLoading: false });
       return false;
     }
+  },
+
+  // Appelé après le redirect Google : lit jwt/id/email/nom/prenom depuis les query params
+  loginFromGoogleCallback: ({ jwt, id, email, nom, prenom }) => {
+    localStorage.setItem('jwt', jwt);
+    localStorage.setItem('utilisateur', id);
+    set({ token: jwt, user: { id, email, nom, prenom } });
   },
 
   logout: () => {
     localStorage.removeItem('jwt');
     localStorage.removeItem('utilisateur');
-    set({
-      user: null,
-      token: null,
-      expenses: [],
-      categories: [],
-      revenues: [],
-      tickets: []
-    });
+    set({ user: null, token: null, expenses: [], categories: [], revenues: [], tickets: [] });
   },
 
   register: async (userData) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch('https://www.krisscode.fr/connection/signup', {
+      const response = await fetch(`${BASE}/connection/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(userData),
       });
 
-      // Essayer de parser le JSON, sinon lire comme texte
       const contentType = response.headers.get('content-type');
       let data;
 
-      if (contentType && contentType.includes('application/json')) {
+      if (contentType?.includes('application/json')) {
         data = await response.json().catch(() => ({}));
       } else {
         const text = await response.text();
-        // Si c'est "ok" avec statut 200/201, c'est un succès
         if (text === 'ok' && (response.status === 200 || response.status === 201)) {
           set({ isLoading: false });
           return true;
-        } else {
-          data = { message: text };
         }
+        data = { message: text };
       }
 
       if (!response.ok) {
-        set({ error: data.message || 'Erreur lors de l\'inscription', isLoading: false });
+        set({ error: data.message || "Erreur lors de l'inscription", isLoading: false });
         return false;
       }
 
-      // L'API peut renvoyer { id, email, nom, prenom, jwt } ou { success: true }
       if (data.success || data.jwt || data.message?.includes('succès')) {
         set({ isLoading: false });
         return true;
       }
 
-      set({ error: data.message || 'Erreur lors de l\'inscription', isLoading: false });
+      set({ error: data.message || "Erreur lors de l'inscription", isLoading: false });
       return false;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur de connexion au serveur', isLoading: false });
       return false;
     }
   },
 
   // ========================================
-  // EXPENSES ACTIONS
+  // EXPENSES — fetch
   // ========================================
-  fetchExpenses: async (userId) => {
+  fetchExpenses: async (userId, { force = false } = {}) => {
+    const uid = userId ?? localStorage.getItem('utilisateur');
+    if (!uid) return;
+
+    const { _lastFetched, CACHE_TTL } = get();
+    if (!force && Date.now() - _lastFetched.expenses < CACHE_TTL) return;
+
     set({ isLoading: true, error: null });
     try {
-      const response = await api.get(`/action/byuser/${userId}`);
-      set({ expenses: response.data, isLoading: false });
-    } catch (error) {
+      const response = await api.get(`/action/byuser/${uid}`);
+      set({
+        expenses: response.data ?? [],
+        isLoading: false,
+        _lastFetched: { ...get()._lastFetched, expenses: Date.now() },
+      });
+    } catch {
       set({ error: 'Erreur lors du chargement des dépenses', isLoading: false });
     }
   },
 
+  // EXPENSES — add
   addExpense: async (expense) => {
     set({ isLoading: true, error: null });
     try {
-      const jwt = localStorage.getItem('jwt');
+      const jwt    = localStorage.getItem('jwt');
       const userId = parseInt(localStorage.getItem('utilisateur'));
 
-      // Convertir la date au format attendu par l'API : "2025/10/24 12:00:00"
-      const date = new Date(expense.dateTransaction);
-      const dateFormatted = date.toLocaleString("zh-CN", { timeZone: 'Europe/Paris' });
+      const date          = new Date(expense.dateTransaction);
+      const dateFormatted = date.toLocaleString('zh-CN', { timeZone: 'Europe/Paris' });
 
       const body = {
-        montant: parseFloat(expense.montant),
-        categorie: parseInt(expense.categorie), // ✅ ID de la catégorie (nombre)
-        description: expense.description,
-        user: userId,
+        montant:         parseFloat(expense.montant),
+        categorie:       parseInt(expense.categorie),
+        description:     expense.description,
+        user:            userId,
         dateTransaction: dateFormatted,
-        jwt
+        jwt,
       };
 
-      console.log('📤 Envoi dépense:', body);
-
-      const response = await fetch('https://www.krisscode.fr/action', {
+      const response = await fetch(`${BASE}/action`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Erreur API:', response.status, errorText);
-        set({ error: 'Erreur lors de l\'ajout de la dépense', isLoading: false });
+        const txt = await response.text();
+        console.error('❌ addExpense:', response.status, txt);
+        set({ error: "Erreur lors de l'ajout de la dépense", isLoading: false });
         return false;
       }
 
-      const data = await response.json();
-      console.log('✅ Dépense ajoutée:', data);
-
-      // Recharger les dépenses pour avoir les données à jour
-      await get().fetchExpenses(userId);
-
-      set({ isLoading: false });
+      // Invalider le cache puis refetch
+      set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
+      await get().fetchExpenses(userId, { force: true });
       return true;
-    } catch (error) {
-      console.error('❌ Exception:', error);
-      set({ error: 'Erreur lors de l\'ajout de la dépense', isLoading: false });
+    } catch (err) {
+      console.error('❌ addExpense exception:', err);
+      set({ error: "Erreur lors de l'ajout de la dépense", isLoading: false });
       return false;
     }
   },
 
+  // EXPENSES — update
   updateExpense: async (id, expense) => {
     set({ isLoading: true, error: null });
     try {
-      const jwt = localStorage.getItem('jwt');
+      const jwt    = localStorage.getItem('jwt');
       const userId = parseInt(localStorage.getItem('utilisateur'));
 
-      // Convertir la date au format attendu par l'API
-      const date = new Date(expense.dateTransaction);
-      const dateFormatted = date.toLocaleString("zh-CN", { timeZone: 'Europe/Paris' });
+      const date          = new Date(expense.dateTransaction);
+      const dateFormatted = date.toLocaleString('zh-CN', { timeZone: 'Europe/Paris' });
 
       const body = {
-        montant: parseFloat(expense.montant),
-        categorie: parseInt(expense.categorie), // ✅ ID de la catégorie (nombre)
-        description: expense.description,
+        montant:         parseFloat(expense.montant),
+        categorie:       parseInt(expense.categorie),
+        description:     expense.description,
         dateTransaction: dateFormatted,
-        jwt
+        jwt,
       };
 
-      const response = await fetch(`https://www.krisscode.fr/action/${id}`, {
+      const response = await fetch(`${BASE}/action/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -220,28 +227,26 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
-      const data = await response.json();
-
-      // Recharger les dépenses pour avoir les données à jour
-      await get().fetchExpenses(userId);
-
-      set({ isLoading: false });
+      set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
+      await get().fetchExpenses(userId, { force: true });
       return true;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur lors de la mise à jour', isLoading: false });
       return false;
     }
   },
 
+  // EXPENSES — delete
   deleteExpense: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      const jwt = localStorage.getItem('jwt');
+      const jwt    = localStorage.getItem('jwt');
+      const userId = parseInt(localStorage.getItem('utilisateur'));
 
-      const response = await fetch(`https://www.krisscode.fr/action/${id}`, {
+      const response = await fetch(`${BASE}/action/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jwt })
+        body: JSON.stringify({ jwt }),
       });
 
       if (!response.ok) {
@@ -249,52 +254,61 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
-      set((state) => ({
-        expenses: state.expenses.filter((e) => e.id !== id),
-        isLoading: false
-      }));
+      set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
+      await get().fetchExpenses(userId, { force: true });
       return true;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur lors de la suppression', isLoading: false });
       return false;
     }
   },
 
   // ========================================
-  // CATEGORIES ACTIONS
+  // CATEGORIES — fetch
   // ========================================
-  fetchCategories: async (userId) => {
+  fetchCategories: async (userId, { force = false } = {}) => {
+    const uid = userId ?? localStorage.getItem('utilisateur');
+    if (!uid) return;
+
+    const { _lastFetched, CACHE_TTL } = get();
+    if (!force && Date.now() - _lastFetched.categories < CACHE_TTL) return;
+
     set({ isLoading: true, error: null });
     try {
-      const response = await api.get(`/categorie/byuser/${userId}`);
-      set({ categories: response.data, isLoading: false });
-    } catch (error) {
+      const response = await api.get(`/categorie/byuser/${uid}`);
+      set({
+        categories: response.data ?? [],
+        isLoading: false,
+        _lastFetched: { ...get()._lastFetched, categories: Date.now() },
+      });
+    } catch {
       set({ error: 'Erreur lors du chargement des catégories', isLoading: false });
     }
   },
 
+  // CATEGORIES — add
   addCategory: async (category) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await api.post('/categorie', category);
-      set((state) => ({
-        categories: [...state.categories, response.data],
-        isLoading: false
-      }));
+      await api.post('/categorie', category);
+      const userId = localStorage.getItem('utilisateur');
+      set((s) => ({ _lastFetched: { ...s._lastFetched, categories: 0 } }));
+      await get().fetchCategories(userId, { force: true });
       return true;
-    } catch (error) {
-      set({ error: 'Erreur lors de l\'ajout de la catégorie', isLoading: false });
+    } catch {
+      set({ error: "Erreur lors de l'ajout de la catégorie", isLoading: false });
       return false;
     }
   },
 
+  // CATEGORIES — update
   updateCategory: async (id, category) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch(`https://www.krisscode.fr/categorie/${id}`, {
+      const response = await fetch(`${BASE}/categorie/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(category)
+        body: JSON.stringify(category),
       });
 
       if (!response.ok) {
@@ -302,29 +316,26 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
-      const data = await response.json();
-
-      // Recharger les catégories
-      const userId = parseInt(localStorage.getItem('utilisateur'));
-      await get().fetchCategories(userId);
-
-      set({ isLoading: false });
+      const userId = localStorage.getItem('utilisateur');
+      set((s) => ({ _lastFetched: { ...s._lastFetched, categories: 0 } }));
+      await get().fetchCategories(userId, { force: true });
       return true;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur lors de la mise à jour de la catégorie', isLoading: false });
       return false;
     }
   },
 
+  // CATEGORIES — delete
   deleteCategory: async (id) => {
     set({ isLoading: true, error: null });
     try {
       const jwt = localStorage.getItem('jwt');
 
-      const response = await fetch(`https://www.krisscode.fr/categorie/${id}`, {
+      const response = await fetch(`${BASE}/categorie/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jwt })
+        body: JSON.stringify({ jwt }),
       });
 
       if (!response.ok) {
@@ -332,29 +343,27 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
-      set((state) => ({
-        categories: state.categories.filter((c) => c.id !== id),
-        isLoading: false
-      }));
+      const userId = localStorage.getItem('utilisateur');
+      set((s) => ({ _lastFetched: { ...s._lastFetched, categories: 0 } }));
+      await get().fetchCategories(userId, { force: true });
       return true;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur lors de la suppression de la catégorie', isLoading: false });
       return false;
     }
   },
 
   // ========================================
-  // REVENUES ACTIONS
+  // REVENUES — fetch
   // ========================================
-  fetchRevenues: async () => {
+  fetchRevenues: async ({ force = false } = {}) => {
+    const { _lastFetched, CACHE_TTL } = get();
+    if (!force && Date.now() - _lastFetched.revenues < CACHE_TTL) return;
+
     set({ isLoading: true, error: null });
     try {
-      const token = localStorage.getItem('jwt');
-
-      const response = await fetch('https://www.krisscode.fr/revenues', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await fetch(`${BASE}/revenues`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
       });
 
       if (!response.ok) {
@@ -362,66 +371,55 @@ const useAppStore = create((set, get) => ({
         return;
       }
 
-      const data = await response.json();
-
-      // L'API peut retourner soit un tableau, soit un objet avec une propriété revenus
-      const revenues = Array.isArray(data) ? data : data?.revenus || [];
-
-      set({ revenues, isLoading: false });
-    } catch (error) {
+      const data     = await response.json();
+      const revenues = Array.isArray(data) ? data : data?.revenus ?? [];
+      set({
+        revenues,
+        isLoading: false,
+        _lastFetched: { ...get()._lastFetched, revenues: Date.now() },
+      });
+    } catch {
       set({ error: 'Erreur lors du chargement des revenus', isLoading: false });
     }
   },
 
+  // REVENUES — add
   addRevenue: async (revenue) => {
     set({ isLoading: true, error: null });
     try {
-      const token = localStorage.getItem('jwt');
-
       const body = {
-        name: revenue.nom,
+        name:   revenue.nom,
         amount: parseFloat(revenue.montant),
-        date: revenue.dateRevenu
+        date:   revenue.dateRevenu,
       };
 
-      const response = await fetch('https://www.krisscode.fr/revenues', {
+      const response = await fetch(`${BASE}/revenues`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(body)
+        headers: jsonHeaders(),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
-        set({ error: 'Erreur lors de l\'ajout du revenu', isLoading: false });
+        set({ error: "Erreur lors de l'ajout du revenu", isLoading: false });
         return false;
       }
 
-      const data = await response.json();
-
-      set((state) => ({
-        revenues: [...state.revenues, data],
-        isLoading: false
-      }));
+      set((s) => ({ _lastFetched: { ...s._lastFetched, revenues: 0 } }));
+      await get().fetchRevenues({ force: true });
       return true;
-    } catch (error) {
-      set({ error: 'Erreur lors de l\'ajout du revenu', isLoading: false });
+    } catch {
+      set({ error: "Erreur lors de l'ajout du revenu", isLoading: false });
       return false;
     }
   },
 
+  // REVENUES — delete
   deleteRevenue: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      const token = localStorage.getItem('jwt');
-
-      const response = await fetch(`https://www.krisscode.fr/revenues/${id}`, {
+      const response = await fetch(`${BASE}/revenues/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
+        headers: jsonHeaders(),
       });
 
       if (!response.ok) {
@@ -429,37 +427,18 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
-      set((state) => ({
-        revenues: state.revenues.filter((r) => r.id !== id),
-        isLoading: false
-      }));
+      set((s) => ({ _lastFetched: { ...s._lastFetched, revenues: 0 } }));
+      await get().fetchRevenues({ force: true });
       return true;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur lors de la suppression', isLoading: false });
       return false;
     }
   },
 
   // ========================================
-  // TICKETS (OCR) ACTIONS
+  // TICKETS
   // ========================================
-  uploadTicket: async (formData) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await api.post('/ticket/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      set((state) => ({
-        tickets: [...state.tickets, response.data],
-        isLoading: false
-      }));
-      return response.data;
-    } catch (error) {
-      set({ error: 'Erreur lors de l\'upload du ticket', isLoading: false });
-      return null;
-    }
-  },
-
   fetchTickets: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -469,10 +448,10 @@ const useAppStore = create((set, get) => ({
         return;
       }
 
-      const response = await fetch('https://www.krisscode.fr/ticket/all', {
+      const response = await fetch(`${BASE}/ticket/all`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jwt })
+        body: JSON.stringify({ jwt }),
       });
 
       if (!response.ok) {
@@ -487,9 +466,23 @@ const useAppStore = create((set, get) => ({
         return;
       }
 
-      set({ tickets: data.tickets || [], isLoading: false });
-    } catch (error) {
+      set({ tickets: data.tickets ?? [], isLoading: false });
+    } catch {
       set({ error: 'Erreur lors du chargement des tickets', isLoading: false });
+    }
+  },
+
+  uploadTicket: async (formData) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await api.post('/ticket/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      await get().fetchTickets();
+      return response.data;
+    } catch {
+      set({ error: "Erreur lors de l'upload du ticket", isLoading: false });
+      return null;
     }
   },
 
@@ -499,18 +492,18 @@ const useAppStore = create((set, get) => ({
       const jwt = localStorage.getItem('jwt');
 
       const body = {
-        commercant: ticketData.commercant,
-        montant: parseFloat(ticketData.montant),
-        categorie: ticketData.categorie,
+        commercant:      ticketData.commercant,
+        montant:         parseFloat(ticketData.montant),
+        categorie:       ticketData.categorie,
         dateTransaction: ticketData.dateTransaction,
-        description: ticketData.description,
-        jwt
+        description:     ticketData.description,
+        jwt,
       };
 
-      const response = await fetch(`https://www.krisscode.fr/ticket/${id}`, {
+      const response = await fetch(`${BASE}/ticket/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -518,12 +511,9 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
-      // Recharger les tickets
       await get().fetchTickets();
-
-      set({ isLoading: false });
       return true;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur lors de la mise à jour du ticket', isLoading: false });
       return false;
     }
@@ -538,10 +528,10 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
-      const response = await fetch('https://www.krisscode.fr/ticket/delete', {
+      const response = await fetch(`${BASE}/ticket/delete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jwt, id })
+        body: JSON.stringify({ jwt, id }),
       });
 
       if (!response.ok) {
@@ -550,18 +540,14 @@ const useAppStore = create((set, get) => ({
       }
 
       const data = await response.json();
-
       if (!data.success) {
         set({ error: data.message || 'Erreur lors de la suppression du ticket', isLoading: false });
         return false;
       }
 
-      set((state) => ({
-        tickets: state.tickets.filter((t) => t.id !== id),
-        isLoading: false
-      }));
+      await get().fetchTickets();
       return true;
-    } catch (error) {
+    } catch {
       set({ error: 'Erreur lors de la suppression du ticket', isLoading: false });
       return false;
     }
@@ -570,20 +556,18 @@ const useAppStore = create((set, get) => ({
   // ========================================
   // FILTERS & SEARCH
   // ========================================
-  setSearchTerm: (term) => set({ searchTerm: term }),
-
+  setSearchTerm:         (term)       => set({ searchTerm: term }),
   setSelectedCategories: (categories) => set({ selectedCategories: categories }),
+  setDateRange:          (range)      => set({ dateRange: range }),
+  setAmountRange:        (range)      => set({ amountRange: range }),
 
-  setDateRange: (range) => set({ dateRange: range }),
-
-  setAmountRange: (range) => set({ amountRange: range }),
-
-  resetFilters: () => set({
-    searchTerm: '',
-    selectedCategories: [],
-    dateRange: { start: null, end: null },
-    amountRange: { min: null, max: null }
-  }),
+  resetFilters: () =>
+    set({
+      searchTerm:         '',
+      selectedCategories: [],
+      dateRange:          { start: null, end: null },
+      amountRange:        { min: null, max: null },
+    }),
 
   // ========================================
   // COMPUTED / SELECTORS
@@ -592,41 +576,35 @@ const useAppStore = create((set, get) => ({
     const state = get();
     let filtered = [...state.expenses];
 
-    // Search term
     if (state.searchTerm) {
       const term = state.searchTerm.toLowerCase();
-      filtered = filtered.filter((expense) =>
-        expense.description?.toLowerCase().includes(term) ||
-        expense.categorie?.toLowerCase().includes(term)
+      filtered = filtered.filter(
+        (e) =>
+          e.description?.toLowerCase().includes(term) ||
+          e.categorie?.toLowerCase().includes(term)
       );
     }
 
-    // Categories
     if (state.selectedCategories.length > 0) {
-      filtered = filtered.filter((expense) =>
-        state.selectedCategories.includes(expense.categorie)
-      );
+      filtered = filtered.filter((e) => state.selectedCategories.includes(e.categorie));
     }
 
-    // Date range
     if (state.dateRange.start || state.dateRange.end) {
-      filtered = filtered.filter((expense) => {
-        const expenseDate = new Date(expense.dateTransaction);
+      filtered = filtered.filter((e) => {
+        const d     = new Date(e.dateTransaction);
         const start = state.dateRange.start ? new Date(state.dateRange.start) : null;
-        const end = state.dateRange.end ? new Date(state.dateRange.end) : null;
-
-        if (start && expenseDate < start) return false;
-        if (end && expenseDate > end) return false;
+        const end   = state.dateRange.end   ? new Date(state.dateRange.end)   : null;
+        if (start && d < start) return false;
+        if (end   && d > end)   return false;
         return true;
       });
     }
 
-    // Amount range
     if (state.amountRange.min !== null || state.amountRange.max !== null) {
-      filtered = filtered.filter((expense) => {
-        const amount = parseFloat(expense.montant);
-        if (state.amountRange.min !== null && amount < state.amountRange.min) return false;
-        if (state.amountRange.max !== null && amount > state.amountRange.max) return false;
+      filtered = filtered.filter((e) => {
+        const amt = parseFloat(e.montant);
+        if (state.amountRange.min !== null && amt < state.amountRange.min) return false;
+        if (state.amountRange.max !== null && amt > state.amountRange.max) return false;
         return true;
       });
     }
@@ -634,51 +612,36 @@ const useAppStore = create((set, get) => ({
     return filtered;
   },
 
-  getTotalExpenses: () => {
-    const state = get();
-    return state.expenses.reduce((sum, expense) => sum + parseFloat(expense.montant || 0), 0);
-  },
+  getTotalExpenses: () =>
+    get().expenses.reduce((sum, e) => sum + parseFloat(e.montant || 0), 0),
 
-  getTotalRevenues: () => {
-    const state = get();
-    return state.revenues.reduce((sum, revenue) => {
-      const amount = revenue.amount || revenue.montant || 0;
+  getTotalRevenues: () =>
+    get().revenues.reduce((sum, r) => {
+      const amount = r.amount ?? r.montant ?? 0;
       return sum + parseFloat(amount);
-    }, 0);
-  },
+    }, 0),
 
   getExpensesByCategory: () => {
-    const state = get();
     const byCategory = {};
-
-    state.expenses.forEach((expense) => {
-      const cat = expense.categorie || 'Sans catégorie';
-      if (!byCategory[cat]) {
-        byCategory[cat] = { total: 0, count: 0 };
-      }
-      byCategory[cat].total += parseFloat(expense.montant || 0);
+    get().expenses.forEach((e) => {
+      const cat = e.categorie || 'Sans catégorie';
+      if (!byCategory[cat]) byCategory[cat] = { total: 0, count: 0 };
+      byCategory[cat].total += parseFloat(e.montant || 0);
       byCategory[cat].count += 1;
     });
-
     return byCategory;
   },
 
   getMonthlyExpenses: () => {
-    const state = get();
     const byMonth = {};
-
-    state.expenses.forEach((expense) => {
-      const date = new Date(expense.dateTransaction);
+    get().expenses.forEach((e) => {
+      const date     = new Date(e.dateTransaction);
       const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-
-      if (!byMonth[monthKey]) {
-        byMonth[monthKey] = 0;
-      }
-      byMonth[monthKey] += parseFloat(expense.montant || 0);
+      if (!byMonth[monthKey]) byMonth[monthKey] = 0;
+      byMonth[monthKey] += parseFloat(e.montant || 0);
     });
-
     return byMonth;
-  }
+  },
 }));
 
 export default useAppStore;

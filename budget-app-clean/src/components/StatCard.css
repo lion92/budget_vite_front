@@ -1,87 +1,99 @@
 .stat-card {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background: var(--bg-primary);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.stat-card-primary::before { background: var(--gradient-primary); }
+.stat-card-success::before { background: var(--gradient-success); }
+.stat-card-danger::before  { background: var(--gradient-danger);  }
+.stat-card-warning::before { background: var(--gradient-warning); }
+
 .stat-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
 }
 
 .stat-card-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 0.875rem;
+  margin-bottom: 1.25rem;
 }
 
 .stat-card-icon {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-tertiary);
-  color: var(--primary);
+  flex-shrink: 0;
 }
 
 .stat-card-primary .stat-card-icon {
-  background-color: rgba(37, 99, 235, 0.1);
+  background: var(--primary-bg);
   color: var(--primary);
 }
-
 .stat-card-success .stat-card-icon {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: var(--secondary);
+  background: var(--success-bg);
+  color: var(--success);
 }
-
 .stat-card-danger .stat-card-icon {
-  background-color: rgba(239, 68, 68, 0.1);
+  background: var(--danger-bg);
   color: var(--danger);
 }
-
 .stat-card-warning .stat-card-icon {
-  background-color: rgba(245, 158, 11, 0.1);
+  background: var(--warning-bg);
   color: var(--warning);
 }
 
 .stat-card-title {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.813rem;
+  font-weight: 600;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .stat-card-value {
   font-size: 1.875rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.03em;
   margin-bottom: 0.5rem;
 }
 
 .stat-card-trend {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
 }
 
-.trend-up {
-  color: var(--secondary);
-}
-
-.trend-down {
-  color: var(--danger);
-}
+.trend-up   { background: var(--success-bg); color: var(--success); }
+.trend-down { background: var(--danger-bg);  color: var(--danger);  }
 
 @media (max-width: 768px) {
-  .stat-card-value {
-    font-size: 1.5rem;
-  }
-
-  .stat-card-icon {
-    width: 40px;
-    height: 40px;
-  }
+  .stat-card-value { font-size: 1.5rem; }
+  .stat-card-icon  { width: 40px; height: 40px; }
 }

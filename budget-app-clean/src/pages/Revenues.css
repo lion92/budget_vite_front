@@ -1,41 +1,124 @@
-.revenues-page {
-  max-width: 100%;
-}
+.revenues-page { max-width: 100%; }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
 }
 
 .stat-label {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   margin-bottom: 0.5rem;
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.stat-value.success { color: var(--success); }
+.stat-value.danger  { color: var(--danger);  }
+.stat-value.primary { color: var(--primary); }
+.stat-value.warning { color: var(--warning); }
+
+.amount-cell.success { color: var(--success); font-weight: 700; }
+
+/* Modal revenue */
+.revenue-modal { max-width: 480px; }
+
+/* Amount styles (mirrored from ExpenseModal) */
+.amount-input-wrapper { display: flex; flex-direction: column; gap: 0.625rem; }
+.amount-display-row   { display: flex; align-items: center; gap: 0.5rem; }
+
+.currency-symbol {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  width: 1.5rem;
+  text-align: center;
+}
+
+.amount-input {
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  text-align: right;
+  color: var(--success) !important;
+  border-color: var(--success) !important;
+}
+.amount-input:focus {
+  border-color: var(--success) !important;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.15) !important;
+}
+
+.quick-amounts { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+
+.quick-amount-btn {
+  background: var(--bg-tertiary);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.8rem;
   font-weight: 700;
+  padding: 0.375rem 0.75rem;
+  transition: var(--transition);
+}
+.quick-amount-btn:hover {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16,185,129,0.30);
 }
 
-.stat-value.success {
-  color: var(--secondary);
+.amount-adjust-row { display: flex; align-items: center; gap: 0.5rem; }
+
+.amount-current {
+  flex: 1;
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--success);
+  background: var(--success-bg);
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--radius-md);
 }
 
-.stat-value.danger {
-  color: var(--danger);
+.adjust-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--bg-tertiary);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.375rem 0.75rem;
+  transition: var(--transition);
 }
+.adjust-btn.plus:hover  { background: var(--success-bg); border-color: var(--success); color: var(--success); }
+.adjust-btn.minus:hover { background: var(--danger-bg);  border-color: var(--danger);  color: var(--danger);  }
 
-.stat-value.primary {
-  color: var(--primary);
+.btn-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
 }
-
-.amount-cell.success {
-  color: var(--secondary);
-  font-weight: 600;
-}
+.btn-close:hover { background: var(--danger-bg); color: var(--danger); }
 
 .empty-state {
   display: flex;
@@ -46,18 +129,13 @@
   color: var(--text-secondary);
   gap: 1rem;
 }
-
-.empty-state svg {
-  color: var(--text-tertiary);
-}
+.empty-state svg { color: var(--text-tertiary); }
 
 @media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat-value { font-size: 1.5rem; }
+}
 
-  .stat-value {
-    font-size: 1.5rem;
-  }
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
 }

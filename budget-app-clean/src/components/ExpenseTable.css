@@ -1,14 +1,13 @@
-.expense-table {
-  background-color: var(--bg-primary);
-}
+.expense-table { background: var(--bg-primary); }
 
 .expense-table th.sortable {
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
 }
-
 .expense-table th.sortable:hover {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-tertiary);
+  color: var(--primary);
 }
 
 .category-cell {
@@ -17,19 +16,25 @@
   gap: 0.5rem;
 }
 
-.category-icon {
-  font-size: 1.25rem;
+.category-icon { font-size: 1.1rem; }
+
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.625rem;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .amount-cell {
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--danger);
 }
 
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
+.action-buttons { display: flex; gap: 0.375rem; }
 
 .btn-icon {
   display: inline-flex;
@@ -43,23 +48,11 @@
   transition: var(--transition);
 }
 
-.btn-edit {
-  background-color: rgba(37, 99, 235, 0.1);
-  color: var(--primary);
-}
+.btn-edit  { background: var(--primary-bg);  color: var(--primary); }
+.btn-edit:hover  { background: var(--primary); color: white; }
 
-.btn-edit:hover {
-  background-color: rgba(37, 99, 235, 0.2);
-}
-
-.btn-delete {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
-}
-
-.btn-delete:hover {
-  background-color: rgba(239, 68, 68, 0.2);
-}
+.btn-delete { background: var(--danger-bg); color: var(--danger); }
+.btn-delete:hover { background: var(--danger); color: white; }
 
 .empty-state {
   text-align: center;
@@ -68,16 +61,7 @@
 }
 
 @media (max-width: 768px) {
-  .expense-table {
-    font-size: 0.813rem;
-  }
-
+  .expense-table { font-size: 0.813rem; }
   .expense-table th,
-  .expense-table td {
-    padding: 0.5rem 0.25rem;
-  }
-
-  .category-icon {
-    font-size: 1rem;
-  }
+  .expense-table td { padding: 0.625rem 0.5rem; }
 }

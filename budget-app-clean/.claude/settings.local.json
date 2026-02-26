@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/kriss/IdeaProjects/budget_vite_js/mon-projet-vite/src/pages/components/**)",
+      "Read(//c/Users/kriss/IdeaProjects/nest_api/src/connection/**)",
+      "Read(//c/Users/kriss/IdeaProjects/budget_vite_js/mon-projet-vite/**)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

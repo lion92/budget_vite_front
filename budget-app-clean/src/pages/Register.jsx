@@ -16,6 +16,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
   });
+  const [cguAccepted, setCguAccepted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +29,11 @@ const Register = () => {
     // Validation
     if (!formData.nom || !formData.prenom || !formData.email || !formData.password) {
       toast.error('Veuillez remplir tous les champs');
+      return;
+    }
+
+    if (!cguAccepted) {
+      toast.error('Veuillez accepter les CGU pour continuer');
       return;
     }
 
@@ -128,6 +134,21 @@ const Register = () => {
               placeholder="••••••••"
               required
             />
+          </div>
+
+          <div className="form-group cgu-check">
+            <label className="cgu-label">
+              <input
+                type="checkbox"
+                checked={cguAccepted}
+                onChange={(e) => setCguAccepted(e.target.checked)}
+              />
+              <span>
+                J'ai lu et j'accepte les{' '}
+                <Link to="/cgu" target="_blank" className="link-primary">Conditions Générales d'Utilisation</Link>
+                {' '}(application gratuite, projet d'apprentissage)
+              </span>
+            </label>
           </div>
 
           <button
