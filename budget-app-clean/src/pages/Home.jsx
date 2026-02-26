@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
-import { TrendingUp, TrendingDown, Receipt, DollarSign, Calendar, Sparkles, Target, PieChart } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { TrendingUp, TrendingDown, Receipt, Calendar, Sparkles, Target, PieChart, Plus } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import StatCard from '../components/StatCard';
+import ExpenseModal from '../components/ExpenseModal';
 import { formatCurrency } from '../utils/formatters';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
@@ -19,6 +20,7 @@ const Home = () => {
     getExpensesByCategory,
   } = useAppStore();
 
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
   const navigate = useNavigate();
   const userId = localStorage.getItem('utilisateur');
 
@@ -55,6 +57,12 @@ const Home = () => {
 
   return (
     <div className="home-page">
+      {/* Quick Add Modal */}
+      <ExpenseModal
+        isOpen={quickAddOpen}
+        onClose={() => setQuickAddOpen(false)}
+      />
+
       {/* Hero Section */}
       <div className="hero-section">
         <div className="hero-content">
@@ -71,7 +79,10 @@ const Home = () => {
               {formatCurrency(balance)}
             </h2>
             <p className="balance-info">
-              {balance >= 0 ? '✓ Votre budget est sain' : '⚠ Attention à vos dépenses'}
+              {balance >= 0
+                ? <><span style={{color:'#6ee7b7'}}>✓</span> Budget équilibré</>
+                : <><span style={{color:'#fb7185'}}>↓</span> Dépenses supérieures aux revenus</>
+              }
             </p>
           </div>
         </div>
@@ -145,7 +156,7 @@ const Home = () => {
           </div>
           <div className="card-body">
             <div className="quick-actions">
-              <button className="action-btn primary" onClick={() => navigate('/expenses')}>
+              <button className="action-btn primary" onClick={() => setQuickAddOpen(true)}>
                 <Receipt size={20} />
                 <span>Ajouter une dépense</span>
               </button>

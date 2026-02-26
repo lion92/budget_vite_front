@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, TrendingUp } from 'lucide-react';
+import { Plus, Trash2, TrendingUp, X, Minus } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { formatCurrency, formatDate } from '../utils/formatters';
 import { toast } from 'react-toastify';
 import './Revenues.css';
 
+const QUICK_AMOUNTS = [100, 200, 500, 1000, 1500, 2000];
+
 const Revenues = () => {
   const { revenues, addRevenue, deleteRevenue, fetchRevenues, getTotalRevenues, getTotalExpenses } = useAppStore();
   const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     nom: '',
     montant: '',
@@ -18,9 +21,23 @@ const Revenues = () => {
     fetchRevenues();
   }, []);
 
+  const openModal = () => {
+    setFormData({ nom: '', montant: '', dateRevenu: new Date().toISOString().split('T')[0] });
+    setShowModal(true);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleQuickAmount = (amount, mode = 'set') => {
+    const current = parseFloat(formData.montant) || 0;
+    let next;
+    if (mode === 'add') next = current + amount;
+    else if (mode === 'sub') next = Math.max(0, current - amount);
+    else next = amount;
+    setFormData((prev) => ({ ...prev, montant: next.toFixed(2) }));
   };
 
   const handleSubmit = async (e) => {
@@ -31,17 +48,20 @@ const Revenues = () => {
       return;
     }
 
+    if (parseFloat(formData.montant) <= 0) {
+      toast.error('Le montant doit être supérieur à 0');
+      return;
+    }
+
+    setIsSubmitting(true);
     const success = await addRevenue(formData);
+    setIsSubmitting(false);
+
     if (success) {
       toast.success('Revenu ajouté avec succès');
       setShowModal(false);
-      setFormData({
-        nom: '',
-        montant: '',
-        dateRevenu: new Date().toISOString().split('T')[0]
-      });
     } else {
-      toast.error('Erreur lors de l\'ajout du revenu');
+      toast.error("Erreur lors de l'ajout du revenu");
     }
   };
 
@@ -59,6 +79,7 @@ const Revenues = () => {
   const totalRevenues = getTotalRevenues();
   const totalExpenses = getTotalExpenses();
   const balance = totalRevenues - totalExpenses;
+  const montantNum = parseFloat(formData.montant) || 0;
 
   return (
     <div className="revenues-page">
@@ -67,7 +88,7 @@ const Revenues = () => {
           <h1>Revenus</h1>
           <p>Gérez vos sources de revenus</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+        <button className="btn btn-primary" onClick={openModal}>
           <Plus size={20} />
           Ajouter un revenu
         </button>
@@ -105,7 +126,7 @@ const Revenues = () => {
             <div className="empty-state">
               <TrendingUp size={48} />
               <p>Aucun revenu enregistré</p>
-              <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+              <button className="btn btn-primary" onClick={openModal}>
                 Ajouter votre premier revenu
               </button>
             </div>
@@ -147,11 +168,11 @@ const Revenues = () => {
       {/* Modal Ajout Revenu */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal revenue-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Ajouter un revenu</h2>
-              <button className="btn-close" onClick={() => setShowModal(false)}>
-                ×
+              <button className="btn-close" type="button" onClick={() => setShowModal(false)}>
+                <X size={20} />
               </button>
             </div>
 
@@ -166,23 +187,58 @@ const Revenues = () => {
                     value={formData.nom}
                     onChange={handleChange}
                     placeholder="Ex: Salaire, Freelance, etc."
+                    autoFocus
                     required
                   />
                 </div>
 
                 <div className="form-group">
                   <label className="form-label">Montant (€)</label>
-                  <input
-                    type="number"
-                    name="montant"
-                    className="form-input"
-                    value={formData.montant}
-                    onChange={handleChange}
-                    placeholder="0.00"
-                    step="0.01"
-                    min="0"
-                    required
-                  />
+                  <div className="amount-input-wrapper">
+                    <div className="amount-display-row">
+                      <span className="currency-symbol">€</span>
+                      <input
+                        type="number"
+                        name="montant"
+                        className="form-input amount-input"
+                        value={formData.montant}
+                        onChange={handleChange}
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0"
+                        required
+                      />
+                    </div>
+                    <div className="quick-amounts">
+                      {QUICK_AMOUNTS.map((amt) => (
+                        <button
+                          key={amt}
+                          type="button"
+                          className="quick-amount-btn"
+                          onClick={() => handleQuickAmount(amt, 'set')}
+                        >
+                          {amt}€
+                        </button>
+                      ))}
+                    </div>
+                    <div className="amount-adjust-row">
+                      <button
+                        type="button"
+                        className="adjust-btn minus"
+                        onClick={() => handleQuickAmount(50, 'sub')}
+                      >
+                        <Minus size={14} /> 50
+                      </button>
+                      <span className="amount-current">{montantNum.toFixed(2)} €</span>
+                      <button
+                        type="button"
+                        className="adjust-btn plus"
+                        onClick={() => handleQuickAmount(50, 'add')}
+                      >
+                        <Plus size={14} /> 50
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="form-group">
@@ -202,8 +258,8 @@ const Revenues = () => {
                 <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>
                   Annuler
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  Ajouter
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enregistrement...' : 'Ajouter'}
                 </button>
               </div>
             </form>

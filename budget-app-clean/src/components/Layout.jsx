@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Home, TrendingUp, PieChart, Receipt, FileText, DollarSign, Tag,
-  Settings, LogOut, Menu, X, User, Calendar, BarChart3
+  Home, TrendingUp, Receipt, FileText, Tag,
+  LogOut, Menu, X, Calendar, BarChart3, Plus
 } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
+import ExpenseModal from './ExpenseModal';
 import './Layout.css';
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAppStore();
+  const userEmail = user?.email || localStorage.getItem('utilisateur') || '';
 
   const handleLogout = () => {
     logout();
@@ -72,9 +75,17 @@ const Layout = ({ children }) => {
           </button>
 
           <div className="header-right">
-            {user && (
-              <div className="user-info">
-
+            <button
+              className="btn btn-primary btn-sm quick-add-btn"
+              onClick={() => setQuickAddOpen(true)}
+              title="Ajouter une dépense rapidement"
+            >
+              <Plus size={16} />
+              <span className="quick-add-label">Dépense</span>
+            </button>
+            {userEmail && (
+              <div className="user-badge">
+                <span>{userEmail}</span>
               </div>
             )}
           </div>
@@ -90,6 +101,12 @@ const Layout = ({ children }) => {
       {sidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
       )}
+
+      {/* Quick Add Expense Modal */}
+      <ExpenseModal
+        isOpen={quickAddOpen}
+        onClose={() => setQuickAddOpen(false)}
+      />
     </div>
   );
 };
