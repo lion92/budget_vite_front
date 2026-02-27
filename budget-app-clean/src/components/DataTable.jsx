@@ -10,7 +10,7 @@ import {
 import { ChevronUp, ChevronDown, Search, X } from 'lucide-react';
 import './css/data-table.css';
 
-const DataTable = ({ data, headers, title = "Tableau de données" }) => {
+const DataTable = ({ data, columns: columnsProp, headers, title = "Tableau de données" }) => {
     const [sorting, setSorting] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
     const [globalFilter, setGlobalFilter] = useState('');
@@ -20,14 +20,15 @@ const DataTable = ({ data, headers, title = "Tableau de données" }) => {
     });
 
     const columns = useMemo(
-        () =>
-            headers.map((header, index) => ({
+        () => {
+            if (columnsProp) return columnsProp;
+            if (!headers) return [];
+            return headers.map((header, index) => ({
                 id: header,
                 header: header.charAt(0).toUpperCase() + header.slice(1),
                 accessorFn: (row) => row[index] || '',
                 cell: ({ getValue }) => {
                     const value = getValue();
-                    // Format spécial pour les montants (si ça ressemble à un nombre)
                     if (header.toLowerCase().includes('montant') && !isNaN(parseFloat(value))) {
                         return `${parseFloat(value).toFixed(2)} €`;
                     }
@@ -35,8 +36,9 @@ const DataTable = ({ data, headers, title = "Tableau de données" }) => {
                 },
                 enableSorting: true,
                 enableColumnFilter: true,
-            })),
-        [headers]
+            }));
+        },
+        [columnsProp, headers]
     );
 
     const table = useReactTable({

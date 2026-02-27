@@ -5,7 +5,8 @@ import TicketModal from './TicketModal';
 import { toast } from 'react-toastify';
 
 const TicketList = () => {
-    const { allTickets } = useTicketStore();
+    const { allTickets: rawTickets } = useTicketStore();
+    const allTickets = Array.isArray(rawTickets) ? rawTickets : [];
     const { fetchTickets, deleteTicket } = useTicketActions();
     const { loading, deleting } = useTicketLoadingStates();
     const { categories, addExpense, fetchCategories } = useAppStore();

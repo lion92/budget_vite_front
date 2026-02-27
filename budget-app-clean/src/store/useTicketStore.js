@@ -303,6 +303,11 @@ export const useTicketStore = create(
                     allTickets: state.allTickets,
                     ticketStats: state.ticketStats,
                 }),
+                merge: (persistedState, currentState) => ({
+                    ...currentState,
+                    ...persistedState,
+                    allTickets: Array.isArray(persistedState?.allTickets) ? persistedState.allTickets : [],
+                }),
             }
         ),
         {
