@@ -9,7 +9,8 @@ const ImportTicket = () => {
     const [dragActive, setDragActive] = useState(false);
 
     // Utilisation des hooks séparés pour plus de clarté
-    const { result, error, allTickets } = useTicketStore();
+    const { result, error, allTickets: rawTickets } = useTicketStore();
+    const allTickets = Array.isArray(rawTickets) ? rawTickets : [];
     const { uploading } = useTicketLoadingStates();
     const { importTicket, clearError, clearResult, fetchTickets } = useTicketActions();
 
@@ -777,14 +778,17 @@ const styles = {
 };
 
 // Ajout de l'animation CSS pour le spinner
-const styleSheet = document.createElement("style");
-styleSheet.type = "text/css";
-styleSheet.innerText = `
+if (typeof document !== 'undefined' && !document.querySelector('#import-ticket-styles')) {
+    const styleSheet = document.createElement("style");
+    styleSheet.id = 'import-ticket-styles';
+    styleSheet.type = "text/css";
+    styleSheet.innerText = `
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-`;
-document.head.appendChild(styleSheet);
+    `;
+    document.head.appendChild(styleSheet);
+}
 
 export default ImportTicket;

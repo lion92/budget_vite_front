@@ -7,7 +7,8 @@ import TicketStats from './TicketStats';
 
 const DashTickets = () => {
     const [activeTab, setActiveTab] = useState('upload');
-    const { allTickets, ticketStats } = useTicketStore();
+    const { allTickets: rawTickets, ticketStats } = useTicketStore();
+    const allTickets = Array.isArray(rawTickets) ? rawTickets : [];
     const { getTicketStats } = useTicketActions();
     const { loading } = useTicketLoadingStates();
 

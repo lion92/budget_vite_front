@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import lien from '../utils/lien';
 import { useTicketActions } from '../store/useTicketStore';
@@ -12,9 +12,23 @@ const TicketModal = ({ ticket, isOpen, onClose }) => {
     const [newAmount, setNewAmount] = useState('');
     const [updating, setUpdating] = useState(false);
     const [localTicket, setLocalTicket] = useState(ticket);
+    // Ref pour révoquer le blob URL même si imageUrl change après le rendu
+    const imageUrlRef = useRef(null);
 
     useEffect(() => {
-        if (isOpen && ticket) {
+        if (!isOpen) {
+            // Réinitialiser l'état image à la fermeture
+            if (imageUrlRef.current) {
+                URL.revokeObjectURL(imageUrlRef.current);
+                imageUrlRef.current = null;
+            }
+            setImageUrl(null);
+            setImageError(false);
+            setImageLoading(false);
+            return;
+        }
+
+        if (ticket) {
             // Ne mettre à jour que si c'est un nouveau ticket (ID différent)
             if (!localTicket || localTicket.id !== ticket.id) {
                 setLocalTicket(ticket);
@@ -23,15 +37,24 @@ const TicketModal = ({ ticket, isOpen, onClose }) => {
                 } else {
                     setNewAmount('');
                 }
+                // Réinitialiser l'image pour le nouveau ticket
+                if (imageUrlRef.current) {
+                    URL.revokeObjectURL(imageUrlRef.current);
+                    imageUrlRef.current = null;
+                }
+                setImageUrl(null);
+                setImageError(false);
             }
 
             if (ticket.id && ticket.imagePath) {
                 loadTicketImage();
             }
         }
+
         return () => {
-            if (imageUrl) {
-                URL.revokeObjectURL(imageUrl);
+            if (imageUrlRef.current) {
+                URL.revokeObjectURL(imageUrlRef.current);
+                imageUrlRef.current = null;
             }
         };
     }, [isOpen, ticket]);
@@ -50,7 +73,12 @@ const TicketModal = ({ ticket, isOpen, onClose }) => {
 
             if (response.ok) {
                 const blob = await response.blob();
+                // Révoquer l'ancien blob URL avant d'en créer un nouveau
+                if (imageUrlRef.current) {
+                    URL.revokeObjectURL(imageUrlRef.current);
+                }
                 const url = URL.createObjectURL(blob);
+                imageUrlRef.current = url;
                 setImageUrl(url);
             } else {
                 setImageError(true);
@@ -85,17 +113,6 @@ const TicketModal = ({ ticket, isOpen, onClose }) => {
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
             onClose();
-        }
-    };
-
-    const handleKeyDown = (e) => {
-        if (e.key === 'Escape') {
-            if (isEditingAmount) {
-                setIsEditingAmount(false);
-                setNewAmount(ticket?.totalExtrait?.toString() || '');
-            } else {
-                onClose();
-            }
         }
     };
 
@@ -155,19 +172,31 @@ const TicketModal = ({ ticket, isOpen, onClose }) => {
     };
 
     useEffect(() => {
-        if (isOpen) {
-            document.addEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.removeEventListener('keydown', handleKeyDown);
+        if (!isOpen) {
             document.body.style.overflow = 'unset';
+            return;
         }
 
+        // Inline pour éviter la stale closure sur isEditingAmount et ticket
+        const handler = (e) => {
+            if (e.key === 'Escape') {
+                if (isEditingAmount) {
+                    setIsEditingAmount(false);
+                    setNewAmount(ticket?.totalExtrait?.toString() || '');
+                } else {
+                    onClose();
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handler);
+        document.body.style.overflow = 'hidden';
+
         return () => {
-            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keydown', handler);
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [isOpen, isEditingAmount, ticket, onClose]);
 
     // Utiliser le ticket local pour l'affichage avec mémoisation
     const displayTicket = useMemo(() => localTicket, [localTicket]);

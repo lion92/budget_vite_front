@@ -8,7 +8,8 @@ import { Eye, CreditCard, Trash2, Plus } from 'lucide-react';
 import './TicketTable.css';
 
 const TicketTable = () => {
-    const { allTickets } = useTicketStore();
+    const { allTickets: rawTickets } = useTicketStore();
+    const allTickets = Array.isArray(rawTickets) ? rawTickets : [];
     const { deleteTicket } = useTicketActions();
     const { deleting } = useTicketLoadingStates();
     const { categories, addExpense, fetchCategories } = useAppStore();
@@ -292,7 +293,7 @@ const TicketTable = () => {
 
     // Préparer les données pour le tableau
     const tableData = useMemo(() => {
-        return allTickets.map(ticket => ({
+        return (allTickets || []).map(ticket => ({
             ...ticket,
             // Ajouter des champs calculés si nécessaire
         }));
