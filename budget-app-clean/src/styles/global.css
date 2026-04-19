@@ -402,6 +402,17 @@ a:hover { color: var(--primary-dark); }
   font-size: 0.938rem;
 }
 
+@media (max-width: 768px) {
+  .page-header           { margin-bottom: 1.25rem; }
+  .page-header h1        { font-size: 1.375rem; }
+  .page-header p         { font-size: 0.875rem; }
+}
+
+@media (max-width: 480px) {
+  .page-header           { margin-bottom: 1rem; }
+  .page-header h1        { font-size: 1.25rem; }
+}
+
 /* ========================================
    TOTAL BADGE
    ======================================== */
@@ -500,17 +511,51 @@ a:hover { color: var(--primary-dark); }
   h1 { font-size: 1.375rem; }
   h2 { font-size: 1.125rem; }
 
-  .grid-cols-2,
   .grid-cols-3,
-  .grid-cols-4 { grid-template-columns: 1fr; }
+  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
 
   .modal {
     max-width: 100%;
     border-radius: var(--radius-lg);
   }
-
   .modal-header,
-  .modal-footer {
-    border-radius: 0;
+  .modal-footer { border-radius: 0; }
+}
+
+@media (max-width: 640px) {
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 { grid-template-columns: 1fr; }
+}
+
+/* Modal slides up from bottom on small screens */
+@media (max-width: 540px) {
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    max-height: 92vh;
+    animation: slideUp 0.3s cubic-bezier(0.32,0.72,0,1);
+  }
+
+  .modal-header {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+  .modal-footer { border-radius: 0; }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

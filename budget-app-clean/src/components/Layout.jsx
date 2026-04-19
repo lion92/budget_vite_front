@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Home, TrendingUp, Receipt, FileText, Tag,
+  Home, TrendingUp, Receipt, Tag,
   LogOut, Menu, X, Calendar, BarChart3, Plus
 } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import ExpenseModal from './ExpenseModal';
 import './Layout.css';
+
+const bottomNavItems = [
+  { path: '/',                 icon: Home,      label: 'Accueil'    },
+  { path: '/analytics',        icon: BarChart3, label: 'Analytique' },
+  { path: '/expenses',         icon: Receipt,   label: 'Dépenses'   },
+  { path: '/categories',       icon: Tag,       label: 'Catégories' },
+];
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,7 +35,6 @@ const Layout = ({ children }) => {
     { path: '/expenses', icon: Receipt, label: 'Toutes les dépenses' },
     { path: '/revenues', icon: TrendingUp, label: 'Revenus' },
     { path: '/categories', icon: Tag, label: 'Catégories' },
-    { path: '/tickets', icon: FileText, label: 'Tickets & Reçus' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -38,7 +44,10 @@ const Layout = ({ children }) => {
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <h2>💰 Budget App</h2>
+          <div className="sidebar-logo">
+            <img src="/logo.svg" alt="Budget App" className="sidebar-logo-img" />
+            <span className="sidebar-logo-text">Budget App</span>
+          </div>
           <button className="close-btn" onClick={() => setSidebarOpen(false)}>
             <X size={24} />
           </button>
@@ -101,6 +110,37 @@ const Layout = ({ children }) => {
       {sidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
       )}
+
+      {/* Bottom Navigation (mobile) */}
+      <nav className="bottom-nav">
+        {bottomNavItems.slice(0, 2).map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`bottom-nav-item ${isActive(item.path) ? 'active' : ''}`}
+          >
+            <item.icon size={22} />
+            <span>{item.label}</span>
+          </Link>
+        ))}
+
+        <div className="bottom-nav-fab">
+          <button className="fab-btn" onClick={() => setQuickAddOpen(true)} title="Ajouter une dépense">
+            <Plus size={24} />
+          </button>
+        </div>
+
+        {bottomNavItems.slice(2).map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`bottom-nav-item ${isActive(item.path) ? 'active' : ''}`}
+          >
+            <item.icon size={22} />
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </nav>
 
       {/* Quick Add Expense Modal */}
       <ExpenseModal

@@ -5,7 +5,7 @@
 /* Categories Grid */
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1rem;
 }
 
@@ -219,6 +219,7 @@
 
   .category-card {
     flex-wrap: wrap;
+    padding: 1.125rem;
   }
 
   .category-actions {
@@ -227,4 +228,10 @@
     padding-top: 0.5rem;
     border-top: 1px solid var(--border-color);
   }
+}
+
+@media (max-width: 480px) {
+  .category-card { padding: 1rem; }
+  .category-info h4 { font-size: 1rem; }
+  .category-stats { gap: 0.5rem; }
 }

@@ -1,5 +1,19 @@
 .expenses-page { max-width: 100%; }
 
+.header-actions {
+  display: flex;
+  gap: 0.625rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 .mb-4 { margin-bottom: 1.5rem; }
 
 /* ===== Filter bar ===== */
@@ -160,13 +174,19 @@
 }
 
 @media (max-width: 768px) {
-  .search-container { min-width: 100%; flex-direction: column; }
+  .search-container    { min-width: 100%; flex-direction: column; }
   .search-field-select { width: 100%; }
-  .filters-bar { flex-direction: column; align-items: stretch; }
-  .category-filters { grid-template-columns: 1fr 1fr; }
-  .date-filters { grid-template-columns: 1fr; }
+  .filters-bar         { flex-direction: column; align-items: stretch; }
+  .category-filters    { grid-template-columns: 1fr 1fr; }
+  .date-filters        { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 480px) {
-  .category-filters { grid-template-columns: 1fr; }
+  .category-filters    { grid-template-columns: 1fr 1fr; }
+  .date-filters        { grid-template-columns: 1fr; }
+  .search-box          { padding: 0.5rem 0.75rem; }
+}
+
+@media (max-width: 360px) {
+  .category-filters    { grid-template-columns: 1fr; }
 }

@@ -65,3 +65,15 @@
   .expense-table th,
   .expense-table td { padding: 0.625rem 0.5rem; }
 }
+
+@media (max-width: 540px) {
+  /* Hide less important columns on very small screens */
+  .expense-table .col-date  { display: none; }
+}
+
+@media (max-width: 400px) {
+  .expense-table th,
+  .expense-table td { padding: 0.5rem 0.375rem; }
+  .expense-table { font-size: 0.75rem; }
+  .btn-icon { width: 28px; height: 28px; }
+}
