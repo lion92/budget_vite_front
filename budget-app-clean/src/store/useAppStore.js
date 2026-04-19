@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { api } from '../services/api';
+import useGamifyStore from './useGamifyStore';
 
 const BASE = 'https://www.krisscode.fr';
 
@@ -19,14 +20,13 @@ const useAppStore = create((set, get) => ({
   expenses:   [],
   categories: [],
   revenues:   [],
-  tickets:    [],
 
   isLoading: false,
   error: null,
 
   // Cache timestamps (ms) — évite les refetch inutiles à la navigation
   _lastFetched: { expenses: 0, categories: 0, revenues: 0 },
-  CACHE_TTL: 30_000, // 30 secondes
+  CACHE_TTL: 120_000, // 2 minutes
 
   // Filters & Search
   searchTerm: '',
@@ -88,7 +88,14 @@ const useAppStore = create((set, get) => ({
   logout: () => {
     localStorage.removeItem('jwt');
     localStorage.removeItem('utilisateur');
-    set({ user: null, token: null, expenses: [], categories: [], revenues: [], tickets: [] });
+    set({
+      user: null,
+      token: null,
+      expenses: [],
+      categories: [],
+      revenues: [],
+      _lastFetched: { expenses: 0, categories: 0, revenues: 0 },
+    });
   },
 
   register: async (userData) => {
@@ -145,18 +152,19 @@ const useAppStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await api.get(`/action/byuser/${uid}`);
-      set({
+      set((s) => ({
         expenses: response.data ?? [],
         isLoading: false,
-        _lastFetched: { ...get()._lastFetched, expenses: Date.now() },
-      });
+        _lastFetched: { ...s._lastFetched, expenses: Date.now() },
+      }));
     } catch {
       set({ error: 'Erreur lors du chargement des dépenses', isLoading: false });
     }
   },
 
-  // EXPENSES — add
-  addExpense: async (expense) => {
+  // EXPENSES — add (ticketFile optionnel : multipart si fourni, JSON sinon)
+  // Retourne l'objet dépense créé (avec id) ou null en cas d'erreur
+  addExpense: async (expense, ticketFile = null) => {
     set({ isLoading: true, error: null });
     try {
       const jwt    = localStorage.getItem('jwt');
@@ -165,35 +173,116 @@ const useAppStore = create((set, get) => ({
       const date          = new Date(expense.dateTransaction);
       const dateFormatted = date.toLocaleString('zh-CN', { timeZone: 'Europe/Paris' });
 
-      const body = {
-        montant:         parseFloat(expense.montant),
-        categorie:       parseInt(expense.categorie),
-        description:     expense.description,
-        user:            userId,
-        dateTransaction: dateFormatted,
-        jwt,
-      };
-
-      const response = await fetch(`${BASE}/action`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
+      let response;
+      if (ticketFile) {
+        const fd = new FormData();
+        fd.append('montant',         parseFloat(expense.montant));
+        fd.append('categorie',       parseInt(expense.categorie));
+        fd.append('description',     expense.description);
+        fd.append('user',            userId);
+        fd.append('dateTransaction', dateFormatted);
+        fd.append('jwt',             jwt);
+        fd.append('ticket',          ticketFile);
+        response = await fetch(`${BASE}/action`, { method: 'POST', body: fd });
+      } else {
+        response = await fetch(`${BASE}/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            montant: parseFloat(expense.montant),
+            categorie: parseInt(expense.categorie),
+            description: expense.description,
+            user: userId,
+            dateTransaction: dateFormatted,
+            jwt,
+          }),
+        });
+      }
 
       if (!response.ok) {
         const txt = await response.text();
         console.error('❌ addExpense:', response.status, txt);
         set({ error: "Erreur lors de l'ajout de la dépense", isLoading: false });
-        return false;
+        return null;
       }
 
-      // Invalider le cache puis refetch
+      // Parse la réponse pour récupérer l'ID de la dépense créée
+      let created = null;
+      try {
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          created = await response.json();
+        }
+      } catch { /* le back ne retourne pas toujours du JSON */ }
+
       set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
       await get().fetchExpenses(userId, { force: true });
-      return true;
+      useGamifyStore.getState().onExpenseAdded(get().expenses.length);
+
+      // Si le back ne retourne pas l'id, on le cherche dans la liste fraîchement chargée
+      if (!created?.id) {
+        const latest = get().expenses.find(
+          (e) => e.description === expense.description &&
+                 parseFloat(e.montant) === parseFloat(expense.montant)
+        );
+        created = latest ?? created;
+      }
+
+      return created;
     } catch (err) {
       console.error('❌ addExpense exception:', err);
       set({ error: "Erreur lors de l'ajout de la dépense", isLoading: false });
+      return null;
+    }
+  },
+
+  // TICKET — lier un ticket OCR déjà uploadé à une dépense (sauvegarde backend)
+  linkTicketToExpense: async ({ ticketId, expenseId, extractedData }) => {
+    try {
+      const jwt = localStorage.getItem('jwt');
+      await fetch(`${BASE}/ticket/link`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticketId, expenseId, extractedData, jwt }),
+      });
+    } catch (err) {
+      console.warn('⚠️ linkTicketToExpense failed (non-bloquant):', err);
+    }
+  },
+
+  // TICKET — attacher / remplacer
+  attachTicket: async (id, file) => {
+    try {
+      const jwt = localStorage.getItem('jwt');
+      const fd  = new FormData();
+      fd.append('ticket', file);
+      fd.append('jwt', jwt);
+      const res = await fetch(`${BASE}/action/${id}/ticket`, { method: 'PATCH', body: fd });
+      if (!res.ok) return false;
+      const userId = parseInt(localStorage.getItem('utilisateur'));
+      set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
+      await get().fetchExpenses(userId, { force: true });
+      return true;
+    } catch {
+      return false;
+    }
+  },
+
+  // TICKET — supprimer
+  removeTicket: async (id) => {
+    try {
+      const jwt = localStorage.getItem('jwt');
+      const res = await fetch(`${BASE}/action/${id}/ticket`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jwt }),
+      });
+      if (!res.ok) return false;
+      const userId = parseInt(localStorage.getItem('utilisateur'));
+      set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
+      await get().fetchExpenses(userId, { force: true });
+      return true;
+    } catch {
       return false;
     }
   },
@@ -254,6 +343,10 @@ const useAppStore = create((set, get) => ({
         return false;
       }
 
+      // Clean up any linked ticket
+      const { removeTicketLink } = await import('../utils/ticketLinks.js');
+      removeTicketLink(id);
+
       set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
       await get().fetchExpenses(userId, { force: true });
       return true;
@@ -276,11 +369,11 @@ const useAppStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await api.get(`/categorie/byuser/${uid}`);
-      set({
+      set((s) => ({
         categories: response.data ?? [],
         isLoading: false,
-        _lastFetched: { ...get()._lastFetched, categories: Date.now() },
-      });
+        _lastFetched: { ...s._lastFetched, categories: Date.now() },
+      }));
     } catch {
       set({ error: 'Erreur lors du chargement des catégories', isLoading: false });
     }
@@ -294,6 +387,7 @@ const useAppStore = create((set, get) => ({
       const userId = localStorage.getItem('utilisateur');
       set((s) => ({ _lastFetched: { ...s._lastFetched, categories: 0 } }));
       await get().fetchCategories(userId, { force: true });
+      useGamifyStore.getState().onCategoryAdded();
       return true;
     } catch {
       set({ error: "Erreur lors de l'ajout de la catégorie", isLoading: false });
@@ -353,6 +447,65 @@ const useAppStore = create((set, get) => ({
     }
   },
 
+  // EXPENSES — copy all expenses from one month to another with a chosen date
+  // targetDateISO : 'YYYY-MM-DD' — all copied expenses get this exact date
+  copyMonthExpenses: async (sourceMonth, sourceYear, targetDateISO) => {
+    const { expenses, categories } = get();
+    const jwt    = localStorage.getItem('jwt');
+    const userId = parseInt(localStorage.getItem('utilisateur'));
+
+    // Filter expenses for the source month
+    const sourceExpenses = expenses.filter((exp) => {
+      if (!exp.dateTransaction) return false;
+      const d = new Date(exp.dateTransaction.toString().replace(/\//g, '-'));
+      return d.getMonth() === sourceMonth && d.getFullYear() === sourceYear;
+    });
+
+    if (sourceExpenses.length === 0) return { success: false, count: 0, total: 0 };
+
+    // Build name→id map so we can resolve category IDs
+    const catNameToId = {};
+    categories.forEach((c) => { catNameToId[c.categorie] = c.id; });
+
+    // Format the user-chosen date the same way addExpense does
+    const chosenDate    = new Date(targetDateISO);
+    const dateFormatted = chosenDate.toLocaleString('zh-CN', { timeZone: 'Europe/Paris' });
+
+    let successCount = 0;
+    for (const exp of sourceExpenses) {
+      try {
+
+        // Resolve category ID (API may return name or numeric id)
+        let catId;
+        if (exp.categorie_id)       catId = parseInt(exp.categorie_id);
+        else if (!isNaN(exp.categorie)) catId = parseInt(exp.categorie);
+        else                         catId = catNameToId[exp.categorie];
+        if (!catId) continue;
+
+        const response = await fetch(`${BASE}/action`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            montant:         parseFloat(exp.montant),
+            categorie:       catId,
+            description:     exp.description,
+            user:            userId,
+            dateTransaction: dateFormatted,
+            jwt,
+          }),
+        });
+        if (response.ok) successCount++;
+      } catch {
+        // Continue with remaining expenses
+      }
+    }
+
+    set((s) => ({ _lastFetched: { ...s._lastFetched, expenses: 0 } }));
+    await get().fetchExpenses(userId, { force: true });
+
+    return { success: successCount > 0, count: successCount, total: sourceExpenses.length };
+  },
+
   // ========================================
   // REVENUES — fetch
   // ========================================
@@ -373,11 +526,11 @@ const useAppStore = create((set, get) => ({
 
       const data     = await response.json();
       const revenues = Array.isArray(data) ? data : data?.revenus ?? [];
-      set({
+      set((s) => ({
         revenues,
         isLoading: false,
-        _lastFetched: { ...get()._lastFetched, revenues: Date.now() },
-      });
+        _lastFetched: { ...s._lastFetched, revenues: Date.now() },
+      }));
     } catch {
       set({ error: 'Erreur lors du chargement des revenus', isLoading: false });
     }
@@ -406,6 +559,7 @@ const useAppStore = create((set, get) => ({
 
       set((s) => ({ _lastFetched: { ...s._lastFetched, revenues: 0 } }));
       await get().fetchRevenues({ force: true });
+      useGamifyStore.getState().onRevenueAdded();
       return true;
     } catch {
       set({ error: "Erreur lors de l'ajout du revenu", isLoading: false });
@@ -432,123 +586,6 @@ const useAppStore = create((set, get) => ({
       return true;
     } catch {
       set({ error: 'Erreur lors de la suppression', isLoading: false });
-      return false;
-    }
-  },
-
-  // ========================================
-  // TICKETS
-  // ========================================
-  fetchTickets: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const jwt = localStorage.getItem('jwt');
-      if (!jwt) {
-        set({ error: 'Session expirée', isLoading: false });
-        return;
-      }
-
-      const response = await fetch(`${BASE}/ticket/all`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jwt }),
-      });
-
-      if (!response.ok) {
-        set({ error: 'Erreur lors du chargement des tickets', isLoading: false });
-        return;
-      }
-
-      const data = await response.json();
-
-      if (!data.success) {
-        set({ error: data.message || 'Erreur lors du chargement des tickets', isLoading: false });
-        return;
-      }
-
-      set({ tickets: data.tickets ?? [], isLoading: false });
-    } catch {
-      set({ error: 'Erreur lors du chargement des tickets', isLoading: false });
-    }
-  },
-
-  uploadTicket: async (formData) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await api.post('/ticket/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      await get().fetchTickets();
-      return response.data;
-    } catch {
-      set({ error: "Erreur lors de l'upload du ticket", isLoading: false });
-      return null;
-    }
-  },
-
-  updateTicket: async (id, ticketData) => {
-    set({ isLoading: true, error: null });
-    try {
-      const jwt = localStorage.getItem('jwt');
-
-      const body = {
-        commercant:      ticketData.commercant,
-        montant:         parseFloat(ticketData.montant),
-        categorie:       ticketData.categorie,
-        dateTransaction: ticketData.dateTransaction,
-        description:     ticketData.description,
-        jwt,
-      };
-
-      const response = await fetch(`${BASE}/ticket/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        set({ error: 'Erreur lors de la mise à jour du ticket', isLoading: false });
-        return false;
-      }
-
-      await get().fetchTickets();
-      return true;
-    } catch {
-      set({ error: 'Erreur lors de la mise à jour du ticket', isLoading: false });
-      return false;
-    }
-  },
-
-  deleteTicket: async (id) => {
-    set({ isLoading: true, error: null });
-    try {
-      const jwt = localStorage.getItem('jwt');
-      if (!jwt) {
-        set({ error: 'Session expirée', isLoading: false });
-        return false;
-      }
-
-      const response = await fetch(`${BASE}/ticket/delete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jwt, id }),
-      });
-
-      if (!response.ok) {
-        set({ error: 'Erreur lors de la suppression du ticket', isLoading: false });
-        return false;
-      }
-
-      const data = await response.json();
-      if (!data.success) {
-        set({ error: data.message || 'Erreur lors de la suppression du ticket', isLoading: false });
-        return false;
-      }
-
-      await get().fetchTickets();
-      return true;
-    } catch {
-      set({ error: 'Erreur lors de la suppression du ticket', isLoading: false });
       return false;
     }
   },

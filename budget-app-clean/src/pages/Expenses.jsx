@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Plus, Search, Filter, Calendar } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Plus, Search, Filter, Calendar, Tag, Camera } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import ExpenseTable from '../components/ExpenseTable';
 import ExpenseModal from '../components/ExpenseModal';
+import CategoryModal from '../components/CategoryModal';
+import TicketScannerModal from '../components/TicketScannerModal';
 import { formatCurrency } from '../utils/formatters';
 import './Expenses.css';
 
@@ -26,6 +28,8 @@ const Expenses = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [localStartDate, setLocalStartDate] = useState('');
   const [localEndDate, setLocalEndDate] = useState('');
@@ -38,53 +42,40 @@ const Expenses = () => {
     }
   }, [userId]);
 
-  // Filtrage personnalisé avec choix du champ de recherche
-  const getCustomFilteredExpenses = () => {
-    let filtered = [...expenses];
+  const filteredExpenses = useMemo(() => {
+    let filtered = expenses;
 
-    // Search term avec choix du champ
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter((expense) => {
-        if (searchField === 'description') {
-          return expense.description?.toLowerCase().includes(term);
-        } else if (searchField === 'category') {
-          return expense.categorie?.toLowerCase().includes(term);
-        } else {
-          // 'all' - recherche dans description et catégorie
-          return expense.description?.toLowerCase().includes(term) ||
-                 expense.categorie?.toLowerCase().includes(term);
-        }
+        if (searchField === 'description') return expense.description?.toLowerCase().includes(term);
+        if (searchField === 'category')    return expense.categorie?.toLowerCase().includes(term);
+        return expense.description?.toLowerCase().includes(term) ||
+               expense.categorie?.toLowerCase().includes(term);
       });
     }
 
-    // Categories
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter((expense) =>
-        selectedCategories.includes(expense.categorie)
-      );
+      filtered = filtered.filter((expense) => selectedCategories.includes(expense.categorie));
     }
 
-    // Date range
     if (dateRange.start || dateRange.end) {
       filtered = filtered.filter((expense) => {
-        const expenseDate = new Date(expense.dateTransaction);
+        const d     = new Date(expense.dateTransaction);
         const start = dateRange.start ? new Date(dateRange.start) : null;
-        const end = dateRange.end ? new Date(dateRange.end) : null;
-
-        if (start && expenseDate < start) return false;
-        if (end && expenseDate > end) return false;
+        const end   = dateRange.end   ? new Date(dateRange.end)   : null;
+        if (start && d < start) return false;
+        if (end   && d > end)   return false;
         return true;
       });
     }
 
     return filtered;
-  };
+  }, [expenses, searchTerm, searchField, selectedCategories, dateRange]);
 
-  const filteredExpenses = getCustomFilteredExpenses();
-  const totalFiltered = filteredExpenses.reduce(
-    (sum, exp) => sum + parseFloat(exp.montant || 0),
-    0
+  const totalFiltered = useMemo(
+    () => filteredExpenses.reduce((sum, exp) => sum + parseFloat(exp.montant || 0), 0),
+    [filteredExpenses],
   );
 
   const handleEdit = (expense) => {
@@ -124,10 +115,20 @@ const Expenses = () => {
           <h1>Dépenses</h1>
           <p>Gérez toutes vos dépenses</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
-          <Plus size={20} />
-          Ajouter une dépense
-        </button>
+        <div className="header-actions">
+          <button className="btn btn-outline" onClick={() => setIsCategoryModalOpen(true)}>
+            <Tag size={18} />
+            <span className="btn-label">Catégorie</span>
+          </button>
+          <button className="btn btn-outline btn-scan" onClick={() => setIsScannerOpen(true)}>
+            <Camera size={18} />
+            <span className="btn-label">Scanner un ticket</span>
+          </button>
+          <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+            <Plus size={20} />
+            <span className="btn-label">Ajouter</span>
+          </button>
+        </div>
       </div>
 
       <div className="card mb-4">
@@ -248,6 +249,14 @@ const Expenses = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         expense={editingExpense}
+      />
+      <CategoryModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
+      />
+      <TicketScannerModal
+        isOpen={isScannerOpen}
+        onClose={() => setIsScannerOpen(false)}
       />
     </div>
   );

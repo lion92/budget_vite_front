@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { Edit, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Edit, Trash2, ChevronDown, ChevronUp, Camera } from 'lucide-react';
 import { formatCurrency, formatDate } from '../utils/formatters';
 import { getCategoryIcon } from '../utils/categories';
 import useAppStore from '../store/useAppStore';
 import { toast } from 'react-toastify';
+import { getTicketForExpense } from '../utils/ticketLinks';
+import TicketViewerModal from './TicketViewerModal';
 import './ExpenseTable.css';
 
 const ExpenseTable = ({ expenses, onEdit }) => {
   const { deleteExpense } = useAppStore();
   const [sortField, setSortField] = useState('dateTransaction');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [viewingTicket, setViewingTicket] = useState(null); // { ticketId, description }
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -35,11 +38,9 @@ const ExpenseTable = ({ expenses, onEdit }) => {
       bVal = bVal?.toLowerCase() || '';
     }
 
-    if (sortOrder === 'asc') {
-      return aVal > bVal ? 1 : -1;
-    } else {
-      return aVal < bVal ? 1 : -1;
-    }
+    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
   });
 
   const handleDelete = async (id) => {
@@ -71,16 +72,16 @@ const ExpenseTable = ({ expenses, onEdit }) => {
       <table className="table expense-table">
         <thead>
           <tr>
-            <th onClick={() => handleSort('dateTransaction')} className="sortable">
+            <th className="col-date sortable" onClick={() => handleSort('dateTransaction')}>
               Date <SortIcon field="dateTransaction" />
             </th>
-            <th onClick={() => handleSort('description')} className="sortable">
+            <th className="col-desc sortable" onClick={() => handleSort('description')}>
               Description <SortIcon field="description" />
             </th>
-            <th onClick={() => handleSort('categorie')} className="sortable">
+            <th className="col-cat sortable" onClick={() => handleSort('categorie')}>
               Catégorie <SortIcon field="categorie" />
             </th>
-            <th onClick={() => handleSort('montant')} className="sortable">
+            <th className="sortable" onClick={() => handleSort('montant')}>
               Montant <SortIcon field="montant" />
             </th>
             <th>Actions</th>
@@ -89,17 +90,30 @@ const ExpenseTable = ({ expenses, onEdit }) => {
         <tbody>
           {sortedExpenses.map((expense) => (
             <tr key={expense.id}>
-              <td>{formatDate(expense.dateTransaction)}</td>
-              <td>{expense.description}</td>
-              <td>
+              <td className="col-date">{formatDate(expense.dateTransaction)}</td>
+              <td className="col-desc">{expense.description}</td>
+              <td className="col-cat">
                 <div className="category-cell">
                   <span className="category-icon">{getCategoryIcon(expense.categorie)}</span>
-                  <span>{expense.categorie}</span>
+                  <span className="cat-label">{expense.categorie}</span>
                 </div>
               </td>
               <td className="amount-cell">{formatCurrency(expense.montant)}</td>
               <td>
                 <div className="action-buttons">
+                  {(() => {
+                    const link = getTicketForExpense(expense.id);
+                    const ticketId = link?.ticketId || expense.ticketId || null;
+                    return ticketId ? (
+                      <button
+                        className="btn-icon btn-ticket"
+                        onClick={() => setViewingTicket({ ticketId, description: expense.description })}
+                        title="Voir le ticket de caisse"
+                      >
+                        <Camera size={16} />
+                      </button>
+                    ) : null;
+                  })()}
                   <button
                     className="btn-icon btn-edit"
                     onClick={() => onEdit(expense)}
@@ -120,6 +134,12 @@ const ExpenseTable = ({ expenses, onEdit }) => {
           ))}
         </tbody>
       </table>
+      <TicketViewerModal
+        isOpen={!!viewingTicket}
+        onClose={() => setViewingTicket(null)}
+        ticketId={viewingTicket?.ticketId}
+        description={viewingTicket?.description}
+      />
     </div>
   );
 };
