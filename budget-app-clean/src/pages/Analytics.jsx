@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BarChart3, TrendingUp, PieChart, Calendar, Filter, X } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
+import useGamifyStore from '../store/useGamifyStore';
 import {
   ExpensesByCategoryChart,
   MonthlyTrendChart,
@@ -22,6 +23,7 @@ const Analytics = () => {
   } = useAppStore();
 
   const userId = localStorage.getItem('utilisateur');
+  const { onAnalyticsVisited } = useGamifyStore();
 
   // Filter states
   const [filterMode, setFilterMode] = useState('all'); // 'all', 'month', 'year', 'range', 'category'
@@ -36,6 +38,7 @@ const Analytics = () => {
       fetchExpenses(userId);
       fetchRevenues();
       fetchCategories(userId);
+      onAnalyticsVisited();
     }
   }, [userId]);
 

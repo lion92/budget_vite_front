@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="coin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+
+  <!-- Wallet body (white) -->
+  <rect x="9" y="22" width="46" height="26" rx="5" fill="white" opacity="0.95"/>
+
+  <!-- Wallet top flap / header strip -->
+  <rect x="9" y="22" width="46" height="8" rx="4" fill="#c7d2fe"/>
+  <rect x="9" y="26" width="46" height="4" fill="#c7d2fe"/>
+
+  <!-- Right coin pocket -->
+  <rect x="34" y="28" width="17" height="13" rx="3" fill="#6366f1" opacity="0.15"/>
+  <rect x="34" y="28" width="17" height="13" rx="3" fill="none" stroke="#6366f1" stroke-width="1.2" opacity="0.35"/>
+
+  <!-- Green coin with euro sign -->
+  <circle cx="42.5" cy="34.5" r="5.5" fill="url(#coin)"/>
+  <text x="42.5" y="37.8" text-anchor="middle"
+        font-family="Arial Black, Arial, sans-serif"
+        font-size="7.5" font-weight="900" fill="white">€</text>
+
+  <!-- Money lines (left side, representing bills) -->
+  <rect x="13" y="32" width="15" height="2.5" rx="1.25" fill="#818cf8" opacity="0.65"/>
+  <rect x="13" y="37" width="10" height="2.5" rx="1.25" fill="#818cf8" opacity="0.4"/>
+</svg>

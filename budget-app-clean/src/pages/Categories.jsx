@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Plus, Edit, Trash2, Tag, TrendingUp, ShoppingBag } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { formatCurrency } from '../utils/formatters';
@@ -8,7 +8,7 @@ import './Categories.css';
 
 const Categories = () => {
   const { categories, expenses, fetchCategories, fetchExpenses, deleteCategory, isLoading } = useAppStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen]         = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const userId = localStorage.getItem('utilisateur');
 
@@ -18,6 +18,40 @@ const Categories = () => {
       fetchExpenses(parseInt(userId));
     }
   }, [userId]);
+
+  // Build {categoryId -> {total, count}} in one pass — O(n+m) instead of O(n×m)
+  const categoryStatsMap = useMemo(() => {
+    const nameToId = {};
+    categories.forEach((c) => { nameToId[c.categorie] = c.id; });
+
+    const map = {};
+    expenses.forEach((exp) => {
+      let catId;
+      if (typeof exp.categorie === 'number' || !isNaN(exp.categorie)) {
+        catId = parseInt(exp.categorie);
+      } else {
+        catId = nameToId[exp.categorie];
+      }
+      if (!catId) return;
+      if (!map[catId]) map[catId] = { total: 0, count: 0 };
+      map[catId].total += parseFloat(exp.montant || 0);
+      map[catId].count += 1;
+    });
+    return map;
+  }, [expenses, categories]);
+
+  const totalExpenses = useMemo(
+    () => expenses.reduce((sum, exp) => sum + parseFloat(exp.montant || 0), 0),
+    [expenses],
+  );
+
+  const mostUsedCategory = useMemo(() => {
+    if (categories.length === 0) return null;
+    return categories.reduce((best, cat) => {
+      const count = categoryStatsMap[cat.id]?.count ?? 0;
+      return count > (categoryStatsMap[best?.id]?.count ?? 0) ? cat : best;
+    }, null);
+  }, [categories, categoryStatsMap]);
 
   const handleAddCategory = () => {
     setEditingCategory(null);
@@ -44,52 +78,6 @@ const Categories = () => {
     setIsModalOpen(false);
     setEditingCategory(null);
   };
-
-  // Calculer les statistiques par catégorie
-  const getCategoryStats = (categoryId) => {
-    // exp.categorie peut être soit un ID (number), soit un nom (string)
-    // On doit vérifier les deux cas
-    const categoryExpenses = expenses.filter(exp => {
-      // Si exp.categorie est un nombre, comparer avec l'ID
-      if (typeof exp.categorie === 'number' || !isNaN(exp.categorie)) {
-        return parseInt(exp.categorie) === parseInt(categoryId);
-      }
-      // Sinon, trouver la catégorie par son nom
-      const cat = categories.find(c => c.categorie === exp.categorie);
-      return cat && cat.id === categoryId;
-    });
-
-    const total = categoryExpenses.reduce((sum, exp) => sum + parseFloat(exp.montant || 0), 0);
-    const count = categoryExpenses.length;
-
-    console.log(`📊 Stats pour catégorie ${categoryId}:`, { count, total, categoryExpenses });
-
-    return { total, count };
-  };
-
-  // Calculer le total général des dépenses
-  const getTotalExpenses = () => {
-    return expenses.reduce((sum, exp) => sum + parseFloat(exp.montant || 0), 0);
-  };
-
-  // Obtenir la catégorie la plus utilisée
-  const getMostUsedCategory = () => {
-    if (categories.length === 0) return null;
-    let maxCount = 0;
-    let mostUsed = null;
-
-    categories.forEach(cat => {
-      const stats = getCategoryStats(cat.id);
-      if (stats.count > maxCount) {
-        maxCount = stats.count;
-        mostUsed = cat;
-      }
-    });
-
-    return mostUsed;
-  };
-
-  const mostUsedCategory = getMostUsedCategory();
 
   return (
     <div className="categories-page">
@@ -121,7 +109,7 @@ const Categories = () => {
           </div>
           <div>
             <div className="stat-label">Total dépenses</div>
-            <div className="stat-value">{formatCurrency(getTotalExpenses())}</div>
+            <div className="stat-value">{formatCurrency(totalExpenses)}</div>
           </div>
         </div>
         {mostUsedCategory && (
@@ -135,7 +123,7 @@ const Categories = () => {
                 {mostUsedCategory.categorie}
               </div>
               <div className="stat-subtitle">
-                {getCategoryStats(mostUsedCategory.id).count} dépenses
+                {categoryStatsMap[mostUsedCategory.id]?.count ?? 0} dépenses
               </div>
             </div>
           </div>
@@ -162,8 +150,7 @@ const Categories = () => {
           ) : (
             <div className="categories-grid">
               {categories.map((category) => {
-                const stats = getCategoryStats(category.id);
-                const totalExpenses = getTotalExpenses();
+                const stats = categoryStatsMap[category.id] ?? { total: 0, count: 0 };
                 const percentage = totalExpenses > 0 ? ((stats.total / totalExpenses) * 100).toFixed(1) : 0;
 
                 return (
@@ -262,7 +249,6 @@ const Categories = () => {
         </div>
       </div>
 
-      {/* Modal */}
       <CategoryModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

@@ -3,8 +3,11 @@
    ======================================== */
 .cgu-page {
   min-height: 100vh;
-  background: var(--bg-secondary);
-  padding: 2rem 1rem;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(139,92,246,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(99,102,241,0.06) 0%, transparent 50%),
+    var(--bg-secondary);
+  padding: 2.5rem 1rem;
   display: flex;
   justify-content: center;
 }
@@ -13,8 +16,10 @@
   background: var(--bg-primary);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-lg);
-  max-width: 720px;
+  box-shadow:
+    var(--shadow-lg),
+    0 0 0 1px rgba(139,92,246,0.04);
+  max-width: 760px;
   width: 100%;
   padding: 2.5rem;
 }
@@ -32,7 +37,7 @@
   cursor: pointer;
   padding: 0.375rem 0.75rem;
   border-radius: var(--radius-md);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
   transition: var(--transition);
 }
 
@@ -44,19 +49,23 @@
 /* Header */
 .cgu-header {
   text-align: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .cgu-icon {
   color: var(--primary);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 12px rgba(139,92,246,0.35));
 }
 
 .cgu-header h1 {
-  font-size: 1.625rem;
+  font-size: 1.75rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 0.375rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
 .cgu-subtitle {
@@ -68,39 +77,64 @@
 .cgu-banner {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  background: rgba(99, 102, 241, 0.08);
-  border: 1px solid rgba(99, 102, 241, 0.20);
+  gap: 0.875rem;
+  background: linear-gradient(135deg, rgba(139,92,246,0.10) 0%, rgba(99,102,241,0.08) 100%);
+  border: 1px solid rgba(139,92,246,0.25);
   border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
+  padding: 1.125rem 1.375rem;
   margin-bottom: 2rem;
   color: var(--primary);
   font-size: 0.938rem;
   line-height: 1.5;
+  box-shadow: 0 2px 12px rgba(139,92,246,0.08);
 }
 
-.cgu-banner svg { flex-shrink: 0; }
+.cgu-banner svg { flex-shrink: 0; color: #f472b6; }
 
 /* Content */
 .cgu-content {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.5rem;
+}
+
+.cgu-section {
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cgu-section:hover {
+  border-color: rgba(139,92,246,0.20);
+  box-shadow: 0 2px 16px rgba(139,92,246,0.06);
 }
 
 .cgu-section h2 {
-  font-size: 1rem;
+  font-size: 0.938rem;
   font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.625rem;
-  padding-bottom: 0.375rem;
-  border-bottom: 1px solid var(--border-color);
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cgu-section h2::before {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 16px;
+  background: linear-gradient(180deg, #7c3aed, #6366f1);
+  border-radius: 99px;
+  flex-shrink: 0;
 }
 
 .cgu-section p {
   font-size: 0.938rem;
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .cgu-section p strong { color: var(--text-primary); }
@@ -108,17 +142,17 @@
 /* Alert box */
 .cgu-alert {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.875rem;
   align-items: flex-start;
-  background: rgba(251, 191, 36, 0.08);
-  border: 1px solid rgba(251, 191, 36, 0.30);
+  background: rgba(251,191,36,0.07);
+  border: 1px solid rgba(251,191,36,0.28);
   border-radius: var(--radius-md);
   padding: 1rem 1.25rem;
   color: var(--warning, #d97706);
 }
 
 .cgu-alert svg { flex-shrink: 0; margin-top: 2px; }
-.cgu-alert p { margin: 0; color: var(--text-secondary); font-size: 0.938rem; line-height: 1.6; }
+.cgu-alert p { margin: 0; color: var(--text-secondary); font-size: 0.938rem; line-height: 1.65; }
 .cgu-alert p strong { color: var(--text-primary); }
 
 /* Footer */
@@ -134,7 +168,10 @@
   color: var(--text-secondary);
 }
 
+.cgu-footer svg { color: var(--primary); }
+
 @media (max-width: 640px) {
-  .cgu-container { padding: 1.5rem 1.25rem; }
+  .cgu-container { padding: 1.5rem 1.125rem; }
   .cgu-header h1 { font-size: 1.375rem; }
+  .cgu-section   { padding: 1rem; }
 }

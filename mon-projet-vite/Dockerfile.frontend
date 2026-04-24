@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installer les dépendances avec cache optimisé
-RUN npm ci --legacy-peer-deps --only=production && npm cache clean --force
+RUN npm ci --legacy-peer-deps && npm cache clean --force
 
 # Copier le code source
 COPY . .

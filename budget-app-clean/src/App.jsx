@@ -15,7 +15,6 @@ const MonthlyExpenses = lazy(() => import('./pages/MonthlyExpenses'));
 const Revenues       = lazy(() => import('./pages/Revenues'));
 const Categories     = lazy(() => import('./pages/Categories'));
 const Analytics      = lazy(() => import('./pages/Analytics'));
-const Tickets        = lazy(() => import('./pages/TicketsPage'));
 
 // Spinner de fallback pendant le chargement d'un chunk
 const PageLoader = () => (
@@ -89,7 +88,6 @@ function App() {
           <Route path="/expenses"         element={<ProtectedRoute><Expenses        /></ProtectedRoute>} />
           <Route path="/revenues"         element={<ProtectedRoute><Revenues        /></ProtectedRoute>} />
           <Route path="/categories"       element={<ProtectedRoute><Categories      /></ProtectedRoute>} />
-          <Route path="/tickets"          element={<ProtectedRoute><Tickets         /></ProtectedRoute>} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />

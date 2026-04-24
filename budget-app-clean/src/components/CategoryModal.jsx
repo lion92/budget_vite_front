@@ -75,7 +75,7 @@ const iconOptions = [
   { label: "❓ Divers", value: "fa-solid fa-question" },
 ];
 
-const CategoryModal = ({ isOpen, onClose, category = null }) => {
+const CategoryModal = ({ isOpen, onClose, category = null, onSuccess = null }) => {
   const { addCategory, updateCategory } = useAppStore();
   const userId = localStorage.getItem('utilisateur');
 
@@ -114,7 +114,7 @@ const CategoryModal = ({ isOpen, onClose, category = null }) => {
         budgetDebutMois: '',
       });
     }
-  }, [category, currentMonth, currentYear]);
+  }, [isOpen, category, currentMonth, currentYear]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -151,6 +151,7 @@ const CategoryModal = ({ isOpen, onClose, category = null }) => {
     }
 
     if (success) {
+      onSuccess?.(formData.categorie.trim());
       onClose();
     }
   };

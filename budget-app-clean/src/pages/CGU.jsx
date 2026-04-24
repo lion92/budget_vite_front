@@ -29,9 +29,10 @@ const CGU = () => {
           <section className="cgu-section">
             <h2>1. Présentation de l'application</h2>
             <p>
-              Budget App est une application web de gestion de budget personnel, développée à titre
+              Budget App est un <strong>projet personnel de Kriss</strong>, développé à titre
               <strong> éducatif</strong> dans le cadre d'un apprentissage du développement web (React, Vite, REST API).
-              Elle n'est pas destinée à un usage commercial.
+              Ce projet peut <strong>disparaître à tout moment</strong> sans préavis.
+              Il n'est pas destiné à un usage commercial.
             </p>
           </section>
 

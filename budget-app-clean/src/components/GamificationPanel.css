@@ -1,0 +1,227 @@
+.gamification-panel {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.gamification-panel::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.gami-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.gami-level-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+  animation: pulse-badge 3s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { box-shadow: 0 0 20px rgba(167, 139, 250, 0.4); }
+  50%       { box-shadow: 0 0 30px rgba(167, 139, 250, 0.7); }
+}
+
+.gami-info {
+  flex: 1;
+}
+
+.gami-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.gami-level-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.gami-level-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.gami-xp-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gami-xp-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.gami-xp-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.8s ease;
+  position: relative;
+}
+
+.gami-xp-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.gami-xp-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.gami-streak {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 99px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fcd34d;
+  white-space: nowrap;
+}
+
+.gami-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin: 1rem 0;
+}
+
+.gami-badges-section h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin: 0 0 0.75rem 0;
+}
+
+.gami-badges-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gami-badge {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: default;
+  transition: transform 0.2s;
+}
+
+.gami-badge:hover {
+  transform: scale(1.15);
+}
+
+.gami-badge.earned {
+  background: rgba(167, 139, 250, 0.2);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+}
+
+.gami-badge.locked {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+.gami-badge-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 12, 41, 0.95);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+  font-size: 0.75rem;
+  color: #e2e8f0;
+}
+
+.gami-badge:hover .gami-badge-tooltip {
+  opacity: 1;
+}
+
+.gami-badge-tooltip strong {
+  display: block;
+  color: #c4b5fd;
+  margin-bottom: 2px;
+}
+
+.gami-no-badges {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.35);
+  font-style: italic;
+}
+
+.gami-max-level {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #fcd34d;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 480px) {
+  .gami-header {
+    flex-wrap: wrap;
+  }
+  .gami-streak {
+    align-self: flex-start;
+  }
+}

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { X, Plus, Minus } from 'lucide-react';
+import { X, Plus, Minus, Tag } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { toast } from 'react-toastify';
+import CategoryModal from './CategoryModal';
 import './ExpenseModal.css';
 
 const QUICK_AMOUNTS = [5, 10, 20, 50, 100, 200];
@@ -22,6 +23,7 @@ const ExpenseModal = ({ isOpen, onClose, expense = null, defaultDate = null }) =
 
   const [formData, setFormData] = useState(defaultForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -32,11 +34,17 @@ const ExpenseModal = ({ isOpen, onClose, expense = null, defaultDate = null }) =
         || expense.categorie?.toString()
         || '';
 
+      const rawDate = expense.dateTransaction?.toString().replace(/\//g, '-') ?? '';
+      const parsedDate = rawDate ? new Date(rawDate) : new Date();
+      const isoDate = isNaN(parsedDate.getTime())
+        ? new Date().toISOString().split('T')[0]
+        : parsedDate.toISOString().split('T')[0];
+
       setFormData({
         description: expense.description || '',
         montant: expense.montant || '',
         categorie: catId,
-        dateTransaction: expense.dateTransaction?.split('T')[0] || new Date().toISOString().split('T')[0],
+        dateTransaction: isoDate,
       });
     } else {
       setFormData({
@@ -99,18 +107,38 @@ const ExpenseModal = ({ isOpen, onClose, expense = null, defaultDate = null }) =
     }
   };
 
+  const handleCategoryCreated = (catName) => {
+    const currentCategories = useAppStore.getState().categories;
+    const newCat = currentCategories.find((c) => c.categorie === catName);
+    if (newCat) {
+      setFormData((prev) => ({ ...prev, categorie: newCat.id.toString() }));
+    }
+  };
+
   if (!isOpen) return null;
 
   const montantNum = parseFloat(formData.montant) || 0;
 
   return (
+    <>
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal expense-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{expense ? 'Modifier la dépense' : 'Ajouter une dépense'}</h2>
-          <button className="btn-close" onClick={onClose} type="button">
-            <X size={20} />
-          </button>
+          <div className="modal-header-right">
+            <button
+              type="button"
+              className="btn-shortcut-category"
+              onClick={() => setShowCategoryModal(true)}
+              title="Créer une nouvelle catégorie"
+            >
+              <Tag size={14} />
+              <span>+ Catégorie</span>
+            </button>
+            <button className="btn-close" onClick={onClose} type="button">
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -220,6 +248,12 @@ const ExpenseModal = ({ isOpen, onClose, expense = null, defaultDate = null }) =
         </form>
       </div>
     </div>
+    <CategoryModal
+      isOpen={showCategoryModal}
+      onClose={() => setShowCategoryModal(false)}
+      onSuccess={handleCategoryCreated}
+    />
+    </>
   );
 };
 

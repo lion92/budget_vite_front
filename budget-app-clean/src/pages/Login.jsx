@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, TrendingUp, PieChart, Target, Sparkles, Shield, Zap } from 'lucide-react';
+import { LogIn, TrendingUp, PieChart, Target, Sparkles, Shield, Zap, Heart, FileText } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { toast } from 'react-toastify';
 import './Auth.css';
@@ -115,6 +115,17 @@ const Login = () => {
               </div>
             </div>
           </div>
+
+          <div className="cgu-landing-box">
+            <div className="cgu-landing-row">
+              <Heart size={14} className="cgu-heart" />
+              <span>Projet personnel — 100% gratuit, aucun usage commercial</span>
+            </div>
+            <Link to="/cgu" className="cgu-landing-link">
+              <FileText size={13} />
+              Lire les Conditions Générales d'Utilisation
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -192,6 +203,10 @@ const Login = () => {
             <p>
               Pas encore de compte ?{' '}
               <Link to="/register" className="link-primary">S'inscrire gratuitement</Link>
+            </p>
+            <p className="auth-cgu-notice">
+              En continuant, vous acceptez nos{' '}
+              <Link to="/cgu" target="_blank" className="link-primary">CGU</Link>
             </p>
           </div>
         </div>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="coin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="1050" cy="80" r="180" fill="#4f46e5" opacity="0.15"/>
+  <circle cx="150" cy="550" r="220" fill="#7c3aed" opacity="0.12"/>
+  <circle cx="600" cy="315" r="400" fill="none" stroke="#4f46e5" stroke-width="1" opacity="0.2"/>
+
+  <!-- Card / wallet icon (left side) -->
+  <g transform="translate(120, 180)" filter="url(#shadow)">
+    <rect width="260" height="260" rx="50" fill="url(#card)"/>
+    <!-- Wallet body -->
+    <rect x="30" y="85" width="200" height="110" rx="16" fill="white" opacity="0.95"/>
+    <!-- Wallet header strip -->
+    <rect x="30" y="85" width="200" height="30" rx="12" fill="#c7d2fe"/>
+    <rect x="30" y="100" width="200" height="15" fill="#c7d2fe"/>
+    <!-- Coin pocket -->
+    <rect x="140" y="105" width="80" height="55" rx="12" fill="#6366f1" opacity="0.2"/>
+    <!-- Green coin -->
+    <circle cx="180" cy="132" r="24" fill="url(#coin)"/>
+    <text x="180" y="141" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="28" font-weight="900" fill="white">€</text>
+    <!-- Bill lines -->
+    <rect x="46" y="120" width="70" height="10" rx="5" fill="#818cf8" opacity="0.7"/>
+    <rect x="46" y="138" width="50" height="10" rx="5" fill="#818cf8" opacity="0.45"/>
+  </g>
+
+  <!-- Main title -->
+  <text x="450" y="240" font-family="Arial Black, Arial, sans-serif" font-size="80" font-weight="900" fill="white" letter-spacing="-2">Budget App</text>
+
+  <!-- Subtitle -->
+  <text x="450" y="310" font-family="Arial, sans-serif" font-size="34" fill="#a5b4fc" letter-spacing="0.5">Gérez vos dépenses simplement</text>
+
+  <!-- Feature pills -->
+  <g transform="translate(450, 370)">
+    <!-- Pill 1 -->
+    <rect width="200" height="50" rx="25" fill="#4f46e5" opacity="0.7"/>
+    <text x="100" y="33" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="white">📊 Analytiques</text>
+
+    <!-- Pill 2 -->
+    <rect x="220" width="200" height="50" rx="25" fill="#6366f1" opacity="0.7"/>
+    <text x="320" y="33" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="white">🏷️ Catégories</text>
+
+    <!-- Pill 3 -->
+    <rect x="440" width="220" height="50" rx="25" fill="#7c3aed" opacity="0.7"/>
+    <text x="550" y="33" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="white">🎯 Objectifs</text>
+  </g>
+
+  <!-- URL bottom -->
+  <text x="600" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#818cf8" opacity="0.8">gestiontaches.krissclotilde.com</text>
+</svg>

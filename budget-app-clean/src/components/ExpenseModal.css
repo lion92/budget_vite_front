@@ -117,3 +117,43 @@
   border-color: var(--danger);
   color: var(--danger);
 }
+
+/* Modal header right side */
+.modal-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-shortcut-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--primary-bg, rgba(99,102,241,0.1));
+  border: 1.5px solid var(--primary-light, rgba(99,102,241,0.35));
+  border-radius: 999px;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.btn-shortcut-category:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(99,102,241,0.3);
+}
+
+@media (max-width: 480px) {
+  .btn-shortcut-category span {
+    display: none;
+  }
+  .btn-shortcut-category {
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius-md);
+  }
+}
