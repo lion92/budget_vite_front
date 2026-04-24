@@ -3,7 +3,7 @@ import { Plus, Trash2, TrendingUp, X, Minus } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { formatCurrency, formatDate } from '../utils/formatters';
 import { toast } from 'react-toastify';
-import './Revenues.css';
+import '../styles/pages/Revenues.css';
 
 const QUICK_AMOUNTS = [100, 200, 500, 1000, 1500, 2000];
 

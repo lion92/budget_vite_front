@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { toast } from 'react-toastify';
-import './CategoryModal.css';
+import '../styles/components/CategoryModal.css';
 
 // Liste complète des 130+ icônes Font Awesome
 const iconOptions = [

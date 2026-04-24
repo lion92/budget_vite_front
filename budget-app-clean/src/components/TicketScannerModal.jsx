@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import useAppStore from '../store/useAppStore';
 import CategoryModal from './CategoryModal';
 import { setTicketLink } from '../utils/ticketLinks';
-import './TicketScannerModal.css';
+import '../styles/components/TicketScannerModal.css';
 
 const STEPS = { UPLOAD: 'upload', LOADING: 'loading', RESULT: 'result', ERROR: 'error' };
 

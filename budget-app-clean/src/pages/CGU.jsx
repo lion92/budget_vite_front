@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Code2, Heart, Shield, AlertTriangle } from 'lucide-react';
-import './CGU.css';
+import '../styles/pages/CGU.css';
 
 const CGU = () => {
   const navigate = useNavigate();

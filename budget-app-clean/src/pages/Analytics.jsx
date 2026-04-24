@@ -10,7 +10,7 @@ import {
 } from '../components/Charts';
 import StatCard from '../components/StatCard';
 import { formatCurrency } from '../utils/formatters';
-import './Analytics.css';
+import '../styles/pages/Analytics.css';
 
 const Analytics = () => {
   const {

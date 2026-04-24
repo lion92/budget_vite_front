@@ -8,7 +8,7 @@ import {
     flexRender,
 } from '@tanstack/react-table';
 import { ChevronUp, ChevronDown, Search, X } from 'lucide-react';
-import './css/data-table.css';
+import '../styles/components/DataTable.css';
 
 const DataTable = ({ data, columns: columnsProp, headers, title = "Tableau de données" }) => {
     const [sorting, setSorting] = useState([]);

@@ -1,5 +1,5 @@
 import useGamifyStore, { LEVELS, BADGES } from '../store/useGamifyStore';
-import './GamificationPanel.css';
+import '../styles/components/GamificationPanel.css';
 
 const GamificationPanel = () => {
   const { xp, badges, streak, getCurrentLevel, getNextLevel } = useGamifyStore();

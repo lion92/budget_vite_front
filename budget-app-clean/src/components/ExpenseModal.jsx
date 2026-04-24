@@ -3,7 +3,7 @@ import { X, Plus, Minus, Tag } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { toast } from 'react-toastify';
 import CategoryModal from './CategoryModal';
-import './ExpenseModal.css';
+import '../styles/components/ExpenseModal.css';
 
 const QUICK_AMOUNTS = [5, 10, 20, 50, 100, 200];
 

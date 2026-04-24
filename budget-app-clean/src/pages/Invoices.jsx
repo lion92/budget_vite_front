@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { formatCurrency, formatDate } from '../utils/formatters';
-import './Invoices.css';
+import '../styles/pages/Invoices.css';
 
 const Invoices = () => {
   const [invoices, setInvoices] = useState([]);

@@ -13,7 +13,7 @@ import {
   Filler
 } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
-import './Charts.css';
+import '../styles/components/Charts.css';
 
 // Register ChartJS components
 ChartJS.register(

@@ -1,7 +1,7 @@
 import { X, ZoomIn, ZoomOut, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { getTicketUrl } from '../utils/ticketLinks';
-import './TicketViewerModal.css';
+import '../styles/components/TicketViewerModal.css';
 
 const TicketViewerModal = ({ isOpen, onClose, ticketId, description }) => {
   const [zoom, setZoom] = useState(1);

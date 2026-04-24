@@ -6,7 +6,7 @@ import useAppStore from '../store/useAppStore';
 import { toast } from 'react-toastify';
 import { getTicketForExpense } from '../utils/ticketLinks';
 import TicketViewerModal from './TicketViewerModal';
-import './ExpenseTable.css';
+import '../styles/components/ExpenseTable.css';
 
 const ExpenseTable = ({ expenses, onEdit }) => {
   const { deleteExpense } = useAppStore();

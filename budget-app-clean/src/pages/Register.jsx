@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus, Sparkles, TrendingUp, PieChart, Target, Shield, Zap, Heart, FileText } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { toast } from 'react-toastify';
-import './Auth.css';
+import '../styles/pages/Auth.css';
 
 const Register = () => {
   const navigate = useNavigate();

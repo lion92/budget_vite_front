@@ -10,7 +10,7 @@ import ExpenseModal from '../components/ExpenseModal';
 import GamificationPanel from '../components/GamificationPanel';
 import { formatCurrency } from '../utils/formatters';
 import { useNavigate } from 'react-router-dom';
-import './Home.css';
+import '../styles/pages/Home.css';
 
 const Home = () => {
   const {

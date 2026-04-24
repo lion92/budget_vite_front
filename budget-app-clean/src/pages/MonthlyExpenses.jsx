@@ -6,7 +6,7 @@ import ExpenseModal from '../components/ExpenseModal';
 import CategoryModal from '../components/CategoryModal';
 import { formatCurrency } from '../utils/formatters';
 import { toast } from 'react-toastify';
-import './MonthlyExpenses.css';
+import '../styles/pages/MonthlyExpenses.css';
 
 const MONTH_NAMES_FR = [
   'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',

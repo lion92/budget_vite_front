@@ -6,7 +6,7 @@ import ExpenseModal from '../components/ExpenseModal';
 import CategoryModal from '../components/CategoryModal';
 import TicketScannerModal from '../components/TicketScannerModal';
 import { formatCurrency } from '../utils/formatters';
-import './Expenses.css';
+import '../styles/pages/Expenses.css';
 
 const Expenses = () => {
   const {

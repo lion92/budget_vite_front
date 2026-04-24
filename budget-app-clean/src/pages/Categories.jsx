@@ -4,7 +4,7 @@ import useAppStore from '../store/useAppStore';
 import { formatCurrency } from '../utils/formatters';
 import { toast } from 'react-toastify';
 import CategoryModal from '../components/CategoryModal';
-import './Categories.css';
+import '../styles/pages/Categories.css';
 
 const Categories = () => {
   const { categories, expenses, fetchCategories, fetchExpenses, deleteCategory, isLoading } = useAppStore();

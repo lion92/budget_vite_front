@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import ExpenseModal from './ExpenseModal';
-import './Layout.css';
+import '../styles/components/Layout.css';
 
 const bottomNavItems = [
   { path: '/',                 icon: Home,      label: 'Accueil'    },
